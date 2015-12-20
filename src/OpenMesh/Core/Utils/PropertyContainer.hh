@@ -200,6 +200,22 @@ public:
 
   //---------------------------------------------------- synchronize properties
 
+#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+  void reserve(size_t _n) const {
+    std::for_each(properties_.begin(), properties_.end(),
+            [_n](BaseProperty* p) { if (p) p->reserve(_n); });
+  }
+
+  void resize(size_t _n) const {
+    std::for_each(properties_.begin(), properties_.end(),
+            [_n](BaseProperty* p) { if (p) p->resize(_n); });
+  }
+
+  void swap(size_t _i0, size_t _i1) const {
+    std::for_each(properties_.begin(), properties_.end(),
+            [_i0, _i1](BaseProperty* p) { if (p) p->swap(_i0, _i1); });
+  }
+#else
   void reserve(size_t _n) const {
     std::for_each(properties_.begin(), properties_.end(), Reserve(_n));
   }
@@ -211,6 +227,7 @@ public:
   void swap(size_t _i0, size_t _i1) const {
     std::for_each(properties_.begin(), properties_.end(), Swap(_i0, _i1));
   }
+#endif
 
 
 

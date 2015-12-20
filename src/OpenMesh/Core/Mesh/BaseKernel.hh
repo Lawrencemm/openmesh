@@ -648,6 +648,7 @@ protected: //------------------------------------------- synchronize properties
 
   void vprops_reserve(size_t _n) const { vprops_.reserve(_n); }
   void vprops_resize(size_t _n) const { vprops_.resize(_n); }
+  void vprops_resize_if_smaller(size_t _n) const { if (vprops_.size() < _n) vprops_.resize(_n); }
   void vprops_clear() {
     vprops_.clear();
   }

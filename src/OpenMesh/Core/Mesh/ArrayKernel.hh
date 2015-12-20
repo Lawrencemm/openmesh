@@ -217,6 +217,14 @@ public:
     return handle(vertices_.back());
   }
 
+  inline VertexHandle new_vertex_dirty()
+  {
+    vertices_.push_back(Vertex());
+    vprops_resize_if_smaller(n_vertices());//TODO:should it be push_back()?
+
+    return handle(vertices_.back());
+  }
+
   inline HalfedgeHandle new_edge(VertexHandle _start_vh, VertexHandle _end_vh)
   {
 //     assert(_start_vh != _end_vh);
@@ -478,6 +486,12 @@ public:
 
   StatusInfo&                               status(VertexHandle _vh)
   { return property(vertex_status_, _vh); }
+
+  void reset_status() {
+      PropertyT<StatusInfo> &status_prop = property(vertex_status_);
+      PropertyT<StatusInfo>::vector_type &sprop_v = status_prop.data_vector();
+      std::fill(sprop_v.begin(), sprop_v.begin() + n_vertices(), StatusInfo());
+  }
 
   //----------------------------------------------------------- halfedge status
   const StatusInfo&                         status(HalfedgeHandle _hh) const

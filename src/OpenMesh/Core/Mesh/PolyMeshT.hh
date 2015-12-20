@@ -203,8 +203,18 @@ public:
     return vh;
   }
 
+  inline VertexHandle new_vertex_dirty(const Point& _p)
+  {
+    VertexHandle vh(Kernel::new_vertex_dirty());
+    this->set_point(vh, _p);
+    return vh;
+  }
+
   inline VertexHandle add_vertex(const Point& _p)
   { return new_vertex(_p); }
+
+  inline VertexHandle add_vertex_dirty(const Point& _p)
+  { return new_vertex_dirty(_p); }
 
   // --- normal vectors ---
 
