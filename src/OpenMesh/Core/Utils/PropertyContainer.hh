@@ -211,6 +211,11 @@ public:
             [_n](BaseProperty* p) { if (p) p->resize(_n); });
   }
 
+  void resize_if_smaller(size_t _n) const {
+    std::for_each(properties_.begin(), properties_.end(),
+            [_n](BaseProperty* p) { if (p && p->n_elements() < _n) p->resize(_n); });
+  }
+
   void swap(size_t _i0, size_t _i1) const {
     std::for_each(properties_.begin(), properties_.end(),
             [_i0, _i1](BaseProperty* p) { if (p) p->swap(_i0, _i1); });
@@ -222,6 +227,10 @@ public:
 
   void resize(size_t _n) const {
     std::for_each(properties_.begin(), properties_.end(), Resize(_n));
+  }
+
+  void resize_if_smaller(size_t _n) const {
+    std::for_each(properties_.begin(), properties_.end(), ResizeIfSmaller(_n));
   }
 
   void swap(size_t _i0, size_t _i1) const {
@@ -287,6 +296,13 @@ private:
   {
     Resize(size_t _n) : n_(_n) {}
     void operator()(BaseProperty* _p) const { if (_p) _p->resize(n_); }
+    size_t n_;
+  };
+
+  struct ResizeIfSmaller
+  {
+    ResizeIfSmaller(size_t _n) : n_(_n) {}
+    void operator()(BaseProperty* _p) const { if (_p && _p->n_elements() < n_) _p->resize(n_); }
     size_t n_;
   };
 
