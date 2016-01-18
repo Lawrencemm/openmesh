@@ -19,6 +19,8 @@
 namespace OpenMesh {
 namespace Python {
 
+#define INIT_MESH_REF init<Mesh&>()[with_custodian_and_ward<1,2>()]
+
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(decimate_overloads, decimate, 0, 1)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(decimate_to_faces_overloads, decimate_to_faces, 0, 2)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(set_max_err_overloads, set_max_err, 1, 2)
@@ -108,7 +110,7 @@ void expose_decimater(const char *_name) {
 	char buffer[64];
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "Decimater");
 
-	class_<Decimater, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<Decimater, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("decimate", &Decimater::decimate, decimate_overloads())
 		.def("decimate_to", &Decimater::decimate_to)
 		.def("decimate_to_faces", &Decimater::decimate_to_faces, decimate_to_faces_overloads())
@@ -168,7 +170,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModAspectRatio");
 
-	class_<ModAspectRatio, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModAspectRatio, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("aspect_ratio", &ModAspectRatio::aspect_ratio)
 		.def("set_aspect_ratio", &ModAspectRatio::set_aspect_ratio)
 		;
@@ -181,7 +183,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModEdgeLength");
 
-	class_<ModEdgeLength, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModEdgeLength, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("edge_length", &ModEdgeLength::edge_length)
 		.def("set_edge_length", &ModEdgeLength::set_edge_length)
 		;
@@ -194,7 +196,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModHausdorff");
 
-	class_<ModHausdorff, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModHausdorff, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("tolerance", &ModHausdorff::tolerance)
 		.def("set_tolerance", &ModHausdorff::set_tolerance)
 		;
@@ -207,7 +209,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModIndependentSets");
 
-	class_<ModIndependentSets, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>());
+	class_<ModIndependentSets, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF);
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModIndependentSetsHandle");
 	expose_module_handle<ModIndependentSetsHandle>(buffer);
@@ -217,7 +219,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModNormalDeviation");
 
-	class_<ModNormalDeviation, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModNormalDeviation, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("normal_deviation", &ModNormalDeviation::normal_deviation)
 		.def("set_normal_deviation", &ModNormalDeviation::set_normal_deviation)
 		;
@@ -230,7 +232,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModNormalFlipping");
 
-	class_<ModNormalFlipping, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModNormalFlipping, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("max_normal_deviation", &ModNormalFlipping::max_normal_deviation)
 		.def("set_max_normal_deviation", &ModNormalFlipping::set_max_normal_deviation)
 		;
@@ -250,7 +252,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModProgMesh");
 
-	class_<ModProgMesh, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModProgMesh, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("pmi", &infolist<ModProgMesh>)
 		.def("infolist", &infolist<ModProgMesh>)
 		.def("write", &ModProgMesh::write)
@@ -264,7 +266,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModQuadric");
 
-	class_<ModQuadric, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModQuadric, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("set_max_err", &ModQuadric::set_max_err, set_max_err_overloads())
 		.def("unset_max_err", &ModQuadric::unset_max_err)
 		.def("max_err", &ModQuadric::max_err)
@@ -278,7 +280,7 @@ void expose_decimater(const char *_name) {
 
 	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModRoundness");
 
-	class_<ModRoundness, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+	class_<ModRoundness, bases<ModBase>, boost::noncopyable>(buffer, INIT_MESH_REF)
 		.def("set_min_angle", &ModRoundness::set_min_angle)
 		.def("set_min_roundness", &ModRoundness::set_min_roundness, set_min_roundness_overloads())
 		.def("unset_min_roundness", &ModRoundness::unset_min_roundness)
