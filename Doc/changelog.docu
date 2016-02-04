@@ -9,6 +9,10 @@
 
 <tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
 
+<b>IO</b>
+<ul>
+<li>Obj reader: added texCoord3d functions to objloader</li>
+</ul>
 
 <b>VectorT</b>
 <ul>
@@ -26,6 +30,11 @@
 <b>Build System</b>
 <ul>
 <li>Updated c++11 ifdefs to use c++11 (starting with VS1015)</li>
+</ul>
+
+<b>Python Interface</b>
+<ul>
+<li>Fixed segfault in decimater due to a bad pointer</li>
 </ul>
 
 </tr>
