@@ -31,6 +31,26 @@
 </tr>
 
 
+<tr valign=top><td><b>5.2</b> (?/?/?)</td><td>
+
+<b>Core</b>
+<ul>
+<li>Fixed ugly typo in __decrement function of Basehandle. Seems to be unused in the rest of the code.</li>
+</ul>
+
+
+<b>Build System</b>
+<ul>
+<li>Fixed Typo in cmake install for smoother (Thanks to Takashi Michikawa for the fix).</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Fixed order of smoother parameters in the documentation. (Thanks to Takashi Michikawa for the info).</li>
+</ul>
+
+</tr>
+
 
 <tr valign=top><td><b>5.1</b> (2015/17/12)</td><td>
 
