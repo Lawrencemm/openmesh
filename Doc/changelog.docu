@@ -48,6 +48,12 @@
 </ul>
 
 
+<b>IO</b>
+<ul>
+<li>PLY Reader: Fixed CR LF newline handling for binary file headers.</li>
+</ul>
+
+
 <b>Build System</b>
 <ul>
 <li>Fixed Typo in cmake install for smoother (Thanks to Takashi Michikawa for the fix).</li>
