@@ -1275,7 +1275,19 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
     // As the binary data is directy after the end_header keyword
     // and the stream removes too many bytes, seek back to the right position
     if (options_.is_binary()) {
-        _is.seekg(streamPos + 12);
+        _is.seekg(streamPos);
+
+        char c1 = 0;
+        char c2 = 0;
+        _is.get(c1);
+        _is.get(c2);
+
+        if (c1 == 0x0D && c2 == 0x0A) {
+            _is.seekg(streamPos + 14);
+        }
+        else {
+            _is.seekg(streamPos + 12);
+        }
     }
 
     return true;
