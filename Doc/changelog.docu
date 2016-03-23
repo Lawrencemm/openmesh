@@ -45,6 +45,7 @@
 <b>Core</b>
 <ul>
 <li>Fixed ugly typo in __decrement function of Basehandle. Seems to be unused in the rest of the code.</li>
+<li>drop VectorDimensionsT metaprogram in favor of vector_traits in normal computation function</li>
 </ul>
 
 
