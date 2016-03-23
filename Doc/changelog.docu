@@ -52,10 +52,6 @@
 <b>IO</b>
 <ul>
 <li>PLY Reader: Fixed CR LF newline handling for binary file headers.</li>
-</ul>
-
-<b>IO</b>
-<ul>
 <li>Obj writer: Fix OBJ material files and face color (Thanks to Sven-Kristofer Pilz for the patch) </li>
 </ul>
 
