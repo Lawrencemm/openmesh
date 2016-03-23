@@ -47,6 +47,11 @@
 <li>Fixed ugly typo in __decrement function of Basehandle. Seems to be unused in the rest of the code.</li>
 </ul>
 
+<b>IO</b>
+<ul>
+<li>Obj writer: Fix OBJ material files and face color (Thanks to Sven-Kristofer Pilz for the patch) </li>
+</ul>
+
 
 <b>Build System</b>
 <ul>
