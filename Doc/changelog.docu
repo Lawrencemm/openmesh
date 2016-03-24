@@ -9,6 +9,10 @@
 
 <tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
 
+<b>IO</b>
+<ul>
+<li>Obj reader: added texCoord3d functions to objloader</li>
+</ul>
 
 <b>VectorT</b>
 <ul>
@@ -28,8 +32,41 @@
 <li>Updated c++11 ifdefs to use c++11 (starting with VS1015)</li>
 </ul>
 
+<b>Python Interface</b>
+<ul>
+<li>Fixed segfault in decimater due to a bad pointer</li>
+</ul>
+
 </tr>
 
+
+<tr valign=top><td><b>5.2</b> (?/?/?)</td><td>
+
+<b>Core</b>
+<ul>
+<li>Fixed ugly typo in __decrement function of Basehandle. Seems to be unused in the rest of the code.</li>
+<li>drop VectorDimensionsT metaprogram in favor of vector_traits in normal computation function</li>
+</ul>
+
+
+<b>IO</b>
+<ul>
+<li>PLY Reader: Fixed CR LF newline handling for binary file headers.</li>
+<li>Obj writer: Fix OBJ material files and face color (Thanks to Sven-Kristofer Pilz for the patch) </li>
+</ul>
+
+
+<b>Build System</b>
+<ul>
+<li>Fixed Typo in cmake install for smoother (Thanks to Takashi Michikawa for the fix).</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Fixed order of smoother parameters in the documentation. (Thanks to Takashi Michikawa for the info).</li>
+</ul>
+
+</tr>
 
 
 <tr valign=top><td><b>5.1</b> (2015/17/12)</td><td>

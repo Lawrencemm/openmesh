@@ -20,8 +20,8 @@ The smoothers directly work on an OpenMesh. The following example shows how to u
   // Initialize smoother with input mesh
   OpenMesh::Smoother::JacobiLaplaceSmootherT<MyMesh> smoother(mesh);
 
-  smoother.initialize( C0,                      //Continuity
-                       Tangential_and_Normal)   //Smooth direction
+  smoother.initialize( Tangential_and_Normal,   //Smooth direction
+                       C0)                      //Continuity
     
   // Execute 3 smooth steps
   smoother.smooth(3);

@@ -61,9 +61,9 @@
 
 #include <OpenMesh/Core/Mesh/PolyMeshT.hh>
 #include <OpenMesh/Core/Geometry/LoopSchemeMaskT.hh>
-#include <OpenMesh/Core/Geometry/VectorDimensionsT.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
 #include <OpenMesh/Core/Utils/vector_cast.hh>
+#include <OpenMesh/Core/Utils/vector_traits.hh>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <vector>
 
@@ -102,7 +102,7 @@ typename PolyMeshT<Kernel>::Normal
 PolyMeshT<Kernel>::calc_face_normal(FaceHandle _fh) const
 {
   return calc_face_normal_impl(_fh, typename GenProg::IF<
-    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
+    vector_traits<PolyMeshT<Kernel>::Point>::size_ == 3,
     PointIs3DTag,
     PointIsNot3DTag
   >::Result());
@@ -169,7 +169,7 @@ calc_face_normal(const Point& _p0,
      const Point& _p2) const
 {
   return calc_face_normal_impl(_p0, _p1, _p2, typename GenProg::IF<
-    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
+    vector_traits<PolyMeshT<Kernel>::Point>::size_ == 3,
     PointIs3DTag,
     PointIsNot3DTag
   >::Result());

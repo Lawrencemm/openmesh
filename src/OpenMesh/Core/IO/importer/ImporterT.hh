@@ -90,6 +90,7 @@ public:
   typedef typename Mesh::Normal      Normal;
   typedef typename Mesh::Color       Color;
   typedef typename Mesh::TexCoord2D  TexCoord2D;
+  typedef typename Mesh::TexCoord3D  TexCoord3D;
   typedef std::vector<VertexHandle>  VHandles;
 
 
@@ -217,6 +218,19 @@ public:
       mesh_.set_texcoord2D(_heh, vector_cast<TexCoord2D>(_texcoord));
   }
 
+  virtual void set_texcoord(VertexHandle _vh, const Vec3f& _texcoord)
+  {
+    if (mesh_.has_vertex_texcoords3D())
+      mesh_.set_texcoord3D(_vh, vector_cast<TexCoord3D>(_texcoord));
+  }
+
+  virtual void set_texcoord(HalfedgeHandle _heh, const Vec3f& _texcoord)
+  {
+    if (mesh_.has_halfedge_texcoords3D())
+      mesh_.set_texcoord3D(_heh, vector_cast<TexCoord3D>(_texcoord));
+  }
+
+
   // edge attributes
 
   virtual void set_color(EdgeHandle _eh, const Vec4uc& _color)
@@ -276,6 +290,23 @@ public:
   }
 
   virtual void add_face_texcoords( FaceHandle _fh, VertexHandle _vh, const std::vector<Vec2f>& _face_texcoords)
+  {
+    // get first halfedge handle
+    HalfedgeHandle cur_heh   = mesh_.halfedge_handle(_fh);
+    HalfedgeHandle end_heh   = mesh_.prev_halfedge_handle(cur_heh);
+
+    // find start heh
+    while( mesh_.to_vertex_handle(cur_heh) != _vh && cur_heh != end_heh )
+      cur_heh = mesh_.next_halfedge_handle( cur_heh);
+
+    for(unsigned int i=0; i<_face_texcoords.size(); ++i)
+    {
+      set_texcoord( cur_heh, _face_texcoords[i]);
+      cur_heh = mesh_.next_halfedge_handle( cur_heh);
+    }
+  }
+
+  virtual void add_face_texcoords( FaceHandle _fh, VertexHandle _vh, const std::vector<Vec3f>& _face_texcoords)
   {
     // get first halfedge handle
     HalfedgeHandle cur_heh   = mesh_.halfedge_handle(_fh);

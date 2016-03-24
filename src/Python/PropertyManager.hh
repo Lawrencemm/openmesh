@@ -111,8 +111,8 @@ void expose_property_manager(const char *_name) {
 
 	// Expose property manager
 	class_<PropertyManager, boost::noncopyable>(_name)
-		.def(init<PolyMesh&, const char *, optional<bool> >())
-		.def(init<TriMesh&,  const char *, optional<bool> >())
+		.def(init<PolyMesh&, const char *, optional<bool> >()[with_custodian_and_ward<1,2>()])
+		.def(init<TriMesh&,  const char *, optional<bool> >()[with_custodian_and_ward<1,2>()])
 
 		.def("swap", &PropertyManager::swap)
 		.def("is_valid", &PropertyManager::isValid)

@@ -473,7 +473,7 @@ class VectorT {
         /// compute L1 (Manhattan) norm
         Scalar l1_norm() const {
             return std::accumulate(
-                    values_.cbegin() + 1, values_.end(), values_[0]);
+                    values_.cbegin() + 1, values_.cend(), values_[0]);
         }
 
         /// compute l8_norm
@@ -523,7 +523,7 @@ class VectorT {
 
         /// return absolute arithmetic mean
         Scalar mean_abs() const {
-            return std::accumulate(values_.cbegin() + 1, values_.end(),
+            return std::accumulate(values_.cbegin() + 1, values_.cend(),
                     std::abs(values_[0]),
                     [](const Scalar &l, const Scalar &r) {
                         return l + std::abs(r);
