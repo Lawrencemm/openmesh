@@ -192,10 +192,21 @@ public:
       Use them to assign two meshes of \b equal type.
       If the mesh types vary, use PolyMeshT::assign() instead. */
 
-   // --- creation ---
+  // --- creation ---
+
+  /**
+   * \brief Adds a new default-initialized vertex.
+   *
+   * \sa new_vertex(const Point&), new_vertex_dirty()
+   */
   inline VertexHandle new_vertex()
   { return Kernel::new_vertex(); }
 
+  /**
+   * \brief Adds a new vertex initialized to a custom position.
+   *
+   * \sa new_vertex(), new_vertex_dirty()
+   */
   inline VertexHandle new_vertex(const Point& _p)
   {
     VertexHandle vh(Kernel::new_vertex());
@@ -203,8 +214,31 @@ public:
     return vh;
   }
 
+  /**
+   * Same as new_vertex(const Point&) but never shrinks, only enlarges the
+   * vertex property vectors.
+   *
+   * If you are rebuilding a mesh that you erased with ArrayKernel::clean() or
+   * ArrayKernel::clean_keep_reservation() using this method instead of
+   * new_vertex(const Point &) saves reallocation and reinitialization of
+   * property memory.
+   *
+   * \sa new_vertex(const Point &)
+   */
+  inline VertexHandle new_vertex_dirty(const Point& _p)
+  {
+    VertexHandle vh(Kernel::new_vertex_dirty());
+    this->set_point(vh, _p);
+    return vh;
+  }
+
+  /// Alias for new_vertex(const Point&).
   inline VertexHandle add_vertex(const Point& _p)
   { return new_vertex(_p); }
+
+  /// Alias for new_vertex_dirty().
+  inline VertexHandle add_vertex_dirty(const Point& _p)
+  { return new_vertex_dirty(_p); }
 
   // --- normal vectors ---
 

@@ -9,6 +9,11 @@
 
 <tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
 
+<b>Core</b>
+<ul>
+<li>Added a couple of methods to enable more efficient adding of batches of vertices (Without resizing property vectors) </li>
+</ul>
+
 <b>IO</b>
 <ul>
 <li>Obj reader: added texCoord3d functions to objloader</li>

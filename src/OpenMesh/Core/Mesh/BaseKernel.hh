@@ -646,11 +646,26 @@ public: //----------------------------------------------------- element numbers
 
 protected: //------------------------------------------- synchronize properties
 
+  /// Reserves space for \p _n elements in all vertex property vectors.
   void vprops_reserve(size_t _n) const { vprops_.reserve(_n); }
+
+  /// Resizes all vertex property vectors to the specified size.
   void vprops_resize(size_t _n) const { vprops_.resize(_n); }
+
+  /**
+   * Same as vprops_resize() but ignores vertex property vectors that have
+   * a size larger than \p _n.
+   *
+   * Use this method instead of vprops_resize() if you plan to frequently reduce
+   * and enlarge the property container and you don't want to waste time
+   * reallocating the property vectors every time.
+   */
+  void vprops_resize_if_smaller(size_t _n) const { vprops_.resize_if_smaller(_n); }
+
   void vprops_clear() {
     vprops_.clear();
   }
+
   void vprops_swap(unsigned int _i0, unsigned int _i1) const {
     vprops_.swap(_i0, _i1);
   }
