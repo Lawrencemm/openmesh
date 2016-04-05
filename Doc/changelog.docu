@@ -58,6 +58,8 @@
 <ul>
 <li>PLY Reader: Fixed CR LF newline handling for binary file headers.</li>
 <li>Obj writer: Fix OBJ material files and face color (Thanks to Sven-Kristofer Pilz for the patch) </li>
+<li>Obj writer: Fix OBJ writer bug file extension removal (Thanks to Katharina Breininger for the patch) </li>
+
 </ul>
 
 <b>Tools</b>

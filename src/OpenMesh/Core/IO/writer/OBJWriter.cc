@@ -115,7 +115,7 @@ write(const std::string& _filename, BaseExporter& _be, Options _opt, std::stream
     }
 
     //remove the file extension
-    dot = _filename.find_last_of(".");
+    dot = objName_.find_last_of(".");
 
     if(dot != std::string::npos)
       objName_ = objName_.substr(0,dot);
