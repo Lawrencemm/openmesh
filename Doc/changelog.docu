@@ -60,6 +60,12 @@
 <li>Obj writer: Fix OBJ material files and face color (Thanks to Sven-Kristofer Pilz for the patch) </li>
 </ul>
 
+<b>Tools</b>
+<ul>
+<li>Decimater: Added missing preprocess collapse call in size_t DecimaterT<Mesh>::decimate(size_t _n_collapses)  (Thanks to Andrej Ivanis for the hint)</li>
+</ul>
+
+
 
 <b>Build System</b>
 <ul>

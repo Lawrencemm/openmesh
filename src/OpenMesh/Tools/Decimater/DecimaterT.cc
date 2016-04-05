@@ -215,6 +215,9 @@ size_t DecimaterT<Mesh>::decimate(size_t _n_collapses) {
     for (; vv_it.is_valid(); ++vv_it)
       support.push_back(*vv_it);
 
+    // pre-processing
+    this->preprocess_collapse(ci);
+
     // perform collapse
     mesh_.collapse(v0v1);
     ++n_collapses;
