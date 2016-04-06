@@ -131,17 +131,45 @@ public:
           if (*it == *it2)
           {
             omerr() << "ImporterT: Face has equal vertices\n";
-            failed_faces_.push_back(_indices);
             return fh;
           }
 
 
       // try to add face
       fh = mesh_.add_face(_indices);
+      // separate non-manifold faces and mark them
       if (!fh.is_valid())
       {
-        failed_faces_.push_back(_indices);
-        return fh;
+        VHandles vhandles(_indices.size());
+
+        // double vertices
+        for (unsigned int j=0; j<_indices.size(); ++j)
+        {
+            // DO STORE p, reference may not work since vertex array
+            // may be relocated after adding a new vertex !
+            Point p = mesh_.point(_indices[j]);
+            vhandles[j] = mesh_.add_vertex(p);
+
+            // Mark vertices of failed face as non-manifold
+            if (mesh_.has_vertex_status()) {
+                mesh_.status(vhandles[j]).set_fixed_nonmanifold(true);
+            }
+        }
+
+        // add face
+        FaceHandle fh = mesh_.add_face(vhandles);
+
+        // Mark failed face as non-manifold
+        if (mesh_.has_face_status())
+          mesh_.status(fh).set_fixed_nonmanifold(true);
+
+        // Mark edges of failed face as non-two-manifold
+        if (mesh_.has_edge_status()) {
+          typename Mesh::FaceEdgeIter fe_it = mesh_.fe_iter(fh);
+          for(; fe_it.is_valid(); ++fe_it) {
+              mesh_.status(*fe_it).set_fixed_nonmanifold(true);
+          }
+        }
       }
 
       //write the half edge normals
@@ -358,60 +386,15 @@ public:
   size_t n_edges()     const { return mesh_.n_edges(); }
 
 
-  void prepare() { failed_faces_.clear(); }
+  void prepare() { }
 
 
-  void finish()
-  {
-    if (!failed_faces_.empty())
-    {
-      omerr() << failed_faces_.size()
-	    << " faces failed, adding them as isolated faces\n";
-
-      for (unsigned int i=0; i<failed_faces_.size(); ++i)
-      {
-        VHandles&  vhandles = failed_faces_[i];
-
-        // double vertices
-        for (unsigned int j=0; j<vhandles.size(); ++j)
-        {
-          Point p = mesh_.point(vhandles[j]);
-          vhandles[j] = mesh_.add_vertex(p);
-          // DO STORE p, reference may not work since vertex array
-          // may be relocated after adding a new vertex !
-
-          // Mark vertices of failed face as non-manifold
-          if (mesh_.has_vertex_status()) {
-              mesh_.status(vhandles[j]).set_fixed_nonmanifold(true);
-          }
-        }
-
-        // add face
-        FaceHandle fh = mesh_.add_face(vhandles);
-
-        // Mark failed face as non-manifold
-        if (mesh_.has_face_status())
-            mesh_.status(fh).set_fixed_nonmanifold(true);
-
-        // Mark edges of failed face as non-two-manifold
-        if (mesh_.has_edge_status()) {
-            typename Mesh::FaceEdgeIter fe_it = mesh_.fe_iter(fh);
-            for(; fe_it.is_valid(); ++fe_it) {
-                mesh_.status(*fe_it).set_fixed_nonmanifold(true);
-            }
-        }
-      }
-
-      failed_faces_.clear();
-    }
-  }
-
+  void finish()  { }
 
 
 private:
 
   Mesh& mesh_;
-  std::vector<VHandles>  failed_faces_;
   // stores normals for halfedges of the next face
   std::map<VertexHandle,Normal> halfedgeNormals_;
 };
