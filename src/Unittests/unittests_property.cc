@@ -588,6 +588,163 @@ TEST_F(OpenMeshProperties, CopyAllPropertiesVertexAfterRemoveOfProperty) {
 
 }
 
+/* Creates a double and int properties and check if we can iterate across them
+ */
+TEST_F(OpenMeshProperties, PropertyIterators ) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[4];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 0, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(1, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  // Test setup:
+  //  1 === 2
+  //  |   / |
+  //  |  /  |
+  //  | /   |
+  //  0 === 3
+
+  // Check setup
+  EXPECT_EQ(4u, mesh_.n_vertices() ) << "Wrong number of vertices";
+  EXPECT_EQ(2u, mesh_.n_faces() )    << "Wrong number of faces";
+
+
+  // Add vertex properties
+  OpenMesh::VPropHandleT<double> doubleHandleV;
+  OpenMesh::VPropHandleT<double> intHandleV;
+
+  EXPECT_FALSE( mesh_.get_property_handle(doubleHandleV,"doublePropV") );
+  EXPECT_FALSE( mesh_.get_property_handle(intHandleV,"intPropV") );
+
+  mesh_.add_property(doubleHandleV,"doublePropV");
+  mesh_.add_property(intHandleV,"intPropV");
+
+  EXPECT_TRUE(mesh_.get_property_handle(doubleHandleV,"doublePropV"));
+  EXPECT_TRUE(mesh_.get_property_handle(intHandleV,"intPropV"));
+
+  // Add a double Edge properties
+  OpenMesh::EPropHandleT<double> doubleHandleE;
+  OpenMesh::EPropHandleT<double> intHandleE;
+
+  EXPECT_FALSE( mesh_.get_property_handle(doubleHandleE,"doublePropE") );
+  EXPECT_FALSE( mesh_.get_property_handle(intHandleE,"intPropE") );
+
+  mesh_.add_property(doubleHandleE,"doublePropE");
+  mesh_.add_property(intHandleE,"intPropE");
+
+  EXPECT_TRUE(mesh_.get_property_handle(doubleHandleE,"doublePropE"));
+  EXPECT_TRUE(mesh_.get_property_handle(intHandleE,"intPropE"));
+
+
+  // Add Face properties
+  OpenMesh::FPropHandleT<double> doubleHandleF;
+  OpenMesh::FPropHandleT<double> intHandleF;
+
+  EXPECT_FALSE( mesh_.get_property_handle(doubleHandleF,"doublePropF") );
+  EXPECT_FALSE( mesh_.get_property_handle(intHandleF,"intPropF") );
+
+  mesh_.add_property(doubleHandleF,"doublePropF");
+  mesh_.add_property(intHandleF,"intPropF");
+
+  EXPECT_TRUE(mesh_.get_property_handle(doubleHandleF,"doublePropF"));
+  EXPECT_TRUE(mesh_.get_property_handle(intHandleF,"intPropF"));
+
+
+
+
+  unsigned int vertex_props = 0;
+    for (Mesh::prop_iterator vprop_it = mesh_.vprops_begin() ; vprop_it != mesh_.vprops_end(); ++vprop_it) {
+      switch (vertex_props) {
+        case 0:
+          EXPECT_EQ ("v:points",(*vprop_it)->name()) << "Wrong Vertex property name";
+          break;
+        case 1:
+          EXPECT_EQ ("<vprop>",(*vprop_it)->name()) << "Wrong Vertex property name";
+          break;
+        case 2:
+          EXPECT_EQ ("doublePropV",(*vprop_it)->name()) << "Wrong Vertex property name";
+          break;
+        case 3:
+          EXPECT_EQ ("intPropV",(*vprop_it)->name()) << "Wrong Vertex property name";
+          break;
+        default:
+          EXPECT_EQ (4u , vertex_props);
+          break;
+      }
+      ++vertex_props;
+    }
+
+    EXPECT_EQ (4u,vertex_props) << "Wrong number of vertex properties";
+
+
+
+  unsigned int edge_props = 0;
+  for (Mesh::prop_iterator eprop_it = mesh_.eprops_begin() ; eprop_it != mesh_.eprops_end(); ++eprop_it) {
+    switch (edge_props) {
+      case 0:
+        EXPECT_EQ ("<eprop>",(*eprop_it)->name()) << "Wrong Edge property name";
+        break;
+      case 1:
+        EXPECT_EQ ("doublePropE",(*eprop_it)->name()) << "Wrong Edge property name";
+        break;
+      case 2:
+        EXPECT_EQ ("intPropE",(*eprop_it)->name()) << "Wrong Edge property name";
+        break;
+      default:
+        EXPECT_EQ (4u , edge_props);
+        break;
+    }
+    ++edge_props;
+  }
+
+  EXPECT_EQ (3u,edge_props) << "Wrong number of edge properties";
+
+
+
+  unsigned int face_props = 0;
+  for (Mesh::prop_iterator prop_it = mesh_.fprops_begin() ; prop_it != mesh_.fprops_end(); ++prop_it) {
+    switch (face_props) {
+      case 0:
+        EXPECT_EQ ("<fprop>",(*prop_it)->name()) << "Wrong Face property name";
+        break;
+      case 1:
+        EXPECT_EQ ("doublePropF",(*prop_it)->name()) << "Wrong Face property name";
+        break;
+      case 2:
+        EXPECT_EQ ("intPropF",(*prop_it)->name()) << "Wrong Face property name";
+        break;
+      default:
+        EXPECT_EQ (4u , face_props);
+        break;
+    }
+    ++face_props;
+  }
+
+  EXPECT_EQ (3u,face_props) << "Wrong number of face properties";
+
+
+}
+
 
 
 }

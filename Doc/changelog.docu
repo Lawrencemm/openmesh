@@ -30,6 +30,7 @@
 <ul>
 <li>Added several unittests for VectorT</li>
 <li>Added Benchmarks for VectorT</li>
+<li>Added test for property iterators</li>
 </ul>
 
 <b>Build System</b>
