@@ -2,6 +2,8 @@
 #include <Unittests/unittests_common.hh>
 #include <iostream>
 #include <list>
+#include <stdint.h>
+
 
 namespace {
 
