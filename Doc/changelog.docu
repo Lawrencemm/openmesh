@@ -44,6 +44,11 @@
 <li>Fixed segfault in decimater due to a bad pointer</li>
 </ul>
 
+<b>Utils</b>
+<ul>
+<li>Add factory functions for creating PropertyManagers without restating the mesh type in C++11</li>
+</ul>
+
 </tr>
 
 
