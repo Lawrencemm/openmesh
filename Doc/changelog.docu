@@ -94,6 +94,7 @@
 <b>IO</b>
 <ul>
 <li>OMWriter: fix crash in OMWriter when writing an empty mesh with colors</li>
+<li>Binary writers: Fixed double swap in string specialization. Added Unittest.</li>
 </ul>
 
 <b>VectorT</b>
