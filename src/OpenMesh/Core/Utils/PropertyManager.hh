@@ -60,7 +60,23 @@ namespace OpenMesh {
  * It also defines convenience operators to access the encapsulated
  * property's value.
  *
- * Usage example:
+ * For C++11, it is recommended to use the factory functions
+ * makePropertyManagerFromNew, makePropertyManagerFromExisting,
+ * makePropertyManagerFromExistingOrNew to construct a PropertyManager, e.g.
+ *
+ * \code
+ * TriMesh mesh;
+ * auto visited = makePropertyManagerFromNew<VPropHandleT<bool>>(mesh, "visited.plugin-example.i8.informatik.rwth-aachen.de");
+ *
+ * for (auto vh : mesh.vertices()) {
+ *     if (!visited[vh]) {
+ *         visitComponent(mesh, vh, visited);
+ *     }
+ * }
+ * \endcode
+ *
+ * For C++98, it is usually more convenient to use the constructor explicitly,
+ * i.e.
  *
  * \code
  * TriMesh mesh;
@@ -107,6 +123,9 @@ class PropertyManager {
          * the property is deleted upon destruction of the PropertyManager instance). If true,
          * the instance merely acts as a convenience wrapper around an existing property with no
          * lifecycle management whatsoever.
+         *
+         * @see PropertyManager::createIfNotExists, makePropertyManagerFromNew,
+         * makePropertyManagerFromExisting, makePropertyManagerFromExistingOrNew
          */
         PropertyManager(MeshT &mesh, const char *propname, bool existing = false) : mesh_(&mesh), retain_(existing), name_(propname) {
             if (existing) {
@@ -164,15 +183,14 @@ class PropertyManager {
          * Move assignment. Transfers ownership (delete responsibility).
          */
         PropertyManager &operator=(PropertyManager &&rhs) {
-
-            deleteProperty();
-
-            mesh_ = rhs.mesh_;
-            prop_ = rhs.prop_;
-            retain_ = rhs.retain_;
-            name_ = rhs.name_;
-            rhs.retain_ = true;
-
+            if (&rhs != this) {
+                deleteProperty();
+                mesh_ = rhs.mesh_;
+                prop_ = rhs.prop_;
+                retain_ = rhs.retain_;
+                name_ = rhs.name_;
+                rhs.retain_ = true;
+            }
             return *this;
         }
 
@@ -180,6 +198,8 @@ class PropertyManager {
          * Create a property manager for the supplied property and mesh.
          * If the property doesn't exist, it is created. In any case,
          * lifecycle management is disabled.
+         *
+         * @see makePropertyManagerFromExistingOrNew
          */
         static PropertyManager createIfNotExists(MeshT &mesh, const char *propname) {
             PROPTYPE dummy_prop;
@@ -192,7 +212,7 @@ class PropertyManager {
         PropertyManager duplicate(const char *clone_name) {
             PropertyManager pm(*mesh_, clone_name, false);
             pm.mesh_->property(pm.prop_) = mesh_->property(prop_);
-            return std::move(pm);
+            return pm;
         }
 
         /**
@@ -237,6 +257,8 @@ class PropertyManager {
          * Create a property manager for the supplied property and mesh.
          * If the property doesn't exist, it is created. In any case,
          * lifecycle management is disabled.
+         *
+         * @see makePropertyManagerFromExistingOrNew
          */
         static Proxy createIfNotExists(MeshT &mesh, const char *propname) {
             PROPTYPE dummy_prop;
@@ -405,6 +427,44 @@ class PropertyManager {
         bool retain_;
         std::string name_;
 };
+
+/**
+ * Creates a new property whose lifecycle is managed by the returned
+ * PropertyManager.
+ *
+ * Intended for temporary properties. Shadows any existsing properties of
+ * matching name and type.
+ */
+template<typename PROPTYPE, typename MeshT>
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromNew(MeshT &mesh, const char *propname) {
+    return PropertyManager<PROPTYPE, MeshT>(mesh, propname, false);
+}
+
+/**
+ * Creates a non-owning wrapper for an existing mesh property (no lifecycle
+ * management).
+ *
+ * Intended for convenient access.
+ *
+ * @pre Property with the name \p propname of matching type exists.
+ * @throws std::runtime_error if no property with the name \p propname of
+ * matching type exists.
+ */
+template<typename PROPTYPE, typename MeshT>
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExisting(MeshT &mesh, const char *propname) {
+    return PropertyManager<PROPTYPE, MeshT>(mesh, propname, true);
+}
+
+/**
+ * Creates a non-owning wrapper for a mesh property (no lifecycle management).
+ * If the given property does not exist, it is created.
+ *
+ * Intended for creating or accessing persistent properties.
+ */
+template<typename PROPTYPE, typename MeshT>
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(MeshT &mesh, const char *propname) {
+    return PropertyManager<PROPTYPE, MeshT>::createIfNotExists(mesh, propname);
+}
 
 } /* namespace OpenMesh */
 #endif /* PROPERTYMANAGER_HH_ */
