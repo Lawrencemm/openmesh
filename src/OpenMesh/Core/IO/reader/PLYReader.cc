@@ -456,11 +456,11 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 
     }
 
-    if (err_enabled) {
+    if (err_enabled) 
       omerr().enable();
-      if (complex_faces)
-        omerr() << complex_faces << " invalid faces could not be added.\n";
-    }
+
+    if (complex_faces)
+      omerr() << complex_faces << "The reader encountered invalid faces, that could not be added.\n";
 
     // File was successfully parsed.
     return true;
@@ -646,11 +646,12 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
       }
     }
 
-    if (err_enabled) {
+    if (err_enabled) 
       omerr().enable();
-      if (complex_faces)
-        omerr() << complex_faces << " invalid faces could not be added.\n";
-    }
+
+   if (complex_faces)
+      omerr() << complex_faces << "The reader encountered invalid faces, that could not be added.\n";
+
 
     return true;
 }
