@@ -50,6 +50,12 @@
 <li>Add factory functions for creating PropertyManagers without restating the mesh type in C++11</li>
 </ul>
 
+
+<b>Apps</b>
+<ul>
+<li>VDPM Analyzer: Fixed VS2015 internal compiler error with C++11</li>
+</ul>
+
 </tr>
 
 
