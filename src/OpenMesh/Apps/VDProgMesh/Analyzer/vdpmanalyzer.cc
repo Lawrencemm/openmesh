@@ -848,8 +848,15 @@ compute_screen_space_error(VHierarchyNodeHandle node_handle, VHierarchyNodeHandl
   Mesh::VertexFaceIter  vf_it;
   Mesh::HalfedgeHandle  heh;
   Mesh::VertexHandle    vh;
-  Vec3f                 residual, res;
-  Vec3f                 lp, tri[3];
+  Vec3f                 residual;
+  Vec3f                 res;
+  Vec3f                 lp;
+#if (_MSC_VER >= 1900  ) 
+  // Workaround for internal compiler error
+  Vec3f                 tri[3]{ {},{},{} };
+#else
+  Vec3f                 tri[3];
+#endif
   float                 s, t;
   VHierarchyNodeHandleContainer::iterator  n_it, n_end(leaf_nodes.end());
 

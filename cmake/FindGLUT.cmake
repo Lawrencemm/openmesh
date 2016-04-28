@@ -21,15 +21,45 @@
 #  License text for the above reference.)
 
 IF (WIN32)
+
+  # Check if the base path is set
+  if ( NOT CMAKE_WINDOWS_LIBS_DIR )
+    # This is the base directory for windows library search used in the finders we shipp.
+    set(CMAKE_WINDOWS_LIBS_DIR "c:\libs" CACHE STRING "Default Library search dir on windows." )
+  endif()
+
+  if ( CMAKE_GENERATOR MATCHES "^Visual Studio 11.*Win64" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2012/x64/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 11.*" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2012/x32/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 12.*Win64" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2013/x64/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 12.*" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2013/x32/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 14.*Win64" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x64/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 14.*" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x32/")
+  endif()
+
+
   FIND_PATH( GLUT_INCLUDE_DIR NAMES GL/glut.h 
     PATHS  ${GLUT_ROOT_PATH}/include 
-           "C:/libs/glut-3.7/include" )
-  FIND_LIBRARY( GLUT_glut_LIBRARY NAMES glut32 glut 
+           "${CMAKE_WINDOWS_LIBS_DIR}/glut-3.7/include"
+           "${VS_SEARCH_PATH}/freeglut-3.0.0/include" 
+           "${VS_SEARCH_PATH}/freeglut-2.8.1/include" )
+
+  FIND_LIBRARY( GLUT_glut_LIBRARY NAMES glut32 glut freeglut
     PATHS
     ${OPENGL_LIBRARY_DIR}
     ${GLUT_ROOT_PATH}/Release
-    "C:/libs/glut-3.7/lib"
+    "${CMAKE_WINDOWS_LIBS_DIR}/glut-3.7/lib"
+    "${VS_SEARCH_PATH}/freeglut-3.0.0/lib"
+    "${VS_SEARCH_PATH}/freeglut-2.8.1/lib"
     )
+
+  GET_FILENAME_COMPONENT( GLUT_LIBRARY_DIR ${GLUT_glut_LIBRARY} PATH ) 
+ 
 ELSE (WIN32)
   
   IF (APPLE)
