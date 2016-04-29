@@ -93,7 +93,7 @@ if ( BUILD_APPS )
 
               # Create a qt.conf file to find plugins on windows
               configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Qt/qt.conf.in Build/qt.conf COPYONLY  )
-              INSTALL(FILES ${CMAKE_BINARY_DIR}/Build/qt.conf DESTINATION .
+              INSTALL(FILES ${CMAKE_BINARY_DIR}/Build/qt.conf DESTINATION . )
             endif()
 
       endif()
