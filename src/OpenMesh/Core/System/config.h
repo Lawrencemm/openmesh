@@ -65,7 +65,7 @@
 // ----------------------------------------------------------------------------
 
 
-#define OM_VERSION 0x60000
+#define OM_VERSION 0x60100
 //#define OM_VERSION 0x50100
 
 // only defined, if it is a beta version

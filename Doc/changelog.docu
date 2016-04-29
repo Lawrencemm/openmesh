@@ -6,6 +6,10 @@
 
 <!-- --------------------------------------------------------------------- -->
 
+<tr valign=top><td><b>6.1</b> (?/?/?)</td><td>
+
+</tr>
+
 
 <tr valign=top><td><b>6.0</b> (2016/29/04)</td><td>
 
@@ -18,7 +22,7 @@
 <ul>
 <li>Obj reader: added texCoord3d functions to objloader</li>
 <li>PLY Reader: Don't emit warning for every complex face but warn only once in the end.</li>
-<li>Importer: Integrate non-manifold faces while importing and not at the end. Fixes missing properties on non-manifolds. (Thanks to Max Limper for the patch, Merge Request 51)<li>
+<li>Importer: Integrate non-manifold faces while importing and not at the end. Fixes missing properties on non-manifolds. (Thanks to Max Limper for the patch, Merge Request 51)</li>
 </ul>
 
 <b>VectorT</b>
