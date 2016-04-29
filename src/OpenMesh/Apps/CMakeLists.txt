@@ -89,7 +89,7 @@ if ( BUILD_APPS )
             # platform plugins for qt shoulb be installed along with the apps to run on the target systems
             if (EXISTS ${CMAKE_BINARY_DIR}/Build/plugins/platforms )
               FILE(GLOB files_install_app_platform_dlls "${CMAKE_BINARY_DIR}/Build/plugins/platforms/*.dll" )
-              INSTALL(FILES ${files_install_app_platform_dlls} DESTINATION . )
+              INSTALL(FILES ${files_install_app_platform_dlls} DESTINATION plugins/platforms/ )
 
               # Create a qt.conf file to find plugins on windows
               INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Qt/qt.conf DESTINATION . )
