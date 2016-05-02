@@ -7,7 +7,7 @@
 \page OpenMeshDoc OpenMesh Documentation
 \endif
 
-
+\image html OpenMesh_text_128.png
 
 Welcome to the %OpenMesh documentation. %OpenMesh is a generic and efficient library
 that offers data structures for representing and manipulating polygonal meshes.
