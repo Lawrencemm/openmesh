@@ -1032,6 +1032,7 @@ void PolyConnectivity::triangulate(FaceHandle _fh)
 
   HalfedgeHandle base_heh(halfedge_handle(_fh));
   VertexHandle start_vh = from_vertex_handle(base_heh);
+  HalfedgeHandle prev_heh(prev_halfedge_handle(base_heh));
   HalfedgeHandle next_heh(next_halfedge_handle(base_heh));
 
   while (to_vertex_handle(next_halfedge_handle(next_heh)) != start_vh)
@@ -1050,6 +1051,10 @@ void PolyConnectivity::triangulate(FaceHandle _fh)
     set_face_handle(base_heh, new_fh);
     set_face_handle(next_heh, new_fh);
     set_face_handle(new_heh,  new_fh);
+
+    copy_all_properties(prev_heh, new_heh, true);
+    copy_all_properties(prev_heh, opposite_halfedge_handle(new_heh), true);
+    copy_all_properties(_fh, new_fh, true);
 
     base_heh = opposite_halfedge_handle(new_heh);
     next_heh = next_next_heh;
