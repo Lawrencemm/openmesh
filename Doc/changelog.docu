@@ -8,6 +8,16 @@
 
 <tr valign=top><td><b>6.1</b> (?/?/?)</td><td>
 
+<b>General</b>
+<ul>
+<li>New logo for OpenMesh and switched to VCI schema</li>
+</ul>
+
+<b>Core</b>
+<ul>
+<li>PolyMesh: Copy per-halfedge and per-face properties to new elments during triangulation (Thanks to Max Limper for the patch)</li>
+</ul>
+
 </tr>
 
 
