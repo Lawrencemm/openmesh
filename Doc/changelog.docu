@@ -18,6 +18,11 @@
 <li>PolyMesh: Copy per-halfedge and per-face properties to new elments during triangulation (Thanks to Max Limper for the patch)</li>
 </ul>
 
+<b>Build System</b>
+<ul>
+<li>Some fixes for min gw (Thanks to Xan for the patch)</li>
+</ul>
+
 </tr>
 
 

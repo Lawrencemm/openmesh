@@ -66,7 +66,7 @@ endmacro ()
 
 
 # set directory structures for the different platforms
-if (WIN32)
+if (CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
   set (ACG_PROJECT_DATADIR ".")
   set (ACG_PROJECT_LIBDIR "lib")
   set (ACG_PROJECT_BINDIR ".")
