@@ -141,9 +141,9 @@ public:
    *  exhausted. This might lead to an memory allocation exception,
    *  though an smaller increment would be enough.
    */
-  void reserve( unsigned int _n_vertices,
-		unsigned int _n_edges,
-		unsigned int _n_faces );
+  void reserve( size_t _n_vertices,
+		size_t _n_edges,
+		size_t _n_faces );
 
 
   /// \name Handle -> Item.
@@ -224,13 +224,13 @@ public:
   /// \name Number of elements
   //@{
   /// Returns number of vertices
-  unsigned int n_vertices() const;
+  size_t n_vertices() const;
   /// Returns number of halfedges (should be 2*n_edges())
-  unsigned int n_halfedges() const;
+  size_t n_halfedges() const;
   /// Returns number of edges
-  unsigned int n_edges() const;
+  size_t n_edges() const;
   /// Returns number of faces
-  unsigned int n_faces() const;
+  size_t n_faces() const;
   /// Is the vertex container empty?
   bool vertices_empty() const;
   /// Is the halfedge container empty (should be the same as edges_empty()).
