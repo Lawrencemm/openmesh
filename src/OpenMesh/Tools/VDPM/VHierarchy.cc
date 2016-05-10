@@ -67,7 +67,8 @@ namespace VDPM {
 
 
 VHierarchy::
-VHierarchy()
+VHierarchy() :
+  n_roots_(0), tree_id_bits_(0)
 {
   clear();
 }
