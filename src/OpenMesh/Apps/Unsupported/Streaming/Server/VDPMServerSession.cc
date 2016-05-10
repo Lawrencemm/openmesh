@@ -245,11 +245,7 @@ stream_vsplits()
   VHierarchyNodeHandle  node_handle;
   OpenMesh::Vec3f       pos;
   VHierarchyNodeIndex   node_index, fund_lcut_index, fund_rcut_index;
-  float                 lchild_radius, rchild_radius;
   OpenMesh::Vec3f       lchild_normal, rchild_normal;
-  float                 lchild_sin_square, rchild_sin_square;
-  float                 lchild_mue_square, rchild_mue_square;
-  float                 lchild_sigma_square, rchild_sigma_square;
   unsigned int          n_vsplit_packets = (unsigned int) vsplits_.size();
   
   QDataStream qTcp(this);
@@ -270,11 +266,11 @@ stream_vsplits()
     node_index = node.node_index();
     fund_lcut_index = node.fund_lcut_index();
     fund_rcut_index = node.fund_rcut_index();
-    lchild_radius = lchild.radius();                rchild_radius = rchild.radius();
-    lchild_normal = lchild.normal();                rchild_normal = rchild.normal();
-    lchild_sin_square = lchild.sin_square();        rchild_sin_square = rchild.sin_square();
-    lchild_mue_square = lchild.mue_square();        rchild_mue_square = rchild.mue_square();
-    lchild_sigma_square = lchild.sigma_square();    rchild_sigma_square = rchild.sigma_square();
+    const float lchild_radius = lchild.radius();                const float rchild_radius = rchild.radius();
+    lchild_normal = lchild.normal();                                        rchild_normal = rchild.normal();
+    const float lchild_sin_square = lchild.sin_square();        const float rchild_sin_square = rchild.sin_square();
+    const float lchild_mue_square = lchild.mue_square();        const float rchild_mue_square = rchild.mue_square();
+    const float lchild_sigma_square = lchild.sigma_square();    const float rchild_sigma_square = rchild.sigma_square();
 
     qTcp  << pos[0] << pos[1] << pos[2]
           << node_index.value()

@@ -70,6 +70,9 @@ namespace VDPM {
 ViewingParameters::
 ViewingParameters()
 {
+  for ( unsigned int i = 0; i < 16; ++i)
+    modelview_matrix_[i] = 0.0;
+
   fovy_ = 45.0f;
   aspect_ = 1.0f;
   tolerance_square_ = 0.001f;

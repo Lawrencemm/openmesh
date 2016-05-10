@@ -27,3 +27,8 @@ macos-c++98:
   script: "CI/ci-mac.sh C++98"
   tags:
     - Apple
+
+cppcheck:
+  script: "CI/ci-cppcheck.sh"
+  tags:
+    - Linux
