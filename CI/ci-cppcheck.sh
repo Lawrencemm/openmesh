@@ -18,7 +18,7 @@ echo -e "${NC}"
 echo "Please Wait ..."
 
 # Run cppcheck and output into file
-cppcheck --enable=all . -I src -i Doc/ --force --suppress=unusedFunction --quiet vi src/OpenMesh/Tools/Utils/Timer.hh -Umin -Umax -UBMPOSTFIX -DOPENMESHDLLEXPORT="" &> cppcheck.log
+cppcheck --enable=all . -I src -i Doc/ --force --suppress=unusedFunction --suppress=missingIncludeSystem --quiet vi src/OpenMesh/Tools/Utils/Timer.hh -Umin -Umax -UBMPOSTFIX -DOPENMESHDLLEXPORT="" &> cppcheck.log
 
 echo -e "${OUTPUT}"
 echo "=============================================================================="
@@ -38,7 +38,7 @@ echo "CPPCHECK Summary"
 echo "=============================================================================="
 echo -e "${NC}"
 
-if [ $COUNT -gt 1 ]; then
+if [ $COUNT -gt 0 ]; then
   echo -e ${WARNING}
   echo "Total CPPCHECK error Count is $COUNT, which is too High! CPPCHECK Run failed";
   echo -e "${NC}"
