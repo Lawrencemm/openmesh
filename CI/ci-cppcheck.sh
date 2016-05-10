@@ -18,7 +18,7 @@ echo -e "${NC}"
 echo "Please Wait ..."
 
 # Run cppcheck and output into file
-cppcheck --enable=all . -I src -i Doc/ --force --suppress=unusedFunction --suppress=missingIncludeSystem --quiet vi src/OpenMesh/Tools/Utils/Timer.hh -Umin -Umax -UBMPOSTFIX -DOPENMESHDLLEXPORT="" &> cppcheck.log
+cppcheck --enable=all . -I src -i Doc/ --force --suppress=unusedFunction --suppress=missingIncludeSystem --quiet -Umin -Umax -UBMPOSTFIX -DOPENMESHDLLEXPORT="" &> cppcheck.log
 
 echo -e "${OUTPUT}"
 echo "=============================================================================="
