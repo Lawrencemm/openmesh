@@ -78,7 +78,7 @@ namespace VDPM {
 
 VHierarchyWindow::
 VHierarchyWindow() :
-  vhierarchy_(NULL), buffer_(NULL),buffer_min_ (0), buffer_max_(0), window_min_(0), window_max_(0), current_pos_(0) , n_shift_(0)
+  vhierarchy_(NULL), buffer_(NULL),buffer_min_ (0), buffer_max_(0), current_pos_(0) , window_min_(0), window_max_(0),  n_shift_(0)
 {
 
 }
