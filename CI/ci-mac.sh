@@ -13,11 +13,11 @@ OPTIONS=""
 
 if [ "$LANGUAGE" == "C++98" ]; then
   echo "Building with C++98";
-  BUILDPATH="$BUILDPATH-cpp98"
+  BUILDPATH="cpp98"
 elif [ "$LANGUAGE" == "C++11" ]; then
   echo "Building with C++11";
   OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++11' "
-  BUILDPATH="$BUILDPATH-cpp11"  
+  BUILDPATH="cpp11"  
 fi  
 
 #=====================================
@@ -27,6 +27,18 @@ NC='\033[0m'
 OUTPUT='\033[0;32m'
 WARNING='\033[0;93m'
 
+
+echo -e "${OUTPUT}"
+echo ""
+echo "======================================================================"
+echo "Basic configuration details:"
+echo "======================================================================"
+echo -e "${NC}"
+
+echo "Options:    $OPTIONS"
+echo "BuildPath:  $BUILDPATH"
+echo "Path:       $PATH"
+echo "Language:   $LANGUAGE"
 
 echo -e "${OUTPUT}"
 echo ""
@@ -78,7 +90,7 @@ fi
 
 cd build-release-$BUILDPATH
 
-cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF $OPTIONS ../
+cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF -DCPACK_BINARY_DRAGNDROP=ON $OPTIONS ../
 
 #build it
 make
@@ -107,7 +119,6 @@ else
   echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
   echo -e "${NC}"
 fi
-
 
 cd ..
 
@@ -184,6 +195,9 @@ if [ "$LANGUAGE" == "C++11" ]; then
   rm -f openmesh.so
   cp ../Build/python/openmesh.so .
   python -m unittest discover -v
+
+  cd ..
+
 else
 
   echo -e "${WARNING}"
@@ -191,3 +205,20 @@ else
   echo -e "${NC}"
 
 fi
+  
+cd ..
+
+echo -e "${OUTPUT}"
+echo ""
+echo "======================================================================"
+echo "Package creation (DMG and tarball)"
+echo "======================================================================"
+echo -e "${NC}"
+
+cd build-release-$BUILDPATH
+cp ../build-debug-$BUILDPATH/Build/lib/* ./Build/lib/
+cmake .
+make package
+
+
+
