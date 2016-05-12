@@ -24,7 +24,7 @@ macos-c++11:
     - Apple
   artifacts:
     paths:
-      - *.dmg
+      - build-release-cpp11/*.dmg
 
 macos-c++98:
   script: "CI/ci-mac.sh C++98"
@@ -32,7 +32,7 @@ macos-c++98:
     - Apple
   artifacts:
     paths:
-      - *.dmg
+      - build-release-cpp98/*.dmg
 
 cppcheck:
   script: "CI/ci-cppcheck.sh"
