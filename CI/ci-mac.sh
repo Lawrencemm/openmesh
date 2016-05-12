@@ -211,7 +211,7 @@ cd ..
 echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
-echo "Package creation"
+echo "Package creation (DMG and tarball)"
 echo "======================================================================"
 echo -e "${NC}"
 
