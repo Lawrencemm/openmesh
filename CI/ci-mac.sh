@@ -120,7 +120,6 @@ else
   echo -e "${NC}"
 fi
 
-OPTIONS=
 cd ..
 
 
@@ -196,6 +195,9 @@ if [ "$LANGUAGE" == "C++11" ]; then
   rm -f openmesh.so
   cp ../Build/python/openmesh.so .
   python -m unittest discover -v
+
+  cd ..
+
 else
 
   echo -e "${WARNING}"
@@ -203,8 +205,7 @@ else
   echo -e "${NC}"
 
 fi
-
-cd .. 
+  
 cd ..
 
 echo -e "${OUTPUT}"
