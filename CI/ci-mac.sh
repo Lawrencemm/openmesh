@@ -78,7 +78,7 @@ fi
 
 cd build-release-$BUILDPATH
 
-cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF $OPTIONS ../
+cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF -DCPACK_BINARY_DRAGNDROP=ON $OPTIONS ../
 
 #build it
 make
@@ -191,3 +191,21 @@ else
   echo -e "${NC}"
 
 fi
+
+cd .. 
+cd ..
+
+echo -e "${OUTPUT}"
+echo ""
+echo "======================================================================"
+echo "Package creation"
+echo "======================================================================"
+echo -e "${NC}"
+
+cd build-release-$BUILDPATH
+cp ../build-debug-$BUILDPATH/Build/lib/* ./Build/lib/
+cmake .
+make package
+
+
+
