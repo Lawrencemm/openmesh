@@ -606,7 +606,7 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
         case VERTEX_INDICES:
           // nV = number of Vertices for current face
           unsigned int nV;
-          readValue(prop.listIndexType, _in, nV);
+          readInteger(prop.listIndexType, _in, nV);
 
           if (nV == 3) {
             vhandles.resize(3);
@@ -636,11 +636,11 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
           if (_opt.check(Options::Custom) && fh.is_valid())
             readCustomProperty<true>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
           else
-            consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
+            consume_input(_in, scalar_size_[faceProperties_[propertyIndex].value]);
           break;
 
         default:
-          consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
+          consume_input(_in, scalar_size_[faceProperties_[propertyIndex].value]);
           break;
         }
       }
@@ -1154,6 +1154,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
                 indexType = ValueTypeUINT8;
               } else if (listIndexType == "uchar") {
                 indexType = ValueTypeUCHAR;
+              } else if (listIndexType == "int") {
+                indexType = ValueTypeINT;
               } else {
                 omerr() << "Unsupported Index type for property list: " << listIndexType << std::endl;
                 continue;
