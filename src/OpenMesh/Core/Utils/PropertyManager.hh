@@ -428,7 +428,7 @@ class PropertyManager {
         std::string name_;
 };
 
-/**
+/** \relates PropertyManager
  * Creates a new property whose lifecycle is managed by the returned
  * PropertyManager.
  *
@@ -440,7 +440,7 @@ PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromNew(MeshT &mesh, const c
     return PropertyManager<PROPTYPE, MeshT>(mesh, propname, false);
 }
 
-/**
+/** \relates PropertyManager
  * Creates a non-owning wrapper for an existing mesh property (no lifecycle
  * management).
  *
@@ -455,7 +455,7 @@ PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExisting(MeshT &mesh, co
     return PropertyManager<PROPTYPE, MeshT>(mesh, propname, true);
 }
 
-/**
+/** \relates PropertyManager
  * Creates a non-owning wrapper for a mesh property (no lifecycle management).
  * If the given property does not exist, it is created.
  *
