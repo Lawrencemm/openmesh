@@ -112,16 +112,6 @@ class VectorT {
 
         //-------------------------------------------------------------- constructors
 
-        /// default constructor creates uninitialized values.
-        constexpr VectorT() {}
-
-        /**
-         * Creates a vector with all components set to v.
-         */
-        explicit VectorT(const Scalar &v) {
-            vectorize(v);
-        }
-
         template<typename ... T,
             typename = typename std::enable_if<sizeof...(T) == DIM>::type,
             typename = typename std::enable_if<
@@ -131,6 +121,16 @@ class VectorT {
                     "Invalid number of components specified in constructor.");
             static_assert(are_convertible_to<Scalar, T...>::value,
                     "Not all components are convertible to Scalar.");
+        }
+
+        /// default constructor creates uninitialized values.
+        constexpr VectorT() {}
+
+        /**
+        * Creates a vector with all components set to v.
+        */
+        explicit VectorT(const Scalar &v) {
+            vectorize(v);
         }
 
         VectorT(const VectorT &rhs) = default;
