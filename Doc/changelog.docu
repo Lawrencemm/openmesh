@@ -20,6 +20,7 @@
 
 <b>IO</b>
 <ul>
+<li>PLY Reader: Handle nr newlines (Thanks to Christian Feurer for the patch)</li>
 <li>PLY Reader: Fixed binary reader errors in ply reader. (Thanks to Michael Kremer for the patch)</li>
 <li>Throw error when no readers are available (Thanks to Christian Feurer for the patch)</li>
 </ul>
