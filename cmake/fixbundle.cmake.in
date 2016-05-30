@@ -1,3 +1,6 @@
+# Interpret booleans directly without dereferencing them
+cmake_policy(SET CMP0012 NEW)
+
 # gp_item_default_embedded_path_override item default_embedded_path_var
 #
 # Return the path that others should refer to the item by when the item
