@@ -11,6 +11,7 @@
 <b>General</b>
 <ul>
 <li>New logo for OpenMesh and switched to VCI schema</li>
+<li>Fix Internal Compiler Error in Visual Studio 2015 Community edition (Enterprise version does not trigger this error)</li>
 </ul>
 
 <b>Core</b>
@@ -29,6 +30,17 @@
 <ul>
 <li>Some fixes for min gw (Thanks to Xan for the patch)</li>
 </ul>
+
+<b>Infrastructure</b>
+<ul>
+<li>Build drag and drop installer for Mac in Daily Builds</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Move documentation of PropertyManager factory functions to PropertyManager Doxygen page</li>
+</ul>
+
 
 </tr>
 
