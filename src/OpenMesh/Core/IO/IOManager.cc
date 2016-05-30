@@ -94,6 +94,12 @@ read(const std::string& _filename, BaseImporter& _bi, Options& _opt)
   std::set<BaseReader*>::const_iterator it     =  reader_modules_.begin();
   std::set<BaseReader*>::const_iterator it_end =  reader_modules_.end();
 
+  if( it == it_end ) 
+  { 
+    omerr() << "[OpenMesh::IO::_IOManager_] No reading modules available!\n"; 
+    return false; 
+  } 
+
   // Try all registered modules
   for(; it != it_end; ++it)
     if ((*it)->can_u_read(_filename))
