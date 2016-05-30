@@ -88,7 +88,7 @@ public:
 // compiler and os dependent implementation
 
 // ------------------------------------------------------------- windows 32 ----
-#if defined(WIN32) && (defined(_MSC_VER) || defined(__INTEL_COMPILER))
+#if defined(WIN32) && (defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined (__MINGW32__) )
 
 #ifndef DOXY_IGNORE_THIS
 #include <windows.h>
@@ -263,7 +263,7 @@ void TimerImplStd::stop(void)
 
 Timer::Timer(void)
 {
-#if defined(WIN32) && defined(_MSC_VER)
+#if defined(WIN32) && (defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__MINGW32__)) 
   impl_       = new TimerImplWin32;
 #elif defined(__GNUC__) && defined(__POSIX__)
 // CLOCK_REALTIME
