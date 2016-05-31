@@ -1,4 +1,4 @@
-# OpenMesh, 6.1
+# OpenMesh, 6.2
 
 
 ## Getting OpenMesh
