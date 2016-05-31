@@ -25,9 +25,9 @@ acg_append_files (sources "*.cc" ${directories})
 #Drop the template only cc files
 acg_drop_templates(sources)
 
-IF(WIN32)
+IF(WIN32 AND NOT MINGW)
   acg_append_files (sources "*.c" ${directories})
-ENDIF(WIN32)
+ENDIF(WIN32 AND NOT MINGW)
 
 # Disable Library installation when not building OpenMesh on its own but as part of another project!
 if ( NOT ${PROJECT_NAME} MATCHES "OpenMesh")

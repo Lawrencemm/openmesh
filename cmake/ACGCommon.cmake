@@ -619,7 +619,7 @@ function (acg_add_library _target _libtype)
 
   if (${_libtype} STREQUAL SHAREDANDSTATIC)
     set (_type SHARED)
-    if (NOT WIN32)
+    if (NOT WIN32 OR MINGW)
       set (_and_static 1)
     else ()
       set (_and_static 0)
@@ -649,7 +649,7 @@ function (acg_add_library _target _libtype)
     endif ()
   endif ()
 
-  if (WIN32 OR (APPLE AND NOT ACG_PROJECT_MACOS_BUNDLE))
+  if ( (WIN32 AND MSVC) OR (APPLE AND NOT ACG_PROJECT_MACOS_BUNDLE))
     if (${_type} STREQUAL SHARED)
       add_custom_command (TARGET ${_target} POST_BUILD
                           COMMAND ${CMAKE_COMMAND} -E
@@ -688,7 +688,7 @@ function (acg_add_library _target _libtype)
                             ${CMAKE_BINARY_DIR}/Build/${ACG_PROJECT_BINDIR}/$<TARGET_FILE_NAME:${_target}>)
 	endif () 
     
-  endif(WIN32 OR (APPLE AND NOT ACG_PROJECT_MACOS_BUNDLE))
+  endif( (WIN32 AND MSVC) OR (APPLE AND NOT ACG_PROJECT_MACOS_BUNDLE))
   
   if (_and_static)
     add_custom_command (TARGET ${_target}Static POST_BUILD

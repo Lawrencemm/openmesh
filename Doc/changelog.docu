@@ -29,6 +29,7 @@
 <b>Build System</b>
 <ul>
 <li>Some fixes for min gw (Thanks to Xan for the patch)</li>
+<li>Several changes to support mingw on windows again. (Thanks to Christian Feurer for the patches).</li>
 </ul>
 
 <b>Infrastructure</b>
