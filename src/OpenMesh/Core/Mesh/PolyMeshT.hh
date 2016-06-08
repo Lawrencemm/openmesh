@@ -608,11 +608,6 @@ const LHS mesh_cast(const PolyMeshT<KERNEL> *rhs) {
     return MeshCast<LHS, const PolyMeshT<KERNEL>*>::cast(rhs);
 }
 
-inline size_t hash_value(const VertexHandle&  i)   { return i.idx(); }
-inline size_t hash_value(const HalfedgeHandle&  i) { return i.idx(); }
-inline size_t hash_value(const FaceHandle&  i)     { return i.idx(); }
-
-
 //=============================================================================
 } // namespace OpenMesh
 //=============================================================================
