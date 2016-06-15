@@ -35,7 +35,7 @@ if ( NOT ${PROJECT_NAME} MATCHES "OpenMesh")
 endif()
 
 
-if (WIN32 AND NOT MINGW)
+if (WIN32)
 
   if ( OPENMESH_BUILD_SHARED )
     add_definitions( -DOPENMESHDLL -DBUILDOPENMESHDLL)
