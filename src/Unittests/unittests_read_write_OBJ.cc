@@ -203,6 +203,62 @@ TEST_F(OpenMeshReadWriteOBJ, LoadSimpleOBJCheckTexCoords) {
 }
 
 /*
+ * Just load and store obj file of a cube and checks the halfedge texCoords
+ */
+TEST_F(OpenMeshReadWriteOBJ, LoadStoreSimpleOBJCheckTexCoords) {
+
+  mesh_.clear();
+
+  mesh_.request_halfedge_texcoords2D();
+
+  OpenMesh::IO::Options options;
+  options += OpenMesh::IO::Options::FaceTexCoord;
+
+  std::string file_name = "cube-minimal-texCoords.obj";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh_, file_name,options);
+
+  EXPECT_TRUE(ok) << file_name;
+
+
+
+  options.clear();
+  options += OpenMesh::IO::Options::FaceTexCoord;
+  bool writeOk = OpenMesh::IO::write_mesh(mesh_,"writeTest.obj",options);
+  EXPECT_TRUE(writeOk) << "writeTest.obj";
+  mesh_.release_halfedge_texcoords2D();
+
+  Mesh loadedMesh_;
+  loadedMesh_.clear();
+
+  loadedMesh_.request_halfedge_texcoords2D();
+
+  options.clear();
+  options += OpenMesh::IO::Options::FaceTexCoord;
+  bool readOk = OpenMesh::IO::read_mesh(loadedMesh_, "writeTest.obj",options);
+  EXPECT_TRUE(readOk) << file_name;
+  EXPECT_EQ(1, loadedMesh_.texcoord2D(mesh_.halfedge_handle(0))[0] ) << "Wrong texCoord at halfedge 0 component 0";
+  EXPECT_EQ(1, loadedMesh_.texcoord2D(mesh_.halfedge_handle(0))[1] ) << "Wrong texCoord at halfedge 0 component 1";
+
+  EXPECT_EQ(3, loadedMesh_.texcoord2D(mesh_.halfedge_handle(10))[0] ) << "Wrong texCoord at halfedge 1 component 0";
+  EXPECT_EQ(3, loadedMesh_.texcoord2D(mesh_.halfedge_handle(10))[1] ) << "Wrong texCoord at halfedge 1 component 1";
+
+  EXPECT_EQ(6, loadedMesh_.texcoord2D(mesh_.halfedge_handle(19))[0] ) << "Wrong texCoord at halfedge 4 component 0";
+  EXPECT_EQ(6, loadedMesh_.texcoord2D(mesh_.halfedge_handle(19))[1] ) << "Wrong texCoord at halfedge 4 component 1";
+
+  EXPECT_EQ(7, loadedMesh_.texcoord2D(mesh_.halfedge_handle(24))[0] ) << "Wrong texCoord at halfedge 7 component 0";
+  EXPECT_EQ(7, loadedMesh_.texcoord2D(mesh_.halfedge_handle(24))[1] ) << "Wrong texCoord at halfedge 7 component 1";
+
+  EXPECT_EQ(9, loadedMesh_.texcoord2D(mesh_.halfedge_handle(30))[0] ) << "Wrong texCoord at halfedge 9 component 0";
+  EXPECT_EQ(9, loadedMesh_.texcoord2D(mesh_.halfedge_handle(30))[1] ) << "Wrong texCoord at halfedge 9 component 1";
+
+  EXPECT_EQ(12, loadedMesh_.texcoord2D(mesh_.halfedge_handle(35))[0] ) << "Wrong texCoord at halfedge 11 component 0";
+  EXPECT_EQ(12, loadedMesh_.texcoord2D(mesh_.halfedge_handle(35))[1] ) << "Wrong texCoord at halfedge 11 component 1";
+
+  loadedMesh_.release_halfedge_texcoords2D();
+}
+
+/*
  * Just load a obj file of a cube and checks the 3d halfedge texCoords
  */
 TEST_F(OpenMeshReadWriteOBJ, LoadSimpleOBJCheckTexCoords3d) {
