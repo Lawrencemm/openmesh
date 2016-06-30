@@ -9,6 +9,11 @@
 
 <tr valign=top><td><b>6.2</b> (?/?/?)</td><td>
 
+<b>Build System</b>
+<ul>
+<li>Fixed mingw compilataion error</li>
+</ul>
+
 </tr>
 
 <tr valign=top><td><b>6.1</b> (2016/05/31)</td><td>
