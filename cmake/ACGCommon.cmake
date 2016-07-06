@@ -9,7 +9,7 @@ if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 endif ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 
 # allow only Debug and Release builds
-set (CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
+set (CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "")
 mark_as_advanced (CMAKE_CONFIGURATION_TYPES)
 
 # set Debus as default build target
