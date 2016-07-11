@@ -17,13 +17,11 @@ endfunction(gp_item_default_embedded_path_override)
 
 include (BundleUtilities)
 
-if(@BUILD_APPS@) 
-  # Get library paths
-  get_filename_component(_GlutDir "@GLUT_glut_LIBRARY@" PATH)
+# Get library paths
+get_filename_component(_GlutDir "@GLUT_glut_LIBRARY@" PATH)
 
-  # fix all dependencies
-  fixup_bundle ("@CMAKE_BINARY_DIR@/Build/Smoothing.exe" ""  "${_GlutDir};@QT_BINARY_DIR@")
-endif()
+# fix all dependencies
+fixup_bundle ("@CMAKE_BINARY_DIR@/Build/Smoothing.exe" ""  "${_GlutDir};@QT_BINARY_DIR@")
 
 
 
