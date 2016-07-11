@@ -106,6 +106,8 @@ private:
   int idx_; 
 };
 
+// this is used by boost::unordered_set/map
+inline size_t hash_value(const BaseHandle&  h)   { return h.idx(); }
 
 //-----------------------------------------------------------------------------
 
@@ -150,5 +152,79 @@ struct FaceHandle : public BaseHandle
 //=============================================================================
 } // namespace OpenMesh
 //=============================================================================
+
+#ifdef OM_HAS_HASH
+#include <functional>
+namespace std {
+
+#if defined(_MSVC_VER)
+#  pragma warning(push)
+#  pragma warning(disable:4099) // For VC++ it is class hash
+#endif
+
+
+template <>
+class hash<OpenMesh::BaseHandle >
+  : public std::unary_function<OpenMesh::BaseHandle, std::size_t>
+{
+
+  std::size_t operator()(const OpenMesh::BaseHandle& h) const
+  {
+    return h.idx();
+  }
+};
+
+template <>
+struct hash<OpenMesh::VertexHandle >
+  : public std::unary_function<OpenMesh::VertexHandle, std::size_t>
+{
+
+  std::size_t operator()(const OpenMesh::VertexHandle& h) const
+  {
+    return h.idx();
+  }
+};
+
+template <>
+struct hash<OpenMesh::HalfedgeHandle >
+  : public std::unary_function<OpenMesh::HalfedgeHandle, std::size_t>
+{
+
+  std::size_t operator()(const OpenMesh::HalfedgeHandle& h) const
+  {
+    return h.idx();
+  }
+};
+
+template <>
+struct hash<OpenMesh::EdgeHandle >
+  : public std::unary_function<OpenMesh::EdgeHandle, std::size_t>
+{
+
+  std::size_t operator()(const OpenMesh::EdgeHandle& h) const
+  {
+    return h.idx();
+  }
+};
+
+template <>
+struct hash<OpenMesh::FaceHandle >
+  : public std::unary_function<OpenMesh::FaceHandle, std::size_t>
+{
+
+  std::size_t operator()(const OpenMesh::FaceHandle& h) const
+  {
+    return h.idx();
+  }
+};
+
+#if defined(_MSVC_VER)
+#  pragma warning(pop)
+#endif
+
+}
+#endif  // OM_HAS_HASH
+
+
 #endif // OPENMESH_HANDLES_HH
 //=============================================================================

@@ -19,6 +19,12 @@
 <li>Fixed mingw compilataion error</li>
 </ul>
 
+<b>General</b>
+<ul>
+<li>Added size_t hash_value functions to support boost unordered_set and map</li>
+</ul>
+
+
 </tr>
 
 <tr valign=top><td><b>6.1</b> (2016/05/31)</td><td>

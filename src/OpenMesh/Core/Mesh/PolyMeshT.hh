@@ -608,7 +608,6 @@ const LHS mesh_cast(const PolyMeshT<KERNEL> *rhs) {
     return MeshCast<LHS, const PolyMeshT<KERNEL>*>::cast(rhs);
 }
 
-
 //=============================================================================
 } // namespace OpenMesh
 //=============================================================================
