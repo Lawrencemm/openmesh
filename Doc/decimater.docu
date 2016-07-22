@@ -39,7 +39,7 @@
 
     // If halfedge is boundary, lock the corresponding vertices
     for (he_it = mesh_->halfedges_begin(); he_it != he_end ; ++he_it)
-      if (mesh_->is_boundary(*he_it) ) {
+      if (mesh_->is_boundary(*he_it)) {
          mesh_->status(_mesh->to_vertex_handle(*he_it)).set_locked(true);
          mesh_->status(_mesh->from_vertex_handle(*he_it)).set_locked(true);
       }
