@@ -164,7 +164,7 @@ namespace std {
 
 
 template <>
-class hash<OpenMesh::BaseHandle >
+struct hash<OpenMesh::BaseHandle >
   : public std::unary_function<OpenMesh::BaseHandle, std::size_t>
 {
 
