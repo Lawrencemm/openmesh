@@ -55,6 +55,7 @@
 
 #include <float.h>
 #include <fstream>
+#include <cstring>
 
 // OpenMesh
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
