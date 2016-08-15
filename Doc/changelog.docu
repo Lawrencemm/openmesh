@@ -9,6 +9,16 @@
 
 <tr valign=top><td><b>6.3</b> (?/?/?)</td><td>
 
+<b>General</b>
+<ul>
+<li>Fixed undefined MSVC macro warning (Thanks to Xan for the patch)</li> 
+</li>
+
+<b>Build System</b>
+<ul>
+<li>Removed unnecessary include dir from Core Cmakelist (Thanks to Xan for the patch)</li>
+</ul>
+
 </tr>
 
 <tr valign=top><td><b>6.2</b> (2016/07/11)</td><td>
@@ -26,7 +36,6 @@
 <b>General</b>
 <ul>
 <li>Added size_t hash_value functions to support boost unordered_set and map</li>
-<li>Fixed undefined MSVC macro warning (Thanks to Xan for the patch)</li> 
 </ul>
 
 
