@@ -61,6 +61,13 @@
 #include <OpenMesh/Core/IO/reader/STLReader.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
 
+//comppare strings crossplatform ignorign case
+#ifdef _WIN32
+  #define strnicmp _strnicmp
+#else
+  #define strnicmp strncasecmp
+#endif
+
 
 //=== NAMESPACES ==============================================================
 
@@ -447,41 +454,32 @@ _STLReader_::STL_Type
 _STLReader_::
 check_stl_type(const std::string& _filename) const
 {
-  // assume it's binary stl, then file size is known from #triangles
-  // if size matches, it's really binary
-
 
   // open file
-  FILE* in = fopen(_filename.c_str(), "rb");
-  if (!in) return NONE;
+  std::ifstream ifs (_filename.c_str(), std::ifstream::binary);
+  if(!ifs.good())
+  {
+    omerr() << "could not open file" << _filename << std::endl;
+    return NONE;
+  }
 
+  //find first non whitespace character
+  std::string line = "";
+  std::size_t firstChar;
+  while(line.empty() && ifs.good())
+  {
+    std::getline(ifs,line);
+    firstChar = line.find_first_not_of("\t ");
+  }
 
-  // determine endian mode
-  union { unsigned int i; unsigned char c[4]; } endian_test;
-  endian_test.i = 1;
-  bool swapFlag = (endian_test.c[3] == 1);
+  //check for ascii keyword solid
+  if(strnicmp("solid",&line[firstChar],5) == 0)
+  {
+    return STLA;
+  }
 
-
-  // read number of triangles
-  char dummy[100];
-  fread(dummy, 1, 80, in);
-  size_t nT = read_int(in, swapFlag);
-
-
-  // compute file size from nT
-  size_t binary_size = 84 + nT*50;
-
-
-  // get actual file size
-  size_t file_size(0);
-  rewind(in);
-  while (!feof(in))
-    file_size += fread(dummy, 1, 100, in);
-  fclose(in);
-
-
-  // if sizes match -> it's STLB
-  return (binary_size == file_size ? STLB : STLA);
+  //if the file does not start with solid it is STLB
+  return STLB;
 }
 
 
