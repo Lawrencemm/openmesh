@@ -9,6 +9,13 @@
 
 <tr valign=top><td><b>6.3</b> (?/?/?)</td><td>
 
+<b>Core</b>
+<ul>
+<li>Fixed type pun warning with gcc-6</li>
+<li>Fixed incorrect type of hash function for boost causing a warning with clang</li>
+</li>
+
+
 <b>General</b>
 <ul>
 <li>Fixed undefined MSVC macro warning (Thanks to Xan for the patch)</li> 
