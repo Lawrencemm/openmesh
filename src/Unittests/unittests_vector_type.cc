@@ -84,7 +84,7 @@ TEST_F(OpenMeshVectorTest, VectorCasting) {
 
 }
 
-#if _MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 TEST_F(OpenMeshVectorTest, cpp11_constructors) {
     OpenMesh::Vec3d vec1 { 1.2, 2.0, 3.0 };
 

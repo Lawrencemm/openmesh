@@ -78,7 +78,7 @@ void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
     classVector
         .def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
-#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+#if ((defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
         .def("__mod__", &Factory<Scalar>::Vector3::template operator%<Scalar>)
         ;
     def("cross", &Factory<Scalar>::Vector3::template operator%<Scalar>);
@@ -144,7 +144,7 @@ void expose_vec(const char *_name) {
 		.def("vectorize", &Vector::vectorize, return_internal_reference<>())
 		.def(self < self)
 
-#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+#if ((defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
         .def("dot", &Vector::template operator|<Scalar>)
         .def("norm", &Vector::template norm<Scalar>)
         .def("length", &Vector::template length<Scalar>)
