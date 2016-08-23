@@ -41,59 +41,56 @@ Scalar get_item(Vector& _vec, int _index) {
 namespace {
 template<class Scalar>
 struct Factory {
-    typedef OpenMesh::VectorT<Scalar, 2> Vector2;
-    typedef OpenMesh::VectorT<Scalar, 3> Vector3;
-    typedef OpenMesh::VectorT<Scalar, 4> Vector4;
+	typedef OpenMesh::VectorT<Scalar, 2> Vector2;
+	typedef OpenMesh::VectorT<Scalar, 3> Vector3;
+	typedef OpenMesh::VectorT<Scalar, 4> Vector4;
 
-    static Vector2 *vec2_default() {
-        return new Vector2(Scalar(), Scalar());
-    }
-    static Vector2 *vec2_user_defined(const Scalar& _v0, const Scalar& _v1) {
-        return new Vector2(_v0, _v1);
-    }
-    static Vector3 *vec3_default() {
-        return new Vector3(Scalar(), Scalar(), Scalar());
-    }
-    static Vector3 *vec3_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2) {
-        return new Vector3(_v0, _v1, _v2);
-    }
-    static Vector4 *vec4_default() {
-        return new Vector4(Scalar(), Scalar(), Scalar(), Scalar());
-    }
-    static Vector4 *vec4_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2, const Scalar& _v3) {
-        return new Vector4(_v0, _v1, _v2, _v3);
-    }
+	static Vector2 *vec2_default() {
+		return new Vector2(Scalar(), Scalar());
+	}
+	static Vector2 *vec2_user_defined(const Scalar& _v0, const Scalar& _v1) {
+		return new Vector2(_v0, _v1);
+	}
+	static Vector3 *vec3_default() {
+		return new Vector3(Scalar(), Scalar(), Scalar());
+	}
+	static Vector3 *vec3_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2) {
+		return new Vector3(_v0, _v1, _v2);
+	}
+	static Vector4 *vec4_default() {
+		return new Vector4(Scalar(), Scalar(), Scalar(), Scalar());
+	}
+	static Vector4 *vec4_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2, const Scalar& _v3) {
+		return new Vector4(_v0, _v1, _v2, _v3);
+	}
 };
 }
 
-template<class Scalar>
+template<class Scalar, class Vector>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 2> > &classVector) {
-    classVector
-        .def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
-        .def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
-        ;
+	classVector
+		.def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
+		.def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
+		;
 }
-template<class Scalar>
+
+template<class Scalar, class Vector>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
-    classVector
-        .def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
-        .def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
-#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
-        .def("__mod__", &Factory<Scalar>::Vector3::template operator%<Scalar>)
-        ;
-    def("cross", &Factory<Scalar>::Vector3::template operator%<Scalar>);
-#else
-        .def("__mod__", &Factory<Scalar>::Vector3::operator%)
-        ;
-    def("cross", &Factory<Scalar>::Vector3::operator%);
-#endif
+	Vector (Vector::*cross)(const Vector&) const = &Vector::operator%;
+	classVector
+		.def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
+		.def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
+		.def("__mod__", cross)
+		;
+	def("cross", cross);
 }
-template<class Scalar>
+
+template<class Scalar, class Vector>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 4> > &classVector) {
-    classVector
-        .def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
-        .def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))
-        ;
+	classVector
+		.def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
+		.def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))
+		;
 }
 
 /**
@@ -118,6 +115,19 @@ void expose_vec(const char *_name) {
 
 	Vector (Vector::*max_vector)(const Vector&) const = &Vector::max;
 	Vector (Vector::*min_vector)(const Vector&) const = &Vector::min;
+
+	Scalar  (Vector::*dot           )(const Vector&) const = &Vector::operator|;
+	Scalar  (Vector::*norm          )(void         ) const = &Vector::norm;
+	Scalar  (Vector::*length        )(void         ) const = &Vector::length;
+	Scalar  (Vector::*sqrnorm       )(void         ) const = &Vector::sqrnorm;
+	Vector& (Vector::*normalize     )(void         )       = &Vector::normalize;
+	Vector& (Vector::*normalize_cond)(void         )       = &Vector::normalize_cond;
+
+#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+	Vector (Vector::*normalized)() const = &Vector::normalized;
+#else
+	const Vector (Vector::*normalized)() const = &Vector::normalized;
+#endif
 
 	class_<Vector> classVector = class_<Vector>(_name);
 
@@ -144,23 +154,13 @@ void expose_vec(const char *_name) {
 		.def("vectorize", &Vector::vectorize, return_internal_reference<>())
 		.def(self < self)
 
-#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
-        .def("dot", &Vector::template operator|<Scalar>)
-        .def("norm", &Vector::template norm<Scalar>)
-        .def("length", &Vector::template length<Scalar>)
-        .def("sqrnorm", &Vector::template sqrnorm<Scalar>)
-        .def("normalize", &Vector::template normalize<Scalar>, return_internal_reference<>())
-        .def("normalized", &Vector::template normalized<Scalar>)
-        .def("normalize_cond", &Vector::template normalize_cond<Scalar>, return_internal_reference<>())
-#else
-        .def("dot", &Vector::operator|)
-        .def("norm", &Vector::norm)
-        .def("length", &Vector::length)
-        .def("sqrnorm", &Vector::sqrnorm)
-        .def("normalize", &Vector::normalize, return_internal_reference<>())
-        .def("normalized", &Vector::normalized)
-        .def("normalize_cond", &Vector::normalize_cond, return_internal_reference<>())
-#endif
+		.def("dot", dot)
+		.def("norm", norm)
+		.def("length", length)
+		.def("sqrnorm", sqrnorm)
+		.def("normalized", normalized)
+		.def("normalize", normalize, return_internal_reference<>())
+		.def("normalize_cond", normalize_cond, return_internal_reference<>())
 
 		.def("l1_norm", &Vector::l1_norm)
 		.def("l8_norm", &Vector::l8_norm)
@@ -184,7 +184,7 @@ void expose_vec(const char *_name) {
 		.staticmethod("vectorized")
 		;
 
-    defInitMod<Scalar>(classVector);
+	defInitMod<Scalar, Vector>(classVector);
 }
 
 } // namespace OpenMesh
