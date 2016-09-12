@@ -208,6 +208,42 @@ class PropertyManager {
             return std::move(pm);
         }
 
+        /**
+         * Like createIfNotExists() with two parameters except, if the property
+         * doesn't exist, it is initialized with the supplied value over
+         * the supplied range after creation. If the property already exists,
+         * this method has the exact same effect as the two parameter version.
+         * Lifecycle management is disabled in any case.
+         *
+         * @see makePropertyManagerFromExistingOrNew
+         */
+        template<typename PROP_VALUE, typename ITERATOR_TYPE>
+        static PropertyManager createIfNotExists(MeshT &mesh, const char *propname,
+                const ITERATOR_TYPE &begin, const ITERATOR_TYPE &end,
+                const PROP_VALUE &init_value) {
+            const bool exists = propertyExists(mesh, propname);
+            PropertyManager pm(mesh, propname, exists);
+            pm.retain();
+            if (!exists)
+                pm.set_range(begin, end, init_value);
+            return std::move(pm);
+        }
+
+        /**
+         * Like createIfNotExists() with two parameters except, if the property
+         * doesn't exist, it is initialized with the supplied value over
+         * the supplied range after creation. If the property already exists,
+         * this method has the exact same effect as the two parameter version.
+         * Lifecycle management is disabled in any case.
+         *
+         * @see makePropertyManagerFromExistingOrNew
+         */
+        template<typename PROP_VALUE, typename ITERATOR_RANGE>
+        static PropertyManager createIfNotExists(MeshT &mesh, const char *propname,
+                const ITERATOR_RANGE &range, const PROP_VALUE &init_value) {
+            return createIfNotExists(
+                    mesh, propname, range.begin(), range.end(), init_value);
+        }
 
         PropertyManager duplicate(const char *clone_name) {
             PropertyManager pm(*mesh_, clone_name, false);
@@ -264,6 +300,27 @@ class PropertyManager {
             PROPTYPE dummy_prop;
             PropertyManager pm(mesh, propname, mesh.get_property_handle(dummy_prop, propname));
             pm.retain();
+            return (Proxy)pm;
+        }
+
+        /**
+         * Like createIfNotExists() with two parameters except, if the property
+         * doesn't exist, it is initialized with the supplied value over
+         * the supplied range after creation. If the property already exists,
+         * this method has the exact same effect as the two parameter version.
+         * Lifecycle management is disabled in any case.
+         *
+         * @see makePropertyManagerFromExistingOrNew
+         */
+        template<typename PROP_VALUE, typename ITERATOR_TYPE>
+        static Proxy createIfNotExists(MeshT &mesh, const char *propname,
+                const ITERATOR_TYPE &begin, const ITERATOR_TYPE &end,
+                const PROP_VALUE &init_value) {
+            const bool exists = propertyExists(mesh, propname);
+            PropertyManager pm(mesh, propname, exists);
+            pm.retain();
+            if (!exists)
+                pm.set_range(begin, end, init_value);
             return (Proxy)pm;
         }
 
@@ -472,6 +529,48 @@ PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExisting(MeshT &mesh, co
 template<typename PROPTYPE, typename MeshT>
 PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(MeshT &mesh, const char *propname) {
     return PropertyManager<PROPTYPE, MeshT>::createIfNotExists(mesh, propname);
+}
+
+/** \relates PropertyManager
+ * Like the two parameter version of makePropertyManagerFromExistingOrNew()
+ * except it initializes the property with the specified value over the
+ * specified range if it needs to be created. If the property already exists,
+ * this function has the exact same effect as the two parameter version.
+ *
+ * Creates a non-owning wrapper for a mesh property (no lifecycle management).
+ * If the given property does not exist, it is created.
+ *
+ * Intended for creating or accessing persistent properties.
+ */
+template<typename PROPTYPE, typename MeshT,
+    typename ITERATOR_TYPE, typename PROP_VALUE>
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(
+        MeshT &mesh, const char *propname,
+        const ITERATOR_TYPE &begin, const ITERATOR_TYPE &end,
+        const PROP_VALUE &init_value) {
+    return PropertyManager<PROPTYPE, MeshT>::createIfNotExists(
+            mesh, propname, begin, end, init_value);
+}
+
+/** \relates PropertyManager
+ * Like the two parameter version of makePropertyManagerFromExistingOrNew()
+ * except it initializes the property with the specified value over the
+ * specified range if it needs to be created. If the property already exists,
+ * this function has the exact same effect as the two parameter version.
+ *
+ * Creates a non-owning wrapper for a mesh property (no lifecycle management).
+ * If the given property does not exist, it is created.
+ *
+ * Intended for creating or accessing persistent properties.
+ */
+template<typename PROPTYPE, typename MeshT,
+    typename ITERATOR_RANGE, typename PROP_VALUE>
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(
+        MeshT &mesh, const char *propname,
+        const ITERATOR_RANGE &range,
+        const PROP_VALUE &init_value) {
+    return makePropertyManagerFromExistingOrNew<PROPTYPE, MeshT>(
+            mesh, propname, range.begin(), range.end(), init_value);
 }
 
 } /* namespace OpenMesh */
