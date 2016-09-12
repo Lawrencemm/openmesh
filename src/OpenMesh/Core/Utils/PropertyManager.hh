@@ -353,6 +353,14 @@ class PropertyManager {
                 (*this)[*begin] = value;
         }
 
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+        template<typename HandleTypeIteratorRange, typename PROP_VALUE>
+        void set_range(HandleTypeIteratorRange &range,
+                const PROP_VALUE &value) {
+            set_range(range.begin(), range.end(), value);
+        }
+#endif
+
         /**
          * Conveniently transfer the values managed by one property manager
          * onto the values managed by a different property manager.

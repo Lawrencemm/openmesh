@@ -60,36 +60,76 @@ TEST_F(OpenMeshPropertyManager, set_range_bool) {
   face_vhandles.push_back(vhandle[3]);
   mesh_.add_face(face_vhandles);
 
-  OpenMesh::PropertyManager<
-      OpenMesh::VPropHandleT<bool>, Mesh> pm_v_bool(mesh_, "pm_v_bool");
-  pm_v_bool.set_range(mesh_.vertices_begin(), mesh_.vertices_end(), false);
-  for (int i = 0; i < 4; ++i)
-      ASSERT_FALSE(pm_v_bool[vhandle[i]]);
-  pm_v_bool.set_range(mesh_.vertices_begin(), mesh_.vertices_end(), true);
-  for (int i = 0; i < 4; ++i)
-      ASSERT_TRUE(pm_v_bool[vhandle[i]]);
+  {
+      OpenMesh::PropertyManager<
+          OpenMesh::VPropHandleT<bool>, Mesh> pm_v_bool(mesh_, "pm_v_bool");
+      pm_v_bool.set_range(mesh_.vertices_begin(), mesh_.vertices_end(), false);
+      for (int i = 0; i < 4; ++i)
+          ASSERT_FALSE(pm_v_bool[vhandle[i]]);
+      pm_v_bool.set_range(mesh_.vertices_begin(), mesh_.vertices_end(), true);
+      for (int i = 0; i < 4; ++i)
+          ASSERT_TRUE(pm_v_bool[vhandle[i]]);
 
-  OpenMesh::PropertyManager<
-      OpenMesh::EPropHandleT<bool>, Mesh> pm_e_bool(mesh_, "pm_e_bool");
-  pm_e_bool.set_range(mesh_.edges_begin(), mesh_.edges_end(), false);
-  for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
-          e_it != f_end; ++e_it)
-      ASSERT_FALSE(pm_e_bool[*e_it]);
-  pm_e_bool.set_range(mesh_.edges_begin(), mesh_.edges_end(), true);
-  for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
-          e_it != f_end; ++e_it)
-      ASSERT_TRUE(pm_e_bool[*e_it]);
+      OpenMesh::PropertyManager<
+          OpenMesh::EPropHandleT<bool>, Mesh> pm_e_bool(mesh_, "pm_e_bool");
+      pm_e_bool.set_range(mesh_.edges_begin(), mesh_.edges_end(), false);
+      for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
+              e_it != f_end; ++e_it)
+          ASSERT_FALSE(pm_e_bool[*e_it]);
+      pm_e_bool.set_range(mesh_.edges_begin(), mesh_.edges_end(), true);
+      for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
+              e_it != f_end; ++e_it)
+          ASSERT_TRUE(pm_e_bool[*e_it]);
 
-  OpenMesh::PropertyManager<
-      OpenMesh::FPropHandleT<bool>, Mesh> pm_f_bool(mesh_, "pm_f_bool");
-  pm_f_bool.set_range(mesh_.faces_begin(), mesh_.faces_end(), false);
-  for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
-          f_it != f_end; ++f_it)
-      ASSERT_FALSE(pm_f_bool[*f_it]);
-  pm_f_bool.set_range(mesh_.faces_begin(), mesh_.faces_end(), true);
-  for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
-          f_it != f_end; ++f_it)
-      ASSERT_TRUE(pm_f_bool[*f_it]);
+      OpenMesh::PropertyManager<
+          OpenMesh::FPropHandleT<bool>, Mesh> pm_f_bool(mesh_, "pm_f_bool");
+      pm_f_bool.set_range(mesh_.faces_begin(), mesh_.faces_end(), false);
+      for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
+              f_it != f_end; ++f_it)
+          ASSERT_FALSE(pm_f_bool[*f_it]);
+      pm_f_bool.set_range(mesh_.faces_begin(), mesh_.faces_end(), true);
+      for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
+              f_it != f_end; ++f_it)
+          ASSERT_TRUE(pm_f_bool[*f_it]);
+  }
+
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+  /*
+   * Same thing again, this time with C++11 ranges.
+   */
+  {
+      OpenMesh::PropertyManager<
+          OpenMesh::VPropHandleT<bool>, Mesh> pm_v_bool(mesh_, "pm_v_bool2");
+      pm_v_bool.set_range(mesh_.vertices(), false);
+      for (int i = 0; i < 4; ++i)
+          ASSERT_FALSE(pm_v_bool[vhandle[i]]);
+      pm_v_bool.set_range(mesh_.vertices(), true);
+      for (int i = 0; i < 4; ++i)
+          ASSERT_TRUE(pm_v_bool[vhandle[i]]);
+
+      OpenMesh::PropertyManager<
+          OpenMesh::EPropHandleT<bool>, Mesh> pm_e_bool(mesh_, "pm_e_bool2");
+      pm_e_bool.set_range(mesh_.edges(), false);
+      for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
+              e_it != f_end; ++e_it)
+          ASSERT_FALSE(pm_e_bool[*e_it]);
+      pm_e_bool.set_range(mesh_.edges(), true);
+      for (Mesh::EdgeIter e_it = mesh_.edges_begin(), f_end = mesh_.edges_end();
+              e_it != f_end; ++e_it)
+          ASSERT_TRUE(pm_e_bool[*e_it]);
+
+      OpenMesh::PropertyManager<
+          OpenMesh::FPropHandleT<bool>, Mesh> pm_f_bool(mesh_, "pm_f_bool2");
+      pm_f_bool.set_range(mesh_.faces(), false);
+      for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
+              f_it != f_end; ++f_it)
+          ASSERT_FALSE(pm_f_bool[*f_it]);
+      pm_f_bool.set_range(mesh_.faces(), true);
+      for (Mesh::FaceIter f_it = mesh_.faces_begin(), f_end = mesh_.faces_end();
+              f_it != f_end; ++f_it)
+          ASSERT_TRUE(pm_f_bool[*f_it]);
+  }
+#endif
 }
 
 /*
