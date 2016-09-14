@@ -366,8 +366,8 @@ class VectorT {
         template<typename OtherScalar>
         auto operator% (const VectorT<OtherScalar, DIM> &_rhs) const ->
             typename std::enable_if<DIM == 3,
-                VectorT<decltype(this->values_[0] * _rhs[0] -
-                                 this->values_[0] * _rhs[0]),
+                VectorT<decltype((*this)[0] * _rhs[0] -
+                                 (*this)[0] * _rhs[0]),
                         DIM>>::type {
             return {
                 values_[1] * _rhs[2] - values_[2] * _rhs[1],
