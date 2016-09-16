@@ -7,6 +7,14 @@ if("${PROJECT_NAME}" STREQUAL "")
     project (OpenMesh)
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "6.0" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9" OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9")
+		message(WARNING "Your version of GCC contains an optimizer bug. Please verify that you do not use -O3!")
+		string(REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_RELEASE_NEW "${CMAKE_CXX_FLAGS_RELEASE}")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_NEW}" CACHE STRING "" FORCE)
+	endif()
+endif()
+
 if ( WIN32 )
   # This is the base directory for windows library search used in the finders we ship.
   set(CMAKE_WINDOWS_LIBS_DIR "c:/libs" CACHE STRING "Default Library search dir on windows." )

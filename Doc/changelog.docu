@@ -9,6 +9,28 @@
 
 <tr valign=top><td><b>6.3</b> (?/?/?)</td><td>
 
+<b>Core</b>
+<ul>
+<li>Fixed type pun warning with gcc-6</li>
+<li>Fixed incorrect type of hash function for boost causing a warning with clang</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>STL Reader: Identify stl files containing solid keyword as ASCII type</li>
+</ul>
+
+
+<b>General</b>
+<ul>
+<li>Fixed undefined MSVC macro warning (Thanks to Xan for the patch)</li> 
+</ul>
+
+<b>Build System</b>
+<ul>
+<li>Removed unnecessary include dir from Core Cmakelist (Thanks to Xan for the patch)</li>
+</ul>
+
 </tr>
 
 <tr valign=top><td><b>6.2</b> (2016/07/11)</td><td>

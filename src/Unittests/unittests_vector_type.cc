@@ -3,6 +3,10 @@
 #include <iostream>
 #include <list>
 
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#include <cstdint>
+#endif
+
 namespace {
 
 class OpenMeshVectorTest : public testing::Test {
@@ -84,7 +88,7 @@ TEST_F(OpenMeshVectorTest, VectorCasting) {
 
 }
 
-#if _MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 TEST_F(OpenMeshVectorTest, cpp11_constructors) {
     OpenMesh::Vec3d vec1 { 1.2, 2.0, 3.0 };
 
@@ -322,5 +326,77 @@ TEST_F(OpenMeshVectorTest, size_dim) {
     EXPECT_EQ(2u, v2i.size());
     EXPECT_EQ(2, v2i.dim());
 }
+
+class OpenMeshVectorGCCBugTest;
+void trigger_alignment_bug(OpenMeshVectorGCCBugTest &obj);
+
+/**
+ * This is a regression test for a GCC compiler bug.
+ * @see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66598
+ * @see https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/issues/32
+ */
+class OpenMeshVectorGCCBugTest : public testing::Test {
+
+    protected:
+
+        virtual void SetUp() {
+            /*
+             * WARNING: DO NOT CHANGE ANYTHGIN! Every single line, as
+             * pointless as it may look, is carefully crafted to provoke
+             * the GCC optimizer bug mentioned above.
+             */
+            testfn = trigger_alignment_bug;
+            vec1 = OpenMesh::Vec4f(1.0f, 2.0f, 3.0f, 4.0f);
+            vec2 = OpenMesh::Vec4f(5.0f, 6.0f, 7.0f, 8.0f);
+            padding = 42;
+        }
+
+        virtual void TearDown() {
+            // Do some final stuff with the member data here...
+        }
+
+    public:
+        /*
+         * WARNING: DO NOT CHANGE ANYTHGIN! Every single line, as
+         * pointless as it may look, is carefully crafted to provoke
+         * the GCC optimizer bug mentioned above.
+         */
+        int32_t padding;
+        OpenMesh::Vec4f vec1, vec2;
+        void (*testfn)(OpenMeshVectorGCCBugTest &obj);
+
+        OpenMesh::Vec4f &get_vec1() { return vec1; }
+        OpenMesh::Vec4f &get_vec2() { return vec2; }
+};
+
+void trigger_alignment_bug(OpenMeshVectorGCCBugTest &obj) {
+    /*
+     * WARNING: DO NOT CHANGE ANYTHGIN! Every single line, as
+     * pointless as it may look, is carefully crafted to provoke
+     * the GCC optimizer bug mentioned above.
+     */
+    int x1 = 1;
+
+    OpenMesh::Vec4f vec3 = obj.get_vec1();
+    OpenMesh::Vec4f vec4 = obj.get_vec2();
+    vec3 += vec4;
+
+    EXPECT_EQ(1, x1);
+    EXPECT_EQ(42, obj.padding);
+    EXPECT_EQ(6.0f, vec3[0]);
+    EXPECT_EQ(8.0f, vec3[1]);
+    EXPECT_EQ(10.0f, vec3[2]);
+    EXPECT_EQ(12.0f, vec3[3]);
+}
+
+TEST_F(OpenMeshVectorGCCBugTest, alignment_bug) {
+    /*
+     * WARNING: DO NOT CHANGE ANYTHGIN! Every single line, as
+     * pointless as it may look, is carefully crafted to provoke
+     * the GCC optimizer bug mentioned above.
+     */
+    (*testfn)(*this);
+}
+
 
 }
