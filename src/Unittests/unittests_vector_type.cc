@@ -2,7 +2,10 @@
 #include <Unittests/unittests_common.hh>
 #include <iostream>
 #include <list>
+
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <cstdint>
+#endif
 
 namespace {
 
