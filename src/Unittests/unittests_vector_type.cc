@@ -2,6 +2,7 @@
 #include <Unittests/unittests_common.hh>
 #include <iostream>
 #include <list>
+#include <cstdint>
 
 namespace {
 
