@@ -13,6 +13,7 @@
 <ul>
 <li>Fixed type pun warning with gcc-6</li>
 <li>Fixed incorrect type of hash function for boost causing a warning with clang</li>
+<li>gcc 4.7 fix</li>
 </ul>
 
 <b>IO</b>
@@ -20,15 +21,37 @@
 <li>STL Reader: Identify stl files containing solid keyword as ASCII type</li>
 </ul>
 
+<b>Utils</b>
+<ul>
+<li>PropertyManager: Add C++11 range-based set_range() version.</li>
+<li>PropertyManager: Add initializing createIfNotExists() versions.</li>
+</ul>
 
 <b>General</b>
 <ul>
 <li>Fixed undefined MSVC macro warning (Thanks to Xan for the patch)</li> 
 </ul>
 
+<b>Python</b>
+<ul>
+<li>Added link directories and log file to build system</li>
+<li>Made member function pointer types explicit. This gets rid of a preprocessor conditional and prevents bug in msvc.</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added unittest to trigger gcc alignment bug</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Updated documentation of BaseKernel's property functions to hint at PropertyManager.</li>
+</ul>
+
 <b>Build System</b>
 <ul>
 <li>Removed unnecessary include dir from Core Cmakelist (Thanks to Xan for the patch)</li>
+<li>Added a little safeguard against GCC optimizer bug to CMakeLists.txt</li>
 </ul>
 
 </tr>
