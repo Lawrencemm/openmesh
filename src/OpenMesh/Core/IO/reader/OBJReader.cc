@@ -597,8 +597,14 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
               // Obj counts from 1 and not zero .. array counts from zero therefore -1
               vhandles.push_back(VertexHandle(value-1));
               faceVertices.push_back(VertexHandle(value-1));
-              if (fileOptions.vertex_has_color() )
-                _bi.set_color(vhandles.back(), colors[value-1]);
+              if (fileOptions.vertex_has_color()) {
+                if ((unsigned int)(value - 1) < colors.size()) {
+                  _bi.set_color(vhandles.back(), colors[value - 1]);
+                }
+                else {
+                  omerr() << "Error setting vertex color" << std::endl;
+                }
+              }                  
               break;
 	      
             case 1: // texture coord
@@ -648,9 +654,13 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
               // Obj counts from 1 and not zero .. array counts from zero therefore -1
               if (fileOptions.vertex_has_normal() ) {
-                assert(!vhandles.empty());
-                assert((unsigned int)(value-1) < normals.size());
-                _bi.set_normal(vhandles.back(), normals[value-1]);
+                assert(!vhandles.empty());                
+                if ((unsigned int)(value - 1) < normals.size()) {
+                    _bi.set_normal(vhandles.back(), normals[value - 1]);
+                }
+                else {
+                    omerr() << "Error setting vertex normal" << std::endl;
+                }                
               }
               break;
           }
