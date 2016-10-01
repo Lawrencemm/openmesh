@@ -443,6 +443,10 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
   _in.clear();
   _in.seekg(0, std::ios::beg);
 
+  int nCurrentPositions = 0,
+      nCurrentTexcoords = 0,
+      nCurrentNormals   = 0;
+      
   // pass 2: read vertices
   while( _in && !_in.eof() )
   {
@@ -511,6 +515,21 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
               << "' not defined in material file.\n";
         matname="";
       }
+    }
+    
+    // track current number of parsed vertex attributes,
+    // to allow for OBJs negative indices
+    else if (keyWrd == "v")
+    {
+        ++nCurrentPositions;
+    }
+    else if (keyWrd == "vt")
+    {
+        ++nCurrentTexcoords;
+    }
+    else if (keyWrd == "vn")
+    {
+        ++nCurrentNormals;
     }
 
     // faces
@@ -592,7 +611,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
                 // Calculation of index :
                 // -1 is the last vertex in the list
                 // As obj counts from 1 and not zero add +1
-                value = int(_bi.n_vertices() + value + 1);
+                value = nCurrentPositions + value + 1;
               }
               // Obj counts from 1 and not zero .. array counts from zero therefore -1
               vhandles.push_back(VertexHandle(value-1));
@@ -606,7 +625,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
                 // Calculation of index :
                 // -1 is the last vertex in the list
                 // As obj counts from 1 and not zero add +1
-                value = int(texcoords.size()) + value + 1;
+                value = nCurrentTexcoords + value + 1;
               }
               assert(!vhandles.empty());
 
@@ -643,7 +662,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
                 // Calculation of index :
                 // -1 is the last vertex in the list
                 // As obj counts from 1 and not zero add +1
-                value = int(normals.size()) + value + 1;
+                value = nCurrentNormals + value + 1;
               }
 
               // Obj counts from 1 and not zero .. array counts from zero therefore -1
