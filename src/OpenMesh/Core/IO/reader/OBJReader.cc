@@ -443,7 +443,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
   _in.clear();
   _in.seekg(0, std::ios::beg);
 
-  // pass 2: read vertices
+  // pass 2: read faces
   while( _in && !_in.eof() )
   {
     std::getline(_in,line);
