@@ -399,7 +399,9 @@ namespace OMFormat {
   template <typename T> Chunk::Integer_Size integer_size(const T& d)
 #endif
   {
+#ifndef NDEBUG
     assert( is_integer(d) );
+#endif
 
     switch( sizeof(T) )
     {
@@ -423,7 +425,9 @@ namespace OMFormat {
   template <typename T> Chunk::Float_Size float_size(const T& d)
 #endif
   {
+#ifndef NDEBUG
     assert( is_float(d) );
+#endif
 
     switch( sizeof(T) )
     {
