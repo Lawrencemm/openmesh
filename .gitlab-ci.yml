@@ -51,9 +51,9 @@ VS2015-64-bit-shared-apps:
     SHARED:         "TRUE"
     APPS:           "ON"
   script: "CI\\Windows.bat"
-    tags:
-      - VS2015
-    artifacts:
-      paths:
-        - Build/*.exe
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - Build/*.exe
 
