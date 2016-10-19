@@ -43,3 +43,17 @@ cppcheck:
   artifacts:
     paths:
       - cppcheck.log
+
+VS2015-64-bit-shared-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+    SHARED:         "TRUE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+    tags:
+      - VS2015
+    artifacts:
+      paths:
+        - Build/*.exe
+
