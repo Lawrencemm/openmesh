@@ -863,7 +863,7 @@ void VF<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
     if (Base::number() == Base::subdiv_rule()->number() + 1 && 
         Base::mesh_.is_boundary(_fh)                  && 
         !MOBJ(_fh).final())
-      position *= 0.5;
+      position *= static_cast<typename M::Scalar>(0.5);
 
     MOBJ(_fh).set_position(_target_state, position);
     MOBJ(_fh).inc_state();
