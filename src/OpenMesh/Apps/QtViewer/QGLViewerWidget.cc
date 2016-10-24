@@ -154,10 +154,10 @@ QGLViewerWidget::~QGLViewerWidget()
 void 
 QGLViewerWidget::setDefaultMaterial(void)
 {
-  GLfloat mat_a[] = {0.1, 0.1, 0.1, 1.0};
-  GLfloat mat_d[] = {0.7, 0.7, 0.5, 1.0};
-  GLfloat mat_s[] = {1.0, 1.0, 1.0, 1.0};
-  GLfloat shine[] = {120.0};
+  GLfloat mat_a[] = {0.1f, 0.1f, 0.1f, 1.0f};
+  GLfloat mat_d[] = {0.7f, 0.7f, 0.5f, 1.0f};
+  GLfloat mat_s[] = {1.0f, 1.0f, 1.0f, 1.0f};
+  GLfloat shine[] = {120.0f};
   
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_a);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_d);
@@ -171,12 +171,12 @@ QGLViewerWidget::setDefaultMaterial(void)
 void
 QGLViewerWidget::setDefaultLight(void)
 {
-  GLfloat pos1[] = { 0.1,  0.1, -0.02, 0.0};
-  GLfloat pos2[] = {-0.1,  0.1, -0.02, 0.0};
-  GLfloat pos3[] = { 0.0,  0.0,  0.1,  0.0};
-  GLfloat col1[] = { 0.7,  0.7,  0.8,  1.0};
-  GLfloat col2[] = { 0.8,  0.7,  0.7,  1.0};
-  GLfloat col3[] = { 1.0,  1.0,  1.0,  1.0};
+  GLfloat pos1[] = { 0.1f,  0.1f, -0.02f, 0.0f};
+  GLfloat pos2[] = {-0.1f,  0.1f, -0.02f, 0.0f};
+  GLfloat pos3[] = { 0.0f,  0.0f,  0.1f,  0.0f};
+  GLfloat col1[] = { 0.7f,  0.7f,  0.8f,  1.0f};
+  GLfloat col2[] = { 0.8f,  0.7f,  0.7f,  1.0f};
+  GLfloat col3[] = { 1.0f,  1.0f,  1.0f,  1.0f};
  
   glEnable(GL_LIGHT0);    
   glLightfv(GL_LIGHT0,GL_POSITION, pos1);
@@ -214,10 +214,10 @@ QGLViewerWidget::initializeGL()
   setDefaultLight();  
   
   // Fog
-  GLfloat fogColor[4] = { 0.3, 0.3, 0.4, 1.0 };
+  GLfloat fogColor[4] = { 0.3f, 0.3f, 0.4f, 1.0f };
   glFogi(GL_FOG_MODE,    GL_LINEAR);
   glFogfv(GL_FOG_COLOR,  fogColor);
-  glFogf(GL_FOG_DENSITY, 0.35);
+  glFogf(GL_FOG_DENSITY, 0.35f);
   glHint(GL_FOG_HINT,    GL_DONT_CARE);
   glFogf(GL_FOG_START,    5.0f);
   glFogf(GL_FOG_END,     25.0f);
