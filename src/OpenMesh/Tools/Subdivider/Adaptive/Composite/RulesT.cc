@@ -223,7 +223,7 @@ Tvv3<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
 	                            vh3(Base::mesh_.FVH(hh2));
 
       // set display position and attributes for new vertices
-      Base::mesh_.set_point(vh1, (Base::mesh_.point(vh0) * 2.0 + Base::mesh_.point(vh3)) / 3.0);
+      Base::mesh_.set_point(vh1, (Base::mesh_.point(vh0) * static_cast<typename M::Point::value_type>(2.0) + Base::mesh_.point(vh3)) / static_cast<typename M::Point::value_type>(3.0) );
 
       MOBJ(vh1).set_position(_target_state, zero_point);
       MOBJ(vh1).set_state(_target_state);
@@ -1375,7 +1375,7 @@ void VVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     // choose coefficient c
     c = Base::coeff();
 
-    position *= (1.0 - c);
+    position *= (static_cast<typename M::Scalar>(1.0) - c);
     position += MOBJ(_vh).position(_target_state - 1) * c;
 
     MOBJ(_vh).set_position(_target_state, position);
@@ -1712,10 +1712,10 @@ void EVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     typename M::Point        position(0.0, 0.0, 0.0);
     typename M::Scalar       c;
     typename M::Point        zero_point(0.0, 0.0, 0.0);
-    int                         valence(0);
+    size_t                   valence(0);
 
     valence = Base::mesh_.valence(_vh);
-    c       = coeff( valence );
+    c       = static_cast<typename M::Scalar>(coeff( valence ));
 
     for (voh_it = Base::mesh_.voh_iter(_vh); voh_it.is_valid(); ++voh_it)
     {
@@ -1734,7 +1734,7 @@ void EVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
         }
       }
       else {
-	--valence;
+        --valence;
       }
     }
 
