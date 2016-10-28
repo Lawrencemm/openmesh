@@ -231,7 +231,7 @@ private:
         double   t      = (3.0 + 2.0 * cos( 2.0 * M_PI * inv_v) );
         double   alpha  = (40.0 - t * t)/64.0;
 
-        return weight_t( 1.0-alpha, inv_v*alpha);
+        return weight_t( static_cast<real_t>(1.0-alpha), static_cast<real_t>(inv_v*alpha) );
       }
       return weight_t(0.0, 0.0);
     }
