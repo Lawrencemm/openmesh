@@ -60,6 +60,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <limits>
 #if defined(OM_CC_MIPS)
 #  include <math.h>
 #else
@@ -151,7 +152,7 @@ void usage_and_exit(const std::string& _fname, int xcode);
 int main(int argc, char **argv)
 {
   size_t      n_iter = 0;          // n iteration
-  size_t      max_nv = size_t(-1); // max. number of vertices in the end
+  size_t      max_nv = std::numeric_limits<size_t>::max(); // max. number of vertices in the end
   std::string ifname;              // input mesh
   std::string ofname;              // output mesh
   std::string rule_sequence = "Tvv3 VF FF FVc"; // sqrt3 default
@@ -207,11 +208,11 @@ int main(int argc, char **argv)
   if ( n_iter > 0 )
     std::cout << "Desired #iterations: " << n_iter << std::endl;
 
-  if ( max_nv < size_t(-1) )
+  if ( max_nv < std::numeric_limits<size_t>::max() )
   {
     std::cout << "Desired max. #V    : " << max_nv << std::endl;
     if (!n_iter )
-      n_iter = size_t(-1);
+      n_iter = std::numeric_limits<size_t>::max();
   }
 
 
