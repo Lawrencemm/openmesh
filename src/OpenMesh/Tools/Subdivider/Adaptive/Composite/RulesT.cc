@@ -992,7 +992,7 @@ void FFc<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
     // choose coefficient c
     typename M::Scalar c = Base::coeff();
 
-    position *= (1.0 - c);
+    position *= (static_cast<typename M::Scalar>(1.0) - c);
     position += MOBJ(_fh).position(_target_state - 1) * c;
 
     MOBJ(_fh).set_position(_target_state, position);
