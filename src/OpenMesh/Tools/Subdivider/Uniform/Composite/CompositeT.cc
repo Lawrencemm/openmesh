@@ -882,7 +882,8 @@ void CompositeT<MeshType,RealType>::EVc(Coeff& _coeff)
       ++valence;
     }
 
-    c = _coeff(valence);
+    // Coefficients always work on double so we cast them to the correct scalar here
+    c = static_cast<scalar_t>(_coeff(valence));
 
     for (voh_it = mesh_.voh_iter(*v_it); voh_it.is_valid(); ++voh_it) {
       cog += mesh_.data(mesh_.edge_handle(*voh_it)).position() * c;
