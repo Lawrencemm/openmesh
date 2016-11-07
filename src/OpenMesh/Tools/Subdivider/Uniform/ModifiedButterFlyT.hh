@@ -150,14 +150,14 @@ public:
     {
         weights[K].resize(K+1);
         // s(j) = ( 1/4 + cos(2*pi*j/K) + 1/2 * cos(4*pi*j/K) )/K
-        real_t   invK  = static_cast<real_t>(1.0)/real_t(K);
+        double invK  = 1.0/static_cast<double>(K);
         real_t sum = 0;
         for(unsigned int j=0; j<K; ++j)
         {
-            weights[K][j] = (0.25 + cos(2.0*M_PI*j*invK) + 0.5*cos(4.0*M_PI*j*invK))*invK;
+            weights[K][j] = static_cast<real_t>((0.25 + cos(2.0*M_PI*static_cast<double>(j)*invK) + 0.5*cos(4.0*M_PI*static_cast<double>(j)*invK))*invK);
             sum += weights[K][j];
         }
-        weights[K][K] = (real_t)1.0 - sum;
+        weights[K][K] = static_cast<real_t>(1.0) - sum;
     }
   }
 
