@@ -650,7 +650,7 @@ Tvv4<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     this->update(_vh, _target_state);
 
     // multiply old position by 4
-    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) * 4.0);
+    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) * static_cast<typename M::Point::value_type>(4.0));
 
     MOBJ(_vh).inc_state();
   }

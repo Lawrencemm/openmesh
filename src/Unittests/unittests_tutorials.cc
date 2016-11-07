@@ -57,7 +57,7 @@ struct MyData
   bool operator != (const MyData& _rhs) const { return !(*this == _rhs); }
 };
 
-typedef std::map< std::string, unsigned int > MyMap;
+typedef std::map< std::string, size_t > MyMap;
 
 namespace OpenMesh {
   namespace IO {
@@ -114,7 +114,7 @@ namespace OpenMesh {
           return sizeof(unsigned int);
 
         value_type::const_iterator it = _v.begin();
-        unsigned int   N     = _v.size();
+        size_t   N     = _v.size();
         size_t         bytes = IO::size_of(N);
         for(;it!=_v.end(); ++it)
         {
@@ -128,7 +128,7 @@ namespace OpenMesh {
       size_t store(std::ostream& _os, const value_type& _v, bool _swap=false)
       {
         size_t   bytes = 0;
-        unsigned int N = _v.size();
+        size_t N = _v.size();
         value_type::const_iterator it = _v.begin();
         bytes += IO::store( _os, N, _swap );
         for (; it != _v.end() && _os.good(); ++it)
