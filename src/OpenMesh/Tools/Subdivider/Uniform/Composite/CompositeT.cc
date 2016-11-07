@@ -116,7 +116,7 @@ void CompositeT<MeshType,RealType>::Tvv3()
   // set new positions for vertices
   v_it = mesh_.vertices_begin();
   for (j = 0; j < n_vertices; ++j) {
-    mesh_.data(*v_it).set_position(mesh_.data(*v_it).position() * static_cast<MeshType::Point::value_type>(3.0) );
+    mesh_.data(*v_it).set_position(mesh_.data(*v_it).position() * static_cast<typename MeshType::Point::value_type>(3.0) );
     ++v_it;
   }
 
@@ -180,7 +180,7 @@ void CompositeT<MeshType,RealType>::Tvv4()
   // set new positions for vertices
   v_it = mesh_.vertices_begin();
   for (j = 0; j < n_vertices; ++j) {
-    mesh_.data(*v_it).set_position(mesh_.data(*v_it).position() * static_cast<MeshType::Point::value_type>(4.0) );
+    mesh_.data(*v_it).set_position(mesh_.data(*v_it).position() * static_cast<typename MeshType::Point::value_type>(4.0) );
     ++v_it;
   }
 
@@ -1250,7 +1250,7 @@ CompositeT<MeshType,RealType>::split_edge(HalfedgeHandle _heh)
     vh2(mesh_.from_vertex_handle(_heh));
 
   // Calculate and Insert Midpoint of Edge
-  vh = mesh_.add_vertex((mesh_.point(vh2) + mesh_.point(vh1)) / static_cast<MeshType::Point::value_type>(2.0) );
+  vh = mesh_.add_vertex((mesh_.point(vh2) + mesh_.point(vh1)) / static_cast<typename MeshType::Point::value_type>(2.0) );
   // Re-Set Handles
   heh2 = mesh_.opposite_halfedge_handle(_heh);
 

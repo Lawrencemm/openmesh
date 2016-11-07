@@ -89,7 +89,7 @@ distPointTriangleSquared( const Point& _p,
   if (d < FLT_MIN && d > -FLT_MIN) {
     return -1.0;
   }
-  const double invD = 1.0 / d;
+  const Scalar invD = static_cast<Scalar>(1.0) / d;
 
   // these are not needed for every point, should still perform
   // better with many points against one triangle

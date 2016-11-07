@@ -390,7 +390,7 @@ private: // geometry helper
     {
         pos = _m.point(a_0);
         pos += _m.point(a_1);
-        pos *= static_cast<mesh_t::Point::value_type>(9.0/16.0);
+        pos *= static_cast<typename mesh_t::Point::value_type>(9.0/16.0);
         typename mesh_t::Point tpos;
         if(_m.is_boundary(heh))
         {
@@ -403,7 +403,7 @@ private: // geometry helper
             tpos = _m.point(_m.to_vertex_handle(_m.next_halfedge_handle(opp_heh)));
             tpos += _m.point(_m.to_vertex_handle(_m.opposite_halfedge_handle(_m.prev_halfedge_handle(opp_heh))));
         }
-        tpos *= static_cast<mesh_t::Point::value_type>(-1.0/16.0);
+        tpos *= static_cast<typename mesh_t::Point::value_type>(-1.0/16.0);
         pos += tpos;
     }
     else
