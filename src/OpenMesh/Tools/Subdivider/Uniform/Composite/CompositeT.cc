@@ -589,7 +589,7 @@ void CompositeT<MeshType,RealType>::FVc(Coeff& _coeff)
 
         if (mesh_.face_handle(mesh_.opposite_halfedge_handle(mesh_.next_halfedge_handle(*voh_it))).is_valid()) {
           cog += mesh_.data(mesh_.face_handle(*voh_it)).position() * c;
-          cog += mesh_.data(mesh_.face_handle(mesh_.opposite_halfedge_handle(mesh_.next_halfedge_handle(*voh_it)))).position() * (1.0 - c);
+          cog += mesh_.data(mesh_.face_handle(mesh_.opposite_halfedge_handle(mesh_.next_halfedge_handle(*voh_it)))).position() * (static_cast<typename MeshType::Point::value_type>(1.0) - c);
         } else {
           cog += mesh_.data(mesh_.face_handle(*voh_it)).position();
         }
