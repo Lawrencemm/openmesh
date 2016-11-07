@@ -2004,7 +2004,7 @@ EdEc<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
     // choose coefficient c
     c = Base::coeff();
 
-    position *= (static_cast<M:Scalar>(1.0) - c);
+    position *= ( static_cast<typename M::Scalar>(1.0) - c);
 
     position += MOBJ(_eh).position(_target_state - 1) * c;
 
