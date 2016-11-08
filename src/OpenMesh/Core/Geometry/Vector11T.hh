@@ -382,7 +382,7 @@ class VectorT {
         auto operator|(const VectorT<OtherScalar, DIM>& _rhs) const ->
             decltype(*this->data() * *_rhs.data()) {
 
-            return std::inner_product(begin(), begin() + DIM, _rhs.begin() + 1,
+            return std::inner_product(begin() + 1, begin() + DIM, _rhs.begin() + 1,
                     *begin() * *_rhs.begin());
         }
 
