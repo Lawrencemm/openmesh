@@ -326,7 +326,7 @@ private: // topological modifiers
     typename mesh_t::VertexHandle   vh1(_m.to_vertex_handle(heh));
     typename mesh_t::Point          midP(_m.point(_m.to_vertex_handle(heh)));
     midP += _m.point(_m.to_vertex_handle(opp_heh));
-    midP *= 0.5;
+    midP *= static_cast<typename mesh_t::Point::value_type>(0.5);
 
     // new vertex
     vh                = _m.new_vertex( midP );
@@ -394,7 +394,7 @@ private: // geometry helper
     // boundary edge: just average vertex positions
     if (_m.is_boundary(_eh) )
     {
-      pos *= 0.5;
+      pos *= static_cast<typename MeshType::Point::value_type>(0.5);
     }
     else // inner edge: add neighbouring Vertices to sum
     {

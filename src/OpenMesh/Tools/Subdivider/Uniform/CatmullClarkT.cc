@@ -346,7 +346,7 @@ CatmullClarkT<MeshType,RealType>::update_vertex( MeshType& _m, const VertexHandl
     for ( ve_itr = _m.ve_iter( _vh); ve_itr.is_valid(); ++ve_itr)
       if ( _m.is_boundary( *ve_itr))
         pos += _m.property( ep_pos_, *ve_itr);
-    pos /= 3.0;
+    pos /= static_cast<typename MeshType::Point::value_type>(3.0);
   }
   else // inner vertex
   {

@@ -328,7 +328,7 @@ TEST_F(OpenMeshTrimeshCirculatorCurrentHalfedgeHandleReplacement, vf_iter_bounda
    *         \ /
    *          5
    */
-  size_t current_halfedge_handles[9] = {
+  int current_halfedge_handles[9] = {
     0,2,12,4,6,8,16,10,14
   };
   std::vector<Mesh::FaceHandle> fh0;

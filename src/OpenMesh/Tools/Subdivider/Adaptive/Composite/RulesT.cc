@@ -229,17 +229,17 @@ Tvv3<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
       MOBJ(vh1).set_state(_target_state);
       MOBJ(vh1).set_not_final();
 
-      MOBJ(vh0).set_position(_target_state, MOBJ(vh0).position(_target_state - 1) * 3.0);
+      MOBJ(vh0).set_position(_target_state, MOBJ(vh0).position(_target_state - 1) *  static_cast<typename M::Point::value_type>(3.0));
       MOBJ(vh0).set_state(_target_state);
       MOBJ(vh0).set_not_final();
 
       // set display position and attributes for old vertices
-      Base::mesh_.set_point(vh2, (Base::mesh_.point(vh3) * 2.0 + Base::mesh_.point(vh0)) / 3.0);
+      Base::mesh_.set_point(vh2, (Base::mesh_.point(vh3) * static_cast<typename M::Point::value_type>(2.0) + Base::mesh_.point(vh0)) / static_cast<typename M::Point::value_type>(3.0) );
       MOBJ(vh2).set_position(_target_state, zero_point);
       MOBJ(vh2).set_state(_target_state);
       MOBJ(vh2).set_not_final();
 
-      MOBJ(vh3).set_position(_target_state, MOBJ(vh3).position(_target_state - 1) * 3.0);
+      MOBJ(vh3).set_position(_target_state, MOBJ(vh3).position(_target_state - 1) *  static_cast<typename M::Point::value_type>(3.0) );
       MOBJ(vh3).set_state(_target_state);
       MOBJ(vh3).set_not_final();
 
@@ -326,7 +326,7 @@ void Tvv3<M>::raise(typename M::VertexHandle& _vh, state_t _target_state) {
     this->update(_vh, _target_state);
 
     // multiply old position by 3
-    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) * 3.0);
+    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) *  static_cast<typename M::Point::value_type>(3.0) );
 
     MOBJ(_vh).inc_state();
 
@@ -650,7 +650,7 @@ Tvv4<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     this->update(_vh, _target_state);
 
     // multiply old position by 4
-    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) * 4.0);
+    MOBJ(_vh).set_position(_target_state, MOBJ(_vh).position(_target_state - 1) * static_cast<typename M::Point::value_type>(4.0));
 
     MOBJ(_vh).inc_state();
   }
@@ -2004,7 +2004,7 @@ EdEc<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
     // choose coefficient c
     c = Base::coeff();
 
-    position *= (1.0 - c);
+    position *= ( static_cast<typename M::Scalar>(1.0) - c);
 
     position += MOBJ(_eh).position(_target_state - 1) * c;
 
