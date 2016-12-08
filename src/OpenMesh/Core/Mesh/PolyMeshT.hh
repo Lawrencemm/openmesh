@@ -186,6 +186,8 @@ public:
 
   // --- constructor/destructor
   PolyMeshT() {}
+  template<typename T>
+  explicit PolyMeshT(const T& t) : Kernel(t) {}
   virtual ~PolyMeshT() {}
 
   /** Uses default copy and assignment operator.
