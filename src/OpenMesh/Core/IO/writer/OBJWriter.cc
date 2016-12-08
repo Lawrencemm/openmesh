@@ -275,9 +275,9 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
   {
     for (size_t i=0, nF=_be.n_faces(); i<nF; ++i)
     {
-      vh = VertexHandle(int(i));
+      vh = VertexHandle(static_cast<int>(i));
       t  = _be.texcoord(vh);
-      texMap[t] = (int)i;
+      texMap[t] = static_cast<int>(i);
     }
   }
 
