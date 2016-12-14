@@ -255,4 +255,60 @@ TEST_F(OpenMeshConvertPolyMeshToTriangle, VertexPropertyCheckDouble) {
 
 }
 
+/* Creates a double property and checks if it works after conversion
+ * especially if edge properties are preserved after triangulation
+ */
+TEST_F(OpenMeshConvertPolyMeshToTriangle, EdgePropertyCheckDouble) {
+
+  // Add a double vertex property
+  OpenMesh::EPropHandleT<double> doubleHandle;
+
+  EXPECT_FALSE( mesh_.get_property_handle(doubleHandle,"doubleProp") );
+
+  mesh_.add_property(doubleHandle,"doubleProp");
+
+  // Fill property
+  double index = 0.0;
+
+  for ( Mesh::EdgeIter v_it = mesh_.edges_begin() ; v_it != mesh_.edges_end(); ++v_it ) {
+    mesh_.property(doubleHandle,*v_it) = index;
+    index += 1.0;
+  }
+
+  EXPECT_TRUE(mesh_.get_property_handle(doubleHandle,"doubleProp"));
+
+  //convert triMesh to PolyMesh
+  Mesh p = static_cast<Mesh>(mesh_);
+
+  EXPECT_TRUE(p.get_property_handle(doubleHandle,"doubleProp"));
+
+  // Check if it is ok.
+  Mesh::EdgeIter v_it = p.edges_begin();
+
+  if(p.is_boundary( (*v_it) ))
+  EXPECT_EQ( p.property(doubleHandle,*v_it) , 0.0 ) << "Invalid double value for vertex 0";
+  ++v_it;
+
+  if(p.is_boundary( (*v_it) ))
+  EXPECT_EQ( p.property(doubleHandle,*v_it) , 1.0 ) << "Invalid double value for vertex 1";
+  ++v_it;
+
+  if(p.is_boundary( (*v_it) ))
+  EXPECT_EQ( p.property(doubleHandle,*v_it) , 2.0 ) << "Invalid double value for vertex 2";
+  ++v_it;
+
+  if(p.is_boundary( (*v_it) ))
+  EXPECT_EQ( p.property(doubleHandle,*v_it) , 3.0 ) << "Invalid double value for vertex 3";
+  ++v_it;
+
+  EXPECT_FALSE( p.is_boundary(*v_it)) << "Invalid Edge after triangulation";
+
+  //check if deletion in the original mesh affects the converted one.
+  mesh_.get_property_handle(doubleHandle,"doubleProp");
+  mesh_.remove_property(doubleHandle);
+  EXPECT_FALSE(mesh_.get_property_handle(doubleHandle,"doubleProp"));
+  EXPECT_TRUE(p.get_property_handle(doubleHandle,"doubleProp"));
+
+}
+
 }
