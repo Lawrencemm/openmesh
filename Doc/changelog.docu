@@ -8,6 +8,30 @@
 
 <tr valign=top><td><b>7.0</b> (?/?/?)</td><td>
 
+<b>Core</b>
+<ul>
+<li>make all negative handles invalid, not just -1</li>
+<li>Several warnings fixed (Including the checked iterators)</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
+<li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
+<li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
+<li>OBJ Loader: fixed handling of negative indices in OBJ loader</li>
+<li>OM Writer: Fixed OMWriter when no faces are available (Thanks to Jamie Kydd for the patch)</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added unittest to write and read faceTexcoords with a test obj file</li>
+</ul>
+
+<b>General</b>
+<ul>
+<li>Updated Logo</li>
+</ul>
 
 </tr>
 
