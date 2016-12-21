@@ -254,6 +254,16 @@ VS2013-32-bit-static-no-apps:
     paths:
       - build-release/*.exe      
       
+Doc-publish:
+  only:
+     - master
+  script: "CI/ci-doc.sh"
+  tags:
+     - Linux
+  
+
+
+
 
 
 
