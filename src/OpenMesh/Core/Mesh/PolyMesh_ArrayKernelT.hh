@@ -74,7 +74,8 @@
 
 namespace OpenMesh {
 
-
+template<class Traits>
+class TriMesh_ArrayKernelT;
 //== CLASS DEFINITION =========================================================
 
 /// Helper class to build a PolyMesh-type
@@ -97,7 +98,18 @@ struct PolyMesh_ArrayKernel_GeneratorT
 template <class Traits = DefaultTraits>
 class PolyMesh_ArrayKernelT
   : public PolyMesh_ArrayKernel_GeneratorT<Traits>::Mesh
-{};
+{
+public:
+  PolyMesh_ArrayKernelT() {}
+  template<class OtherTraits>
+   PolyMesh_ArrayKernelT( const TriMesh_ArrayKernelT<OtherTraits> & t)
+  {
+     //assign the connectivity (add vertices)
+     this->assign(t);
+     //copy properties from triMesh
+     this->copy_all_kernel_properties(t);
+  }
+};
 
 
 //=============================================================================
