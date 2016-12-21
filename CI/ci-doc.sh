@@ -11,4 +11,4 @@ cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=FALSE ../
 make doc
 
 # Copy to webserver
-scp -r -P 2222 Build/share/OpenMesh/Doc/html/* hudson@web4-info8:/OpenMesh-Daily/Doc/
+scp -r -P 2222 Build/share/OpenMesh/Doc/html/* hudson@web4-info8:OpenMesh-Daily/Doc/
