@@ -318,7 +318,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   // ---------- write face normals
 
-  if ( _be.has_face_normals() && _opt.check(Options::FaceNormal) )
+  if (_be.n_faces() && _be.has_face_normals() && _opt.check(Options::FaceNormal) )
   {
 #define NEW_STYLE 0
 #if NEW_STYLE
@@ -353,7 +353,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   // ---------- write face color
 
-  if (_be.has_face_colors() && _opt.check( Options::FaceColor ))
+  if (_be.n_faces() && _be.has_face_colors() && _opt.check( Options::FaceColor ))
   {
 #define NEW_STYLE 0
 #if NEW_STYLE
