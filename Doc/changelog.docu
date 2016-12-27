@@ -22,6 +22,7 @@
 <li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
 <li>OBJ Loader: fixed handling of negative indices in OBJ loader</li>
 <li>OM Writer: Fixed OMWriter when no faces are available (Thanks to Jamie Kydd for the patch)</li>
+<li>OM Writer: Added Mark to the format header to identify end of stream correctly (Thanks to Jamie Kydd for the patch)</li>
 </ul>
 
 <b>Unittests</b>
