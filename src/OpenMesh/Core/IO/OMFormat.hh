@@ -179,7 +179,8 @@ namespace OMFormat {
       Entity_Mesh      = 0x01,
       Entity_Face      = 0x02,
       Entity_Edge      = 0x04,
-      Entity_Halfedge  = 0x06
+      Entity_Halfedge  = 0x06,
+      Entity_Sentinel  = 0x07
     };
 
     enum Dim {

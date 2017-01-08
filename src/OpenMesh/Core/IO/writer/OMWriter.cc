@@ -430,6 +430,11 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 				       OMFormat::Chunk::Entity_Mesh, swap );
   }
 
+  memset(&chunk_header, 0, sizeof(chunk_header));
+  chunk_header.name_ = false;
+  chunk_header.entity_ = OMFormat::Chunk::Entity_Sentinel;
+  bytes += store(_os, chunk_header, swap);
+
   std::clog << "#bytes written: " << bytes << std::endl;
 
   return true;
