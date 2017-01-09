@@ -104,10 +104,9 @@ public:
   template<class OtherTraits>
    PolyMesh_ArrayKernelT( const TriMesh_ArrayKernelT<OtherTraits> & t)
   {
-     //assign the connectivity (add vertices)
-     this->assign(t);
-     //copy properties from triMesh
-     this->copy_all_kernel_properties(t);
+     //assign the connectivity and standard properties
+     this->assign(t, true);
+
   }
 };
 
