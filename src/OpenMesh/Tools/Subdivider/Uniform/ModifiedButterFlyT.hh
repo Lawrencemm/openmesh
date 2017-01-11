@@ -95,7 +95,7 @@ namespace Uniform    { // BEGIN_NS_UNIFORM
  *
  * Clement Courbet - clement.courbet@ecp.fr
  */
-template <typename MeshType, typename RealType = float>
+template <typename MeshType, typename RealType = double>
 class ModifiedButterflyT : public SubdividerT<MeshType, RealType>
 {
 public:
