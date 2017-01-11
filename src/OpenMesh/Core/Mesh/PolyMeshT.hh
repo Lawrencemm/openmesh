@@ -409,6 +409,22 @@ public:
     return edge_vec.sqrnorm();
   }
 
+  /** Calculates the midpoint of the halfedge _heh, defined by the positions of
+      the two incident vertices */
+  Point calc_edge_midpoint(HalfedgeHandle _heh) const
+  {
+    auto vh0 = this->from_vertex_handle(_heh);
+    auto vh1 = this->to_vertex_handle(_heh);
+    return 0.5 * (this->point(vh0) + this->point(vh1));
+  }
+
+  /** Calculates the midpoint of the edge _eh, defined by the positions of the
+      two incident vertices */
+  Point calc_edge_midpoint(EdgeHandle _eh) const
+  {
+    return calc_edge_midpoint(this->halfedge_handle(_eh, 0));
+  }
+
   /** defines a consistent representation of a sector geometry:
       the halfedge _in_heh defines the sector orientation
       the vertex pointed by _in_heh defines the sector center
