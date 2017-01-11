@@ -88,6 +88,6 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
     add_test(NAME AllTestsIn_OpenMesh_tests WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/Unittests" COMMAND "${CMAKE_BINARY_DIR}/Unittests/unittests")
 
   else(GTEST_FOUND)
-      message("Google testing framework was not found!")
+      message(STATUS "Google testing framework was not found, unittests disabled.")
   endif(GTEST_FOUND)
 endif()
