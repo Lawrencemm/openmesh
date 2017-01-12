@@ -413,8 +413,8 @@ public:
       the two incident vertices */
   Point calc_edge_midpoint(HalfedgeHandle _heh) const
   {
-    auto vh0 = this->from_vertex_handle(_heh);
-    auto vh1 = this->to_vertex_handle(_heh);
+    VertexHandle vh0 = this->from_vertex_handle(_heh);
+    VertexHandle vh1 = this->to_vertex_handle(_heh);
     return 0.5 * (this->point(vh0) + this->point(vh1));
   }
 
