@@ -103,11 +103,11 @@ public:
   //@{
   /// Constructor to be used with interface 2
   /// \see attach(), operator()(size_t), detach()
-  SubdividerT(void) : attached_(nullptr) { }
+  SubdividerT(void) : attached_() { }
 
   /// Constructor to be used with interface 1 (calls attach())
   /// \see operator()( MeshType&, size_t )
-  SubdividerT( MeshType &_m ) : attached_(nullptr) {  attach(_m); }
+  SubdividerT( MeshType &_m ) : attached_(NULL) {  attach(_m); }
 
   //@}
 
