@@ -10,6 +10,19 @@ namespace OpenMesh {
 namespace Subdivider {
 namespace Uniform {
 
+/**
+ * Midpoint subdivision algorithm.
+ *
+ * With every step, the set of vertices is replaced with by the midpoints of all
+ * current edges. Then, two sets of faces are created to set up the new
+ * connectivity: From all midpoints of edges surrounding an original face, a new
+ * face is created. Also, for all midpoints of edges surrounding an original
+ * vertex, a new face is created.
+ *
+ * @note This algorithm ignores the _update_points option.
+ * @note This algorithm is best suited for closed meshes since boundaries tend
+ *       to fragment into isolated faces after a few iterations.
+ */
 template<typename MeshType, typename RealType = double>
 class MidpointT : public SubdividerT<MeshType, RealType>
 {
@@ -30,6 +43,8 @@ protected: // SubdividerT interface
         return true;
     }
 
+    //! Performs one step of Midpoint subdivision.
+    //! @note The _update_points option is ignored
     bool subdivide(mesh_t& _m, size_t _n, const bool _update_points = true)
     {
         PropertyManager<EPropHandleT<typename mesh_t::VertexHandle>, mesh_t> edge_midpoint(_m, "edge_midpoint");
