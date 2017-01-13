@@ -325,7 +325,7 @@ TEST_F(OpenMeshSubdividerUniform_Poly, Midpoint) {
     // Check Result
     EXPECT_EQ(48u, mesh_.n_edges())     << "Wrong number of Edges";
     EXPECT_EQ(96u, mesh_.n_halfedges()) << "Wrong number of HalfEdges";
-    EXPECT_EQ(24u,  mesh_.n_vertices())  << "Wrong number of vertices";
+    EXPECT_EQ(24u, mesh_.n_vertices())  << "Wrong number of vertices";
     EXPECT_EQ(26u, mesh_.n_faces())     << "Wrong number of faces";
 }
 
