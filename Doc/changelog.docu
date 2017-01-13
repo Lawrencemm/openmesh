@@ -15,6 +15,19 @@
 <li>Several warnings fixed (Including the checked iterators)</li>
 </ul>
 
+
+<b>Tools</b>
+<ul>
+<li>Subdivider: New Midpoint subdivision scheme</li>
+<li>Subdivider: Use double as default type</li>
+</ul>
+
+<b>Geometry</b>
+<ul>
+<li>QuadricT: implement Q+Q and Q*scalar operators for convenience.</li>
+</ul>
+
+
 <b>IO</b>
 <ul>
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
