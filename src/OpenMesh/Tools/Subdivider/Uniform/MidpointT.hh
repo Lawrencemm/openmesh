@@ -13,7 +13,7 @@ namespace Uniform {
 /**
  * Midpoint subdivision algorithm.
  *
- * With every step, the set of vertices is replaced with by the midpoints of all
+ * With every step, the set of vertices is replaced by the midpoints of all
  * current edges. Then, two sets of faces are created to set up the new
  * connectivity: From all midpoints of edges surrounding an original face, a new
  * face is created. Also, for all midpoints of edges surrounding an original
