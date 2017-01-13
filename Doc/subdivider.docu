@@ -14,6 +14,7 @@ subdivision:
   -# OpenMesh::Subdivider::Uniform::InterpolatingSqrt3LGT
   -# OpenMesh::Subdivider::Uniform::CompositeT
   -# OpenMesh::Subdivider::Uniform::CatmullClarkT
+  -# OpenMesh::Subdivider::Uniform::MidpointT
 -# Adaptive subdivision
   -# OpenMesh::Subdivider::Adaptive::CompositeT
 -# Simple subdivision

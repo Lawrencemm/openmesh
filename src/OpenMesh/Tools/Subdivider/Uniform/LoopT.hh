@@ -92,7 +92,7 @@ namespace Uniform    { // BEGIN_NS_DECIMATER
  *  M.S. Thesis, Department of Mathematics, University of Utah, August 1987.
  *
  */
-template <typename MeshType, typename RealType = float>
+template <typename MeshType, typename RealType = double>
 class LoopT : public SubdividerT<MeshType, RealType>
 {
 public:
