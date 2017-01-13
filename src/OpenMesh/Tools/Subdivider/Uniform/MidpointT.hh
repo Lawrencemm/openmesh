@@ -47,6 +47,10 @@ protected: // SubdividerT interface
     //! @note The _update_points option is ignored
     bool subdivide(mesh_t& _m, size_t _n, const bool _update_points = true)
     {
+        _m.request_halfedge_status();
+        _m.request_edge_status();
+        _m.request_vertex_status();
+        _m.request_face_status();
         PropertyManager<EPropHandleT<typename mesh_t::VertexHandle>, mesh_t> edge_midpoint(_m, "edge_midpoint");
         PropertyManager<VPropHandleT<bool>, mesh_t> is_original_vertex(_m, "is_original_vertex");
 
@@ -90,6 +94,7 @@ protected: // SubdividerT interface
                     _m.delete_vertex(vh);
                 }
             }
+            _m.garbage_collection();
         }
         return true;
     }
