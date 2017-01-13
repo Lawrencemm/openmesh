@@ -373,7 +373,7 @@ TEST_F(OpenMeshSubdividerUniform_Triangle,Midpoint) {
   // Initialize subdivider
   OpenMesh::Subdivider::Uniform::MidpointT<Mesh> midpoint;
 
-  // Execute 3 subdivision steps
+  // Execute 2 subdivision steps
   midpoint.attach(mesh_);
   midpoint( 2 );
   midpoint.detach();
@@ -385,6 +385,106 @@ TEST_F(OpenMeshSubdividerUniform_Triangle,Midpoint) {
   EXPECT_EQ(12u, mesh_.n_faces() )     << "Wrong number of faces";
 
 }
+
+/* Adds a cube to a polymesh
+ */
+TEST_F(OpenMeshSubdividerUniform_Poly, Midpoint) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[8];
+  vhandle[0] = mesh_.add_vertex(PolyMesh::Point(-1, -1,  1));
+  vhandle[1] = mesh_.add_vertex(PolyMesh::Point( 1, -1,  1));
+  vhandle[2] = mesh_.add_vertex(PolyMesh::Point( 1,  1,  1));
+  vhandle[3] = mesh_.add_vertex(PolyMesh::Point(-1,  1,  1));
+  vhandle[4] = mesh_.add_vertex(PolyMesh::Point(-1, -1, -1));
+  vhandle[5] = mesh_.add_vertex(PolyMesh::Point( 1, -1, -1));
+  vhandle[6] = mesh_.add_vertex(PolyMesh::Point( 1,  1, -1));
+  vhandle[7] = mesh_.add_vertex(PolyMesh::Point(-1,  1, -1));
+
+  // Add six faces to form a cube
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[7]);
+  face_vhandles.push_back(vhandle[6]);
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[4]);
+  face_vhandles.push_back(vhandle[5]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[6]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[6]);
+  face_vhandles.push_back(vhandle[7]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[7]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+
+  // Test setup:
+  //
+  //
+  //    3 ======== 2
+  //   /          /|
+  //  /          / |      z
+  // 0 ======== 1  |      |
+  // |          |  |      |   y
+  // |  7       |  6      |  /
+  // |          | /       | /
+  // |          |/        |/
+  // 4 ======== 5         -------> x
+  //
+
+  // Check setup
+  EXPECT_EQ(12u, mesh_.n_edges() )     << "Wrong number of Edges";
+  EXPECT_EQ(24u, mesh_.n_halfedges() ) << "Wrong number of HalfEdges";
+  EXPECT_EQ(8u, mesh_.n_vertices() )   << "Wrong number of vertices";
+  EXPECT_EQ(6u, mesh_.n_faces() )      << "Wrong number of faces";
+
+  // Initialize subdivider
+  OpenMesh::Subdivider::Uniform::MidpointT<Mesh> midpoint;
+
+  // Execute 2 subdivision steps
+  midpoint.attach(mesh_);
+  midpoint( 2 );
+  midpoint.detach();
+
+  // Check Result
+  EXPECT_EQ(18u, mesh_.n_edges() )     << "Wrong number of Edges";
+  EXPECT_EQ(36u, mesh_.n_halfedges() ) << "Wrong number of HalfEdges";
+  EXPECT_EQ(8u,  mesh_.n_vertices() )   << "Wrong number of vertices";
+  EXPECT_EQ(12u, mesh_.n_faces() )     << "Wrong number of faces";
+
+}
+
 
 
 }
