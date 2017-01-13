@@ -470,7 +470,7 @@ TEST_F(OpenMeshSubdividerUniform_Poly, Midpoint) {
   EXPECT_EQ(6u, mesh_.n_faces() )      << "Wrong number of faces";
 
   // Initialize subdivider
-  OpenMesh::Subdivider::Uniform::MidpointT<Mesh> midpoint;
+  OpenMesh::Subdivider::Uniform::MidpointT<PolyMesh> midpoint;
 
   // Execute 2 subdivision steps
   midpoint.attach(mesh_);
