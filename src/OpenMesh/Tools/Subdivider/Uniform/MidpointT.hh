@@ -96,6 +96,10 @@ protected: // SubdividerT interface
             }
             _m.garbage_collection();
         }
+        _m.release_face_status();
+        _m.release_vertex_status();
+        _m.release_edge_status();
+        _m.release_halfedge_status();
         return true;
     }
 
