@@ -107,7 +107,7 @@ public:
 
   /// Constructor to be used with interface 1 (calls attach())
   /// \see operator()( MeshType&, size_t )
-  SubdividerT( MeshType &_m ) : attached_(NULL) {  attach(_m); }
+  explicit SubdividerT( MeshType &_m ) : attached_(NULL) {  attach(_m); }
 
   //@}
 

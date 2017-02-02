@@ -85,7 +85,7 @@ class SoOpenMeshNodeT : public SoShape
 public:
 
   static void initClass();
-  SoOpenMeshNodeT(const Mesh* _mesh=0);
+  explicit SoOpenMeshNodeT(const Mesh* _mesh=0);
   void setMesh(const Mesh* mesh) { d_mesh = mesh; }
 
 
