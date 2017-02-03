@@ -479,6 +479,18 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 				}
 			}
 		}
+
+		if (_in.eof()) {
+			if (err_enabled)
+				omerr().enable();
+
+			omerr() << "Unexpected end of file while reading." << std::endl;
+			return false;
+		}
+
+		if(e_it->element_== FACE)
+			// stop reading after the faces since additional elements are not preserved anyway
+			break;
 	}
 
     if (err_enabled) 
@@ -694,6 +706,17 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 			}
 		}
 
+		if (_in.eof()) {
+			if (err_enabled)
+				omerr().enable();
+
+			omerr() << "Unexpected end of file while reading." << std::endl;
+			return false;
+		}
+
+		if (e_it->element_ == FACE)
+			// stop reading after the faces since additional elements are not preserved anyway
+			break; 
 	}
     if (err_enabled) 
       omerr().enable();
