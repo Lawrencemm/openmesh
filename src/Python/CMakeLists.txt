@@ -66,8 +66,8 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 			IF(COMPILE_WORKS)
 				# Look for the python interpreter to check if the example works
 
-				# strip version string of any characters (e.g.  # '+') than 0-9 and .
-				STRING(REGEX REPLACE "[^ 0-9 | \\.]" "" PYTHONLIBS_VERSION_STRING_STRIPPED ${PYTHONLIBS_VERSION_STRING})
+				# strip version string of any characters (e.g. rc1 # '+') than 0-9 and .
+				STRING(REGEX REPLACE "(rc[0-9]+)|[^ 0-9 | \\.]" "" PYTHONLIBS_VERSION_STRING_STRIPPED ${PYTHONLIBS_VERSION_STRING})
 				FIND_PACKAGE(PythonInterp ${PYTHONLIBS_VERSION_STRING_STRIPPED} QUIET)
 
 				IF(PYTHONINTERP_FOUND)
