@@ -33,6 +33,10 @@ elif [ "$LANGUAGE" == "C++11" ]; then
   echo "Building with C++11";
   OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++11' "
   BUILDPATH="$BUILDPATH-cpp11"  
+elif [ "$LANGUAGE" == "C++14" ]; then
+  echo "Building with C++14";
+  OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++14' "
+  BUILDPATH="$BUILDPATH-cpp14"  
 fi  
 
 #=====================================
