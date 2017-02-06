@@ -115,7 +115,7 @@ public:
   CatmullClarkT(  ) : parent_t() {  }
 
   /// Constructor
-  CatmullClarkT(MeshType &_m) : parent_t(_m) {  }
+  explicit CatmullClarkT(MeshType &_m) : parent_t(_m) {  }
 
   virtual ~CatmullClarkT() {}
 
