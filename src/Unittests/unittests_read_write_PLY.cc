@@ -692,4 +692,40 @@ TEST_F(OpenMeshReadWritePLY, WriteReadBinaryPLYWithCustomProps) {
     //remove(outFilename);
 
 }
+
+/*
+* Just load a ply with extra elements
+*/
+TEST_F(OpenMeshReadWritePLY, LoadSimplePLYWithExtraElements) {
+
+	mesh_.clear();
+
+	bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-extra-elements.ply");
+
+	EXPECT_TRUE(ok) << "Unable to load cube-minimal-extra-elements.ply";
+
+	EXPECT_EQ(8u, mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+	EXPECT_EQ(18u, mesh_.n_edges()) << "The number of loaded edges is not correct!";
+	EXPECT_EQ(12u, mesh_.n_faces()) << "The number of loaded faces is not correct!";
+
+}
+
+/*
+* Just load a binary ply with extra elements
+*/
+TEST_F(OpenMeshReadWritePLY, LoadSimpleBinaryPLYWithExtraElements) {
+
+	mesh_.clear();
+
+	OpenMesh::IO::Options options = OpenMesh::IO::Options::Binary;
+
+	bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-extra-elements-binary.ply", options);
+
+	EXPECT_TRUE(ok) << "Unable to load cube-minimal-extra-elements-binary.ply";
+
+	EXPECT_EQ(8u, mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+	EXPECT_EQ(18u, mesh_.n_edges()) << "The number of loaded edges is not correct!";
+	EXPECT_EQ(12u, mesh_.n_faces()) << "The number of loaded faces is not correct!";
+
+}
 }
