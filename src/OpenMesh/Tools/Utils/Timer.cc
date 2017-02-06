@@ -261,7 +261,8 @@ void TimerImplStd::stop(void)
 
 // ----------------------------------------------------------------- Timer ----
 
-Timer::Timer(void)
+Timer::Timer(void) :
+    state_(Stopped)
 {
 #if defined(WIN32) && (defined(_MSC_VER) || defined(__INTEL_COMPILER) || defined(__MINGW32__)) 
   impl_       = new TimerImplWin32;
@@ -280,7 +281,7 @@ Timer::Timer(void)
 #else
   impl_       = new TimerImplStd;
 #endif
-  state_      = Stopped;
+
 }
 
 Timer::~Timer(void)
