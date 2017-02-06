@@ -42,6 +42,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
   else(GTEST_PREFIX)
     find_path(_GTEST_INCLUDE_DIR "gtest/gtest.h"
       PATHS
+      ~/sw/gtest-1.8.0/include
       ~/sw/gtest-1.7.0/include
       ~/sw/gtest/include     
       /ACG/acgdev/gcc-4.7-x86_64/gtest/include
@@ -52,6 +53,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
       NO_DEFAULT_PATH )
     find_library(_GTEST_LIBRARY gtest
       PATHS
+      ~/sw/gtest-1.8.0/lib
       ~/sw/gtest-1.7.0/lib
       ~/sw/gtest/lib
       /ACG/acgdev/gcc-4.7-x86_64/gtest/lib
@@ -62,6 +64,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
       NO_DEFAULT_PATH )
     find_library(_GTEST_MAIN_LIBRARY gtest_main
       PATHS
+      ~/sw/gtest-1.8.0/lib
       ~/sw/gtest-1.7.0/lib
       ~/sw/gtest/lib
       /ACG/acgdev/gcc-4.7-x86_64/gtest/lib
