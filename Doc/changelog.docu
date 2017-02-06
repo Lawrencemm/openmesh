@@ -8,6 +8,11 @@
 
 <tr valign=top><td><b>7.0</b> (?/?/?)</td><td>
 
+<b>Breaking changes</b>
+<ul>
+<li>The minimal standard for C++ has been raised to C++11. Compilers not supporting C++11 or higher are no longer supported</li>
+</ul>
+
 <b>Core</b>
 <ul>
 <li>Implemented a cast from polyMesh to Mesh and vice versa using static_cast(polymeshInstance) or static_cast(trimeshInstance)</li>
@@ -41,6 +46,11 @@
 <b>Unittests</b>
 <ul>
 <li>Added unittest to write and read faceTexcoords with a test obj file</li>
+</ul>
+
+<b>Python</b>
+<ul>
+<li>fix the stripping of the python libs version string</li>
 </ul>
 
 <b>General</b>
