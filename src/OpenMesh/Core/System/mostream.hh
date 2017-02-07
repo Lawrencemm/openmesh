@@ -96,7 +96,7 @@ template <class T>
 class multiplex_target : public basic_multiplex_target
 {
 public:
-  multiplex_target(T& _t) : target_(_t) {}
+  explicit multiplex_target(T& _t) : target_(_t) {}
   virtual void operator<<(const std::string& _s) { target_ << _s; }
 private:
   T& target_;

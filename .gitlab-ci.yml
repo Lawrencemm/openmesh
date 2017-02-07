@@ -8,13 +8,13 @@ clang-c++11:
   tags:
     - Linux
 
-gcc-c++98:
-  script: "CI/ci-linux.sh gcc C++98"
+gcc-c++14:
+  script: "CI/ci-linux.sh gcc C++14"
   tags:
     - Linux
 
-clang-c++98:
-  script: "CI/ci-linux.sh clang C++98"
+clang-c++14:
+  script: "CI/ci-linux.sh clang C++14"
   tags: 
     - Linux
 
@@ -28,13 +28,13 @@ macos-c++11:
       - build-release-cpp11/*.tar.gz
 
 macos-c++98:
-  script: "CI/ci-mac.sh C++98"
+  script: "CI/ci-mac.sh C++14"
   tags:
     - Apple
   artifacts:
     paths:
-      - build-release-cpp98/*.dmg
-      - build-release-cpp98/*.tar.gz
+      - build-release-cpp14/*.dmg
+      - build-release-cpp14/*.tar.gz
 
 cppcheck:
   script: "CI/ci-cppcheck.sh"
