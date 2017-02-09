@@ -309,152 +309,189 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
     if (err_enabled)
       omerr().disable();
 
-    // read vertices:
-    for (i = 0; i < vertexCount_ && !_in.eof(); ++i) {
-        vh = _bi.add_vertex();
+	for (std::vector<ElementInfo>::iterator e_it = elements_.begin(); e_it != elements_.end(); ++e_it)
+	{
+		if (e_it->element_== VERTEX)
+		{
+			// read vertices:
+			for (i = 0; i < e_it->count_ && !_in.eof(); ++i) {
+				vh = _bi.add_vertex();
 
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 0.0;
+				v[0] = 0.0;
+				v[1] = 0.0;
+				v[2] = 0.0;
 
-        n[0] = 0.0;
-        n[1] = 0.0;
-        n[2] = 0.0;
+				n[0] = 0.0;
+				n[1] = 0.0;
+				n[2] = 0.0;
 
-        t[0] = 0.0;
-        t[1] = 0.0;
+				t[0] = 0.0;
+				t[1] = 0.0;
 
-        c[0] = 0;
-        c[1] = 0;
-        c[2] = 0;
-        c[3] = 255;
+				c[0] = 0;
+				c[1] = 0;
+				c[2] = 0;
+				c[3] = 255;
 
-        for (size_t propertyIndex = 0; propertyIndex < vertexProperties_.size(); ++propertyIndex) {
-            switch (vertexProperties_[propertyIndex].property) {
-            case XCOORD:
-                _in >> v[0];
-                break;
-            case YCOORD:
-                _in >> v[1];
-                break;
-            case ZCOORD:
-                _in >> v[2];
-                break;
-            case XNORM:
-                _in >> n[0];
-                break;
-            case YNORM:
-                _in >> n[1];
-                break;
-            case ZNORM:
-                _in >> n[2];
-                break;
-            case TEXX:
-                _in >> t[0];
-                break;
-            case TEXY:
-                _in >> t[1];
-                break;
-            case COLORRED:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    _in >> tmp;
-                    c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    _in >> c[0];
-                break;
-            case COLORGREEN:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    _in >> tmp;
-                    c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    _in >> c[1];
-                break;
-            case COLORBLUE:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    _in >> tmp;
-                    c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    _in >> c[2];
-                break;
-            case COLORALPHA:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    _in >> tmp;
-                    c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    _in >> c[3];
-                break;
-            case CUSTOM_PROP:
-                if (_opt.check(Options::Custom))
-                  readCustomProperty<false>(_in, _bi, vh, vertexProperties_[propertyIndex].name, vertexProperties_[propertyIndex].value, vertexProperties_[propertyIndex].listIndexType);
-                else
-                  _in >> trash;
-                break;
-            default:
-                _in >> trash;
-                break;
-            }
-        }
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex) {
+					PropertyInfo prop = e_it->properties_[propertyIndex];
+					switch (prop.property) {
+					case XCOORD:
+						_in >> v[0];
+						break;
+					case YCOORD:
+						_in >> v[1];
+						break;
+					case ZCOORD:
+						_in >> v[2];
+						break;
+					case XNORM:
+						_in >> n[0];
+						break;
+					case YNORM:
+						_in >> n[1];
+						break;
+					case ZNORM:
+						_in >> n[2];
+						break;
+					case TEXX:
+						_in >> t[0];
+						break;
+					case TEXY:
+						_in >> t[1];
+						break;
+					case COLORRED:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							_in >> tmp;
+							c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							_in >> c[0];
+						break;
+					case COLORGREEN:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							_in >> tmp;
+							c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							_in >> c[1];
+						break;
+					case COLORBLUE:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							_in >> tmp;
+							c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							_in >> c[2];
+						break;
+					case COLORALPHA:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							_in >> tmp;
+							c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							_in >> c[3];
+						break;
+					case CUSTOM_PROP:
+						if (_opt.check(Options::Custom))
+							readCustomProperty<false>(_in, _bi, vh, prop.name, prop.value, prop.listIndexType);
+						else
+							_in >> trash;
+						break;
+					default:
+						_in >> trash;
+						break;
+					}
+				}
 
-        _bi.set_point(vh, v);
-        if (_opt.vertex_has_normal())
-          _bi.set_normal(vh, n);
-        if (_opt.vertex_has_texcoord())
-          _bi.set_texcoord(vh, t);
-        if (_opt.vertex_has_color())
-          _bi.set_color(vh, Vec4uc(c));
-    }
+				_bi.set_point(vh, v);
+				if (_opt.vertex_has_normal())
+					_bi.set_normal(vh, n);
+				if (_opt.vertex_has_texcoord())
+					_bi.set_texcoord(vh, t);
+				if (_opt.vertex_has_color())
+					_bi.set_color(vh, Vec4uc(c));
+			}
+		}
+		else if (e_it->element_ == FACE)
+		{
+			// faces
+			for (i = 0; i < faceCount_ && !_in.eof(); ++i) {
+				FaceHandle fh;
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex) {
+					PropertyInfo prop = e_it->properties_[propertyIndex];
+					switch (prop.property) {
 
-    // faces
-    for (i = 0; i < faceCount_; ++i) {
-      FaceHandle fh;
-      for (size_t propertyIndex = 0; propertyIndex < faceProperties_.size(); ++propertyIndex) {
-        PropertyInfo prop = faceProperties_[propertyIndex];
-        switch (prop.property) {
+					case VERTEX_INDICES:
+						// nV = number of Vertices for current face
+						_in >> nV;
 
-        case VERTEX_INDICES:
-          // nV = number of Vertices for current face
-          _in >> nV;
+						if (nV == 3) {
+							vhandles.resize(3);
+							_in >> j;
+							_in >> k;
+							_in >> l;
 
-          if (nV == 3) {
-            vhandles.resize(3);
-            _in >> j;
-            _in >> k;
-            _in >> l;
+							vhandles[0] = VertexHandle(j);
+							vhandles[1] = VertexHandle(k);
+							vhandles[2] = VertexHandle(l);
+						}
+						else {
+							vhandles.clear();
+							for (j = 0; j < nV; ++j) {
+								_in >> idx;
+								vhandles.push_back(VertexHandle(idx));
+							}
+						}
 
-            vhandles[0] = VertexHandle(j);
-            vhandles[1] = VertexHandle(k);
-            vhandles[2] = VertexHandle(l);
-          } else {
-            vhandles.clear();
-            for (j = 0; j < nV; ++j) {
-              _in >> idx;
-              vhandles.push_back(VertexHandle(idx));
-            }
-          }
+						fh = _bi.add_face(vhandles);
+						if (!fh.is_valid())
+							++complex_faces;
+						break;
 
-          fh = _bi.add_face(vhandles);
-          if (!fh.is_valid())
-            ++complex_faces;
-          break;
+					case CUSTOM_PROP:
+						if (_opt.check(Options::Custom) && fh.is_valid())
+							readCustomProperty<false>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
+						else
+							_in >> trash;
+						break;
 
-        case CUSTOM_PROP:
-          if (_opt.check(Options::Custom) && fh.is_valid())
-            readCustomProperty<false>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
-          else
-            _in >> trash;
-          break;
+					default:
+						_in >> trash;
+						break;
+					}
+				}
 
-        default:
-          _in >> trash;
-          break;
-        }
-      }
+			}
+		}
+		else
+		{
+			// other elements
+			for (i = 0; i < e_it->count_ && !_in.eof(); ++i) {
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex)
+				{
+					// just skip the values
+					_in >> trash;
+				}
+			}
+		}
 
-    }
+		if (_in.eof()) {
+			if (err_enabled)
+				omerr().enable();
+
+			omerr() << "Unexpected end of file while reading." << std::endl;
+			return false;
+		}
+
+		if(e_it->element_== FACE)
+			// stop reading after the faces since additional elements are not preserved anyway
+			break;
+	}
 
     if (err_enabled) 
       omerr().enable();
@@ -482,7 +519,7 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
     VertexHandle           vh;
     OpenMesh::Vec4i        c;  // Color
     float                  tmp;
-
+	
     _bi.reserve(vertexCount_, 3* vertexCount_ , faceCount_);
 
     const bool err_enabled = omerr().is_enabled();
@@ -490,162 +527,197 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
     if (err_enabled)
       omerr().disable();
 
-    // read vertices:
-    for (unsigned int i = 0; i < vertexCount_ && !_in.eof(); ++i) {
-        vh = _bi.add_vertex();
+	for (std::vector<ElementInfo>::iterator e_it = elements_.begin(); e_it != elements_.end(); ++e_it)
+	{
+		if (e_it->element_ == VERTEX)
+		{
+			// read vertices:
+			for (unsigned int i = 0; i < e_it->count_ && !_in.eof(); ++i) {
+				vh = _bi.add_vertex();
 
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 0.0;
+				v[0] = 0.0;
+				v[1] = 0.0;
+				v[2] = 0.0;
 
-        n[0] = 0.0;
-        n[1] = 0.0;
-        n[2] = 0.0;
+				n[0] = 0.0;
+				n[1] = 0.0;
+				n[2] = 0.0;
 
-        t[0] = 0.0;
-        t[1] = 0.0;
+				t[0] = 0.0;
+				t[1] = 0.0;
 
-        c[0] = 0;
-        c[1] = 0;
-        c[2] = 0;
-        c[3] = 255;
+				c[0] = 0;
+				c[1] = 0;
+				c[2] = 0;
+				c[3] = 255;
 
-        for (size_t propertyIndex = 0; propertyIndex < vertexProperties_.size(); ++propertyIndex) {
-            switch (vertexProperties_[propertyIndex].property) {
-            case XCOORD:
-                readValue(vertexProperties_[propertyIndex].value, _in, v[0]);
-                break;
-            case YCOORD:
-                readValue(vertexProperties_[propertyIndex].value, _in, v[1]);
-                break;
-            case ZCOORD:
-                readValue(vertexProperties_[propertyIndex].value, _in, v[2]);
-                break;
-            case XNORM:
-                readValue(vertexProperties_[propertyIndex].value, _in, n[0]);
-                break;
-            case YNORM:
-                readValue(vertexProperties_[propertyIndex].value, _in, n[1]);
-                break;
-            case ZNORM:
-                readValue(vertexProperties_[propertyIndex].value, _in, n[2]);
-                break;
-            case TEXX:
-                readValue(vertexProperties_[propertyIndex].value, _in, t[0]);
-                break;
-            case TEXY:
-                readValue(vertexProperties_[propertyIndex].value, _in, t[1]);
-                break;
-            case COLORRED:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    readValue(vertexProperties_[propertyIndex].value, _in, tmp);
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex) {
+					PropertyInfo prop = e_it->properties_[propertyIndex];
+					switch (prop.property) {
+					case XCOORD:
+						readValue(prop.value, _in, v[0]);
+						break;
+					case YCOORD:
+						readValue(prop.value, _in, v[1]);
+						break;
+					case ZCOORD:
+						readValue(prop.value, _in, v[2]);
+						break;
+					case XNORM:
+						readValue(prop.value, _in, n[0]);
+						break;
+					case YNORM:
+						readValue(prop.value, _in, n[1]);
+						break;
+					case ZNORM:
+						readValue(prop.value, _in, n[2]);
+						break;
+					case TEXX:
+						readValue(prop.value, _in, t[0]);
+						break;
+					case TEXY:
+						readValue(prop.value, _in, t[1]);
+						break;
+					case COLORRED:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
 
-                    c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    readInteger(vertexProperties_[propertyIndex].value, _in, c[0]);
+							c[0] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							readInteger(prop.value, _in, c[0]);
 
-                break;
-            case COLORGREEN:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    readValue(vertexProperties_[propertyIndex].value, _in, tmp);
-                    c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    readInteger(vertexProperties_[propertyIndex].value, _in, c[1]);
+						break;
+					case COLORGREEN:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
+							c[1] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							readInteger(prop.value, _in, c[1]);
 
-                break;
-            case COLORBLUE:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    readValue(vertexProperties_[propertyIndex].value, _in, tmp);
-                    c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    readInteger(vertexProperties_[propertyIndex].value, _in, c[2]);
+						break;
+					case COLORBLUE:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
+							c[2] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							readInteger(prop.value, _in, c[2]);
 
-                break;
-            case COLORALPHA:
-                if (vertexProperties_[propertyIndex].value == ValueTypeFLOAT32 ||
-                    vertexProperties_[propertyIndex].value == ValueTypeFLOAT) {
-                    readValue(vertexProperties_[propertyIndex].value, _in, tmp);
-                    c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
-                } else
-                    readInteger(vertexProperties_[propertyIndex].value, _in, c[3]);
+						break;
+					case COLORALPHA:
+						if (prop.value == ValueTypeFLOAT32 ||
+							prop.value == ValueTypeFLOAT) {
+							readValue(prop.value, _in, tmp);
+							c[3] = static_cast<OpenMesh::Vec4i::value_type> (tmp * 255.0f);
+						}
+						else
+							readInteger(prop.value, _in, c[3]);
 
-                break;
-            case CUSTOM_PROP:
-              if (_opt.check(Options::Custom))
-                readCustomProperty<true>(_in, _bi, vh, vertexProperties_[propertyIndex].name, vertexProperties_[propertyIndex].value, vertexProperties_[propertyIndex].listIndexType);
-              else
-                consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
-              break;
-            default:
-                // Read unsupported property
-                consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
-                break;
-            }
+						break;
+					case CUSTOM_PROP:
+						if (_opt.check(Options::Custom))
+							readCustomProperty<true>(_in, _bi, vh, prop.name, prop.value, prop.listIndexType);
+						else
+							consume_input(_in, scalar_size_[prop.value]);
+						break;
+					default:
+						// Read unsupported property
+						consume_input(_in, scalar_size_[prop.value]);
+						break;
+					}
 
-        }
+				}
 
-        _bi.set_point(vh,v);
-        if (_opt.vertex_has_normal())
-          _bi.set_normal(vh, n);
-        if (_opt.vertex_has_texcoord())
-          _bi.set_texcoord(vh, t);
-        if (_opt.vertex_has_color())
-          _bi.set_color(vh, Vec4uc(c));
-    }
+				_bi.set_point(vh, v);
+				if (_opt.vertex_has_normal())
+					_bi.set_normal(vh, n);
+				if (_opt.vertex_has_texcoord())
+					_bi.set_texcoord(vh, t);
+				if (_opt.vertex_has_color())
+					_bi.set_color(vh, Vec4uc(c));
+			}
+		} 
+		else if (e_it->element_ == FACE) {
+			for (unsigned i = 0; i < e_it->count_ && !_in.eof(); ++i) {
+				FaceHandle fh;
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex)
+				{
+					PropertyInfo prop = e_it->properties_[propertyIndex];
+					switch (prop.property) {
 
-    for (unsigned i = 0; i < faceCount_; ++i) {
-      FaceHandle fh;
-      for (size_t propertyIndex = 0; propertyIndex < faceProperties_.size(); ++propertyIndex)
-      {
-        PropertyInfo prop = faceProperties_[propertyIndex];
-        switch (prop.property) {
+					case VERTEX_INDICES:
+						// nV = number of Vertices for current face
+						unsigned int nV;
+						readInteger(prop.listIndexType, _in, nV);
 
-        case VERTEX_INDICES:
-          // nV = number of Vertices for current face
-          unsigned int nV;
-          readInteger(prop.listIndexType, _in, nV);
+						if (nV == 3) {
+							vhandles.resize(3);
+							unsigned int j, k, l;
+							readInteger(prop.value, _in, j);
+							readInteger(prop.value, _in, k);
+							readInteger(prop.value, _in, l);
 
-          if (nV == 3) {
-            vhandles.resize(3);
-            unsigned int j,k,l;
-            readInteger(prop.value, _in, j);
-            readInteger(prop.value, _in, k);
-            readInteger(prop.value, _in, l);
+							vhandles[0] = VertexHandle(j);
+							vhandles[1] = VertexHandle(k);
+							vhandles[2] = VertexHandle(l);
+						}
+						else {
+							vhandles.clear();
+							for (unsigned j = 0; j < nV; ++j) {
+								unsigned int idx;
+								readInteger(prop.value, _in, idx);
+								vhandles.push_back(VertexHandle(idx));
+							}
+						}
 
-            vhandles[0] = VertexHandle(j);
-            vhandles[1] = VertexHandle(k);
-            vhandles[2] = VertexHandle(l);
-          } else {
-            vhandles.clear();
-            for (unsigned j = 0; j < nV; ++j) {
-              unsigned int idx;
-              readInteger(prop.value, _in, idx);
-              vhandles.push_back(VertexHandle(idx));
-            }
-          }
+						fh = _bi.add_face(vhandles);
+						if (!fh.is_valid())
+							++complex_faces;
+						break;
 
-          fh = _bi.add_face(vhandles);
-          if (!fh.is_valid())
-            ++complex_faces;
-          break;
+					case CUSTOM_PROP:
+						if (_opt.check(Options::Custom) && fh.is_valid())
+							readCustomProperty<true>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
+						else
+							consume_input(_in, scalar_size_[prop.value]);
+						break;
 
-        case CUSTOM_PROP:
-          if (_opt.check(Options::Custom) && fh.is_valid())
-            readCustomProperty<true>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
-          else
-            consume_input(_in, scalar_size_[faceProperties_[propertyIndex].value]);
-          break;
+					default:
+						consume_input(_in, scalar_size_[prop.value]);
+						break;
+					}
+				}
+			}
+		} 
+		else { 
+			for (unsigned int i = 0; i < e_it->count_ && !_in.eof(); ++i)
+			{
+				for (size_t propertyIndex = 0; propertyIndex < e_it->properties_.size(); ++propertyIndex)
+				{
+					PropertyInfo prop = e_it->properties_[propertyIndex];
+					// skip element values
+					consume_input(_in, scalar_size_[prop.value]);
+				}
+			}
+		}
 
-        default:
-          consume_input(_in, scalar_size_[faceProperties_[propertyIndex].value]);
-          break;
-        }
-      }
-    }
+		if (_in.eof()) {
+			if (err_enabled)
+				omerr().enable();
 
+			omerr() << "Unexpected end of file while reading." << std::endl;
+			return false;
+		}
+
+		if (e_it->element_ == FACE)
+			// stop reading after the faces since additional elements are not preserved anyway
+			break; 
+	}
     if (err_enabled) 
       omerr().enable();
 
@@ -1067,9 +1139,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
     // Clear per file options
     options_.cleanup();
 
-    // clear property maps, will be recreated
-    vertexProperties_.clear();
-    faceProperties_.clear();
+    // clear element list
+    elements_.clear();
 
     // read 1st line
     std::string line;
@@ -1087,6 +1158,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
     vertexCount_ = 0;
     faceCount_ = 0;
     vertexDimension_ = 0;
+
+    unsigned int elementCount = 0;
 
     std::string keyword;
     std::string fileType;
@@ -1132,13 +1205,24 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
             std::getline(_is, line);
         } else if (keyword == "element") {
             _is >> elementName;
+			_is >> elementCount;
+
+			ElementInfo element;
+			element.name_ = elementName;
+			element.count_ = elementCount;
+
             if (elementName == "vertex") {
-                _is >> vertexCount_;
+				vertexCount_ = elementCount;
+				element.element_ = VERTEX;
             } else if (elementName == "face") {
-                _is >> faceCount_;
+				faceCount_ = elementCount;
+				element.element_ = FACE;
             } else {
                 omerr() << "PLY header unsupported element type: " << elementName << std::endl;
+				element.element_ = UNKNOWN;
             }
+
+			elements_.push_back(element);
         } else if (keyword == "property") {
             std::string tmp1;
             std::string tmp2;
@@ -1174,28 +1258,25 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
                 PropertyInfo property(CUSTOM_PROP, entryType, propertyName);
                 property.listIndexType = indexType;
 
-                // just 2 elements supported by now
-                if (elementName == "vertex")
-                {
-                  vertexProperties_.push_back(property);
-                }
-                else if (elementName == "face")
+				if (elementName == "face")
                 {
                   // special case for vertex indices
                   if (propertyName == "vertex_index" || propertyName == "vertex_indices")
                   {
                     property.property = VERTEX_INDICES;
-                    if (!faceProperties_.empty())
-                    {
-                      omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
-                      faceProperties_.clear();
-                    }
+                   
+					if (!elements_.back().properties_.empty())
+					{
+						omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
+						elements_.back().properties_.clear();
+					}
                   }
-                  faceProperties_.push_back(property);
 
                 }
                 else
                   omerr() << "property " << propertyName << " belongs to unsupported element " << elementName << std::endl;
+
+				elements_.back().properties_.push_back(property);
 
             } else {
               // as this is not a list property, read second value of property
@@ -1283,14 +1364,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
 
               if (entry.property != UNSUPPORTED)
               {
-                if (elementName == "vertex")
-                  vertexProperties_.push_back(entry);
-                else if (elementName == "face")
-                  faceProperties_.push_back(entry);
-                else
-                  omerr() << "Properties not supported in element " << elementName << std::endl;
+				elements_.back().properties_.push_back(entry);
               }
-
             }
 
         } else {
