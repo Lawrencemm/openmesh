@@ -112,14 +112,16 @@ class VectorT {
 
         //-------------------------------------------------------------- constructors
 
-        template<typename ... T,
-            typename = typename std::enable_if<sizeof...(T) == DIM>::type,
+        // Converting constructor: Constructs the vector from DIM values (of
+        // potentially heterogenous types) which are all convertible to Scalar.
+        template<typename T, typename ... Ts,
+            typename = typename std::enable_if<sizeof...(Ts)+1 == DIM>::type,
             typename = typename std::enable_if<
-                are_convertible_to<Scalar, T...>::value>::type>
-        constexpr VectorT(T... vs) : values_ { {static_cast<Scalar>(vs)...} } {
-            static_assert(sizeof...(T) == DIM,
+                are_convertible_to<Scalar, T, Ts...>::value>::type>
+        constexpr VectorT(T v, Ts... vs) : values_ { {static_cast<Scalar>(v), static_cast<Scalar>(vs)...} } {
+            static_assert(sizeof...(Ts)+1 == DIM,
                     "Invalid number of components specified in constructor.");
-            static_assert(are_convertible_to<Scalar, T...>::value,
+            static_assert(are_convertible_to<Scalar, T, Ts...>::value,
                     "Not all components are convertible to Scalar.");
         }
 
@@ -367,8 +369,7 @@ class VectorT {
         auto operator% (const VectorT<OtherScalar, DIM> &_rhs) const ->
             typename std::enable_if<DIM == 3,
                 VectorT<decltype((*this)[0] * _rhs[0] -
-                                 (*this)[0] * _rhs[0]),
-                        DIM>>::type {
+                                 (*this)[0] * _rhs[0]), DIM>>::type {
             return {
                 values_[1] * _rhs[2] - values_[2] * _rhs[1],
                 values_[2] * _rhs[0] - values_[0] * _rhs[2],
