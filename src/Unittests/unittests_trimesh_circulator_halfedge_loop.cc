@@ -287,7 +287,7 @@ TEST_F(OpenMeshTrimeshCirculatorHalfedgeLoop, CWAndCCWCheck) {
    */
 
 
-  int indices[4] = {3, 8, 6, 3};
+  int indices[4] = {3, 6, 8, 3};
   int rev_indices[4];
   std::reverse_copy(indices,indices+4,rev_indices);
 
