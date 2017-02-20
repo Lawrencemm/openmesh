@@ -192,12 +192,12 @@ public:
       &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   HalfedgeLoopIter;
   typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
-      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle> HalfedgeLoopCWIter;
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle, false> HalfedgeLoopCWIter;
   /**
    * Identical to #FaceHalfedgeIter. God knows why this typedef exists.
    */
   typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
-      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle, false>
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   HalfedgeLoopCCWIter;
 
   typedef VertexVertexIter        ConstVertexVertexIter;
