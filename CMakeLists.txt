@@ -115,6 +115,7 @@ else()
 	# successful finder run:
 	set (OPENMESH_FOUND true PARENT_SCOPE)
 	set (OPENMESH_LIBRARIES OpenMeshCore OpenMeshTools PARENT_SCOPE)
+	set (OPENMESH_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/src" PARENT_SCOPE)
 	set (OPENMESH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" PARENT_SCOPE)
 
 	# Also define variables provided by the old legacy finder.
