@@ -851,7 +851,7 @@ compute_screen_space_error(VHierarchyNodeHandle node_handle, VHierarchyNodeHandl
   Vec3f                 residual;
   Vec3f                 res;
   Vec3f                 lp;
-#if ((defined(_MSC_VER) && (_MSC_VER >= 1900))  ) 
+#if ((defined(_MSC_VER) && (_MSC_VER >= 1800))  )
   // Workaround for internal compiler error
   Vec3f                 tri[3]{ {},{},{} };
 #else

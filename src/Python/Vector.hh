@@ -123,7 +123,7 @@ void expose_vec(const char *_name) {
 	Vector& (Vector::*normalize     )(void         )       = &Vector::normalize;
 	Vector& (Vector::*normalize_cond)(void         )       = &Vector::normalize_cond;
 
-#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+#if (_MSC_VER >= 1800 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
 	Vector (Vector::*normalized)() const = &Vector::normalized;
 #else
 	const Vector (Vector::*normalized)() const = &Vector::normalized;

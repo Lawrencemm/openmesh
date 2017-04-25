@@ -79,7 +79,7 @@
 #include "Config.hh"
 #include <vector>
 #include <OpenMesh/Core/System/omstream.hh>
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <utility>
 #endif
 
@@ -150,7 +150,7 @@ public:
   /// Constructor
   HeapT() : HeapVector() {}
   
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   /// Construct with a given \c HeapIterface. 
   HeapT(HeapInterface _interface)
   : HeapVector(),  interface_(std::move(_interface))

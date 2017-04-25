@@ -114,7 +114,7 @@ public:
   typedef Decimater::ModNormalFlippingT< mesh_t >::Handle mod_nf_t;
 
   // object types
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   typedef std::unique_ptr< decimater_t   >   decimater_o;
 #else
   typedef std::auto_ptr< decimater_t   >   decimater_o;

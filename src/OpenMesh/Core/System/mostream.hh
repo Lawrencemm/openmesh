@@ -70,7 +70,7 @@
 #include <string>
 #include <algorithm>
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
   #include <mutex>
 #endif
 
@@ -189,7 +189,7 @@ protected:
   virtual int sync() 
   {
     // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-    #if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
+    #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
        std::lock_guard<std::mutex> lck (serializer_);
     #endif
 
@@ -214,7 +214,7 @@ protected:
     char c = traits_type::to_char_type(_c);
 
     // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-    #if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
+    #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
        {
          std::lock_guard<std::mutex> lck (serializer_);
          buffer_.push_back(c);
@@ -264,7 +264,7 @@ private:
   bool         enabled_;
 
   // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-  #if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
+  #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
      std::mutex serializer_;
   #endif
 

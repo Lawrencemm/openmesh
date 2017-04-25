@@ -92,7 +92,7 @@ update_viewing_configurations()
   Vec3f  trans;
 
 // Workaround for internal compiler error on Visual Studio 2015 Update 1
-#if ((defined(_MSC_VER) && (_MSC_VER >= 1900)) )
+#if ((defined(_MSC_VER) && (_MSC_VER >= 1800)) )
   Vec3f inv_rot[3]{ {},{},{} };
   Vec3f normal[4]{ {},{},{},{} };
 #else
