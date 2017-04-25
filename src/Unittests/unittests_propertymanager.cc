@@ -93,7 +93,7 @@ TEST_F(OpenMeshPropertyManager, set_range_bool) {
           ASSERT_TRUE(pm_f_bool[*f_it]);
   }
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   /*
    * Same thing again, this time with C++11 ranges.
    */
@@ -137,7 +137,7 @@ TEST_F(OpenMeshPropertyManager, set_range_bool) {
  * C++11 Specific Tests
  * ====================================================================
  */
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 
 template<typename PropHandle, typename Mesh>
 bool has_property(const Mesh& _mesh, const std::string& _name) {
