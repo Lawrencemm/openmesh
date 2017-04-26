@@ -100,13 +100,21 @@ TEST_F(OpenMeshSplitTriangleMesh, Split_Triangle_Mesh_1_4) {
 
   EXPECT_EQ(4u, mesh_.n_faces());
 
-  // split face with new vertex
+  // split face in center (non-boundary case)
   mesh_.split(to_split);
 
   mesh_.garbage_collection();
 
   EXPECT_EQ(10u, mesh_.n_faces());
 
+  Mesh::FaceHandle boundary_split = mesh_.face_handle(0);
+
+  // split face at boundary
+   mesh_.split(boundary_split);
+
+   mesh_.garbage_collection();
+
+   EXPECT_EQ(15u, mesh_.n_faces());
 
 
 }
