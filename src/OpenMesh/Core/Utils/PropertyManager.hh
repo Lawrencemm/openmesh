@@ -92,7 +92,7 @@ namespace OpenMesh {
  */
 template<typename PROPTYPE, typename MeshT>
 class PropertyManager {
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
     public:
         PropertyManager(const PropertyManager&) = delete;
         PropertyManager& operator=(const PropertyManager&) = delete;
@@ -167,7 +167,7 @@ class PropertyManager {
 
         MeshT &getMesh() const { return *mesh_; }
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
         /// Only for pre C++11 compatibility.
 
         typedef PropertyManager<PROPTYPE, MeshT> Proxy;
@@ -410,7 +410,7 @@ class PropertyManager {
                 (*this)[*begin] = value;
         }
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
         template<typename HandleTypeIteratorRange, typename PROP_VALUE>
         void set_range(const HandleTypeIteratorRange &range,
                 const PROP_VALUE &value) {

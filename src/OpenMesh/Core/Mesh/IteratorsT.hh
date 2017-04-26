@@ -170,7 +170,7 @@ class GenericIteratorT {
             return cpy;
         }
 
-#if ((defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+#if ((defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
         template<class T = value_handle>
         auto operator+=(int amount) ->
             typename std::enable_if<

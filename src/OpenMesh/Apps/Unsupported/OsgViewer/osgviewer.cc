@@ -131,7 +131,7 @@ public:
 
   bool bind( osg::GeometryPtr geo )
   {
-    #if (defined(_MSC_VER) && (_MSC_VER >= 1900)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+    #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
       std::unique_ptr<mesh_t> obj(new mesh_t);
     #else
       std::auto_ptr<mesh_t> obj(new mesh_t);
