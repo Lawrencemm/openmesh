@@ -18,8 +18,15 @@
 <li>Implemented a cast from polyMesh to Mesh and vice versa using static_cast(polymeshInstance) or static_cast(trimeshInstance)</li>
 <li>make all negative handles invalid, not just -1</li>
 <li>Several warnings fixed (Including the checked iterators)</li>
+<li>fix halfedge indices in OpenMeshTrimeshCirculatorHalfedgeLoop CWAndCCWCheck</li>
+<li>Fix wrong behaviour of HalfedgeLoopIterators by changing the template parameter</li>
+<li>Added 1-4 triangle split funtion(splits all edges at Midpoints)</li>
 </ul>
 
+<b>Utils</b>
+<ul>
+<li>enable c++11 features of many classes for Visual Studio 2013</li>
+</ul>
 
 <b>Tools</b>
 <ul>
@@ -30,6 +37,7 @@
 <b>Geometry</b>
 <ul>
 <li>QuadricT: implement Q+Q and Q*scalar operators for convenience.</li>
+<li>Vector11T: Make converting ctor only accept 2 arguments</li>
 </ul>
 
 
@@ -41,6 +49,9 @@
 <li>OBJ Loader: fixed handling of negative indices in OBJ loader</li>
 <li>OM Writer: Fixed OMWriter when no faces are available (Thanks to Jamie Kydd for the patch)</li>
 <li>OM Writer: Added Mark to the format header to identify end of stream correctly (Thanks to Jamie Kydd for the patch)</li>
+<li>PLY Reader: Skip reading extra elements after face</li>
+<li>PLY Reader: Return error when reaching EOF</li>
+
 </ul>
 
 <b>Unittests</b>
