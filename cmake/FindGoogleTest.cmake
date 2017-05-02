@@ -45,7 +45,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
       ~/sw/gtest-1.8.0/include
       ~/sw/gtest-1.7.0/include
       ~/sw/gtest/include     
-      /ACG/acgdev/gcc-4.7-x86_64/gtest/include
+      /ACG/acgdev/gcc-x86_64/gtest/include
       /opt/local/include
       /usr/local/include
       /usr/include
@@ -56,7 +56,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
       ~/sw/gtest-1.8.0/lib
       ~/sw/gtest-1.7.0/lib
       ~/sw/gtest/lib
-      /ACG/acgdev/gcc-4.7-x86_64/gtest/lib
+      /ACG/acgdev/gcc-x86_64/gtest/lib
       /opt/local/lib
       /usr/local/lib
       /usr/lib
@@ -67,7 +67,7 @@ else(GTEST_INCLUDE_DIRS AND GTEST_LIBRARIES AND GTEST_MAIN_LIBRARIES)
       ~/sw/gtest-1.8.0/lib
       ~/sw/gtest-1.7.0/lib
       ~/sw/gtest/lib
-      /ACG/acgdev/gcc-4.7-x86_64/gtest/lib
+      /ACG/acgdev/gcc-x86_64/gtest/lib
       /opt/local/lib
       /usr/local/lib
       /usr/lib
