@@ -368,9 +368,9 @@ public:
     VertexHandle v1 = this->add_vertex(new1);
     VertexHandle v2 = this->add_vertex(new2);
 
-    const bool split0 = !this->is_boundary(he0);
-    const bool split1 = !this->is_boundary(he1);
-    const bool split2 = !this->is_boundary(he2);
+    const bool split0 = !this->is_boundary(eh0);
+    const bool split1 = !this->is_boundary(eh1);
+    const bool split2 = !this->is_boundary(eh2);
 
     // delete original face
     this->delete_face(_fh);
