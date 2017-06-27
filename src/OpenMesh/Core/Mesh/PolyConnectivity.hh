@@ -1123,6 +1123,9 @@ public:
       ITER_TYPE (CONTAINER_TYPE::*end_fn)() const>
   class EntityRange {
       public:
+          typedef ITER_TYPE iterator;
+          typedef ITER_TYPE const_iterator;
+
           EntityRange(CONTAINER_TYPE &container) : container_(container) {}
           ITER_TYPE begin() const { return (container_.*begin_fn)(); }
           ITER_TYPE end() const { return (container_.*end_fn)(); }
@@ -1184,12 +1187,15 @@ public:
       ITER_TYPE (CONTAINER_TYPE::*end_fn)(CENTER_ENTITY_TYPE) const>
   class CirculatorRange {
       public:
+          typedef ITER_TYPE iterator;
+          typedef ITER_TYPE const_iterator;
+
           CirculatorRange(
                   const CONTAINER_TYPE &container,
                   CENTER_ENTITY_TYPE center) :
               container_(container), center_(center) {}
-          ITER_TYPE begin() { return (container_.*begin_fn)(center_); }
-          ITER_TYPE end() { return (container_.*end_fn)(center_); }
+          ITER_TYPE begin() const { return (container_.*begin_fn)(center_); }
+          ITER_TYPE end() const { return (container_.*end_fn)(center_); }
 
       private:
           const CONTAINER_TYPE &container_;
