@@ -1130,7 +1130,7 @@ void PolyConnectivity::split_copy(FaceHandle fh, VertexHandle vh) {
 
   // Copy the property of the original face to all new faces
   for(VertexFaceIter vf_it =  vf_iter(vh); vf_it.is_valid(); ++vf_it)
-    copy_all_properties(fh, *vf_it);
+    copy_all_properties(fh, *vf_it, true);
 }
 
 //-----------------------------------------------------------------------------
@@ -1226,7 +1226,7 @@ void PolyConnectivity::split_edge_copy(EdgeHandle _eh, VertexHandle _vh)
   EdgeHandle eh0 = edge_handle( next_halfedge_handle( halfedge_handle(_eh, 1) ) );
 
   // Copy the property from the original to the new edge
-  copy_all_properties(_eh, eh0);
+  copy_all_properties(_eh, eh0, true);
 }
 
 } // namespace OpenMesh
