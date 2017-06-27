@@ -57,6 +57,7 @@ class OpenMeshSplitCopyPolyMesh : public OpenMeshBasePoly {
 TEST_F(OpenMeshSplitCopyTriangleMesh, SplitCopyTriangleMesh) {
 
   mesh_.clear();
+  mesh_.request_face_status();
 
   // Add some vertices
   Mesh::VertexHandle vhandle[4];
@@ -86,6 +87,8 @@ TEST_F(OpenMeshSplitCopyTriangleMesh, SplitCopyTriangleMesh) {
   OpenMesh::FPropHandleT<int> fprop_int;
   mesh_.add_property(fprop_int);
   mesh_.property(fprop_int, fh) = 999;
+  //set internal property
+  mesh_.status(fh).set_tagged(true);
 
   // split face with new vertex
   mesh_.split_copy(fh, vhandle[3]);
@@ -94,7 +97,10 @@ TEST_F(OpenMeshSplitCopyTriangleMesh, SplitCopyTriangleMesh) {
   Mesh::FaceIter f_it = mesh_.faces_begin();
   Mesh::FaceIter f_end = mesh_.faces_end();
   for (; f_it != f_end; ++f_it)
+  {
     EXPECT_EQ(999, mesh_.property(fprop_int, *f_it)) << "Different Property value";
+    EXPECT_TRUE(mesh_.status(*f_it).tagged()) << "Different internal property value";
+  }
 }
 
 /* splits a face that has a property in a poly mesh with split_copy
@@ -103,6 +109,7 @@ TEST_F(OpenMeshSplitCopyTriangleMesh, SplitCopyTriangleMesh) {
 TEST_F(OpenMeshSplitCopyPolyMesh, SplitCopyPolymesh) {
 
   mesh_.clear();
+  mesh_.request_face_status();
 
   // Add some vertices
   Mesh::VertexHandle vhandle[5];
@@ -134,6 +141,8 @@ TEST_F(OpenMeshSplitCopyPolyMesh, SplitCopyPolymesh) {
   OpenMesh::FPropHandleT<int> fprop_int;
   mesh_.add_property(fprop_int);
   mesh_.property(fprop_int, fh) = 999;
+  //set internal property
+  mesh_.status(fh).set_tagged(true);
 
   // split face with new vertex
   mesh_.split_copy(fh, vhandle[4]);
@@ -142,7 +151,10 @@ TEST_F(OpenMeshSplitCopyPolyMesh, SplitCopyPolymesh) {
   PolyMesh::FaceIter f_it = mesh_.faces_begin();
   PolyMesh::FaceIter f_end = mesh_.faces_end();
   for (; f_it != f_end; ++f_it)
+  {
     EXPECT_EQ(999, mesh_.property(fprop_int, *f_it)) << "Different Property value";
+    EXPECT_TRUE(mesh_.status(*f_it).tagged()) << "Different internal property value";
+  }
 
 }
 }
