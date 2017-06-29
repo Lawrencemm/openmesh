@@ -18,6 +18,7 @@
 <li>Implemented a cast from polyMesh to Mesh and vice versa using static_cast(polymeshInstance) or static_cast(trimeshInstance)</li>
 <li>make all negative handles invalid, not just -1</li>
 <li>Several warnings fixed (Including the checked iterators)</li>
+<li>split_copy and split_edge_copy operations now also copy internal properties.</li>
 </ul>
 
 
@@ -46,6 +47,7 @@
 <b>Unittests</b>
 <ul>
 <li>Added unittest to write and read faceTexcoords with a test obj file</li>
+<li>Added unittest for split_edge_copy operations on Tri and PolyMeshes</li>
 </ul>
 
 <b>Python</b>
