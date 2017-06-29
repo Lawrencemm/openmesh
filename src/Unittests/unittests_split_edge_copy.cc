@@ -95,8 +95,9 @@ TEST_F(OpenMeshSplitEdgeCopyTriangleMesh, SplitEdgeCopyTriangleMesh) {
   mesh_.split_edge_copy(eh, vhandle[3]);
 
   // Check setup
-  EXPECT_EQ(999, mesh_.property(eprop_int, *(mesh_.edges_begin()++))) << "Different Property value";
-  EXPECT_TRUE(mesh_.status(*(mesh_.edges_begin()++)).tagged()) << "Different internal property value";
+  Mesh::EdgeHandle eh0 = mesh_.edge_handle( mesh_.next_halfedge_handle( mesh_.halfedge_handle(eh, 1) ) );
+  EXPECT_EQ(999, mesh_.property(eprop_int, eh0)) << "Different Property value";
+  EXPECT_TRUE(mesh_.status(eh0).tagged()) << "Different internal property value";
 }
 
 /* splits an edge that has a property in a poly mesh with split_edge_copy
@@ -145,8 +146,10 @@ TEST_F(OpenMeshSplitEdgeCopyPolyMesh, SplitEdgeCopyPolymesh) {
   // split face with new vertex
   mesh_.split_edge_copy(eh, vhandle[4]);
 
+
   // Check setup  
-  EXPECT_EQ(999, mesh_.property(eprop_int, *(mesh_.edges_begin()++))) << "Different Property value";
-  EXPECT_TRUE(mesh_.status(*(mesh_.edges_begin()++)).tagged()) << "Different internal property value";
+  Mesh::EdgeHandle eh0 = mesh_.edge_handle( mesh_.next_halfedge_handle( mesh_.halfedge_handle(eh, 1) ) );
+  EXPECT_EQ(999, mesh_.property(eprop_int, eh0)) << "Different Property value";
+  EXPECT_TRUE(mesh_.status(eh0).tagged()) << "Different internal property value";
 }
 }
