@@ -494,7 +494,7 @@ void TriConnectivity::split_copy(EdgeHandle _eh, VertexHandle _vh)
   // Copy the properties of the original edge to all neighbor edges that
   // have been created
   for(VEIter ve_it = ve_iter(_vh); ve_it.is_valid(); ++ve_it)
-    copy_all_properties(_eh, *ve_it);
+    copy_all_properties(_eh, *ve_it, true);
 }
 
 }// namespace OpenMesh
