@@ -218,7 +218,7 @@ public:
   template <class _Vec>
   Scalar operator()(const _Vec& _v) const
   {
-    return evaluate(_v, GenProg::Int2Type<_Vec::size_>());
+    return evaluate(_v, GenProg::Int2Type<vector_traits<_Vec>::size_>());
   }
 
   Scalar a() const { return a_; }
