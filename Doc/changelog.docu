@@ -43,6 +43,7 @@
 
 <b>IO</b>
 <ul>
+<li>ImporterT: Return a valid FaceHandle when adding non-manifold faces.</li>
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
 <li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
 <li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
