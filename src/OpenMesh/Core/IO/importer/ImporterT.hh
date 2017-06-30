@@ -157,7 +157,7 @@ public:
         }
 
         // add face
-        FaceHandle fh = mesh_.add_face(vhandles);
+        fh = mesh_.add_face(vhandles);
 
         // Mark failed face as non-manifold
         if (mesh_.has_face_status())
