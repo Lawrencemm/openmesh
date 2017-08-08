@@ -261,7 +261,7 @@ void
 PolyMeshT<Kernel>::
 update_face_normals()
 {
-  FaceIter f_it(Kernel::faces_begin()), f_end(Kernel::faces_end());
+  FaceIter f_it(Kernel::faces_sbegin()), f_end(Kernel::faces_end());
 
   for (; f_it != f_end; ++f_it)
     this->set_normal(*f_it, calc_face_normal(*f_it));
