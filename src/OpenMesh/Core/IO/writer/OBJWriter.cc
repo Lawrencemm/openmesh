@@ -363,7 +363,7 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
         {
           // write vertex texture coordinate index
           if (_opt.check(Options::VertexTexCoord))
-            _out  << texMap[_be.texcoord(vh)];
+            _out  << texMap[_be.texcoord(vhandles[j])];
         }
 
         // write vertex normal index
