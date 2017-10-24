@@ -22,11 +22,15 @@
 <li>fix halfedge indices in OpenMeshTrimeshCirculatorHalfedgeLoop CWAndCCWCheck</li>
 <li>Fix wrong behaviour of HalfedgeLoopIterators by changing the template parameter</li>
 <li>Added 1-4 triangle split funtion(splits all edges at Midpoints)</li>
+<li>Boost range support (Thanks to Bastian Pranzas for the patch)</li>
+<li>Made the face and edge split operations that copy properties also copy builtin properties</li>
 </ul>
 
 <b>Utils</b>
 <ul>
 <li>enable c++11 features of many classes for Visual Studio 2013</li>
+<li>Fixed broken version macros (Thanks to Frederik Salomonsson for the fix)</li>
+<li>Fixed Build on gcc-7.2 (Thanks to Gero Müller and Martial Tola for the patches)</li>
 </ul>
 
 <b>Tools</b>
@@ -39,11 +43,13 @@
 <ul>
 <li>QuadricT: implement Q+Q and Q*scalar operators for convenience.</li>
 <li>Vector11T: Make converting ctor only accept 2 arguments</li>
+<li>Only compute normals for faces that are not deleted</li>
 </ul>
 
 
 <b>IO</b>
 <ul>
+<li>ImporterT: Modified the add_face function of importerT to always return a valid FaceHandle</li>
 <li>ImporterT: Return a valid FaceHandle when adding non-manifold faces.</li>
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
 <li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
@@ -53,7 +59,6 @@
 <li>OM Writer: Added Mark to the format header to identify end of stream correctly (Thanks to Jamie Kydd for the patch)</li>
 <li>PLY Reader: Skip reading extra elements after face</li>
 <li>PLY Reader: Return error when reaching EOF</li>
-
 </ul>
 
 <b>Unittests</b>
