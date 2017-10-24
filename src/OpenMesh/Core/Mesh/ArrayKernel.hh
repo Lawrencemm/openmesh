@@ -879,10 +879,7 @@ private:
   void                                      init_bit_masks(BitMaskContainer& _bmc);
   void                                      init_bit_masks();
 
-private:
-  VertexContainer                           vertices_;
-  EdgeContainer                             edges_;
-  FaceContainer                             faces_;
+protected:
 
   VertexStatusPropertyHandle                vertex_status_;
   HalfedgeStatusPropertyHandle              halfedge_status_;
@@ -893,6 +890,11 @@ private:
   unsigned int                              refcount_hstatus_;
   unsigned int                              refcount_estatus_;
   unsigned int                              refcount_fstatus_;
+
+private:
+  VertexContainer                           vertices_;
+  EdgeContainer                             edges_;
+  FaceContainer                             faces_;
 
   BitMaskContainer                          halfedge_bit_masks_;
   BitMaskContainer                          edge_bit_masks_;
