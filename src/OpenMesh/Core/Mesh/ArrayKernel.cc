@@ -84,21 +84,20 @@ void ArrayKernel::assign_connectivity(const ArrayKernel& _other)
   eprops_resize(n_edges());
   fprops_resize(n_faces());
   
-#define COPY_STATUS_PROPERTY(ENTITY) \
-  if (_other.ENTITY##_status_.is_valid()) \
-  {   \
-    if (!ENTITY##_status_.is_valid()) \
-    { \
-      request_##ENTITY##_status(); \
-    } \
-    property(ENTITY##_status_) = _other.property(_other.ENTITY##_status_); \
-  }
-  COPY_STATUS_PROPERTY(vertex)
-  COPY_STATUS_PROPERTY(halfedge)
-  COPY_STATUS_PROPERTY(edge)
-  COPY_STATUS_PROPERTY(face)
-  
-#undef COPY_STATUS_PROPERTY
+  //just copy status properties for now,
+  //until a proper solution for refcounted
+  //properties is available
+  vertex_status_ = _other.vertex_status_;
+  halfedge_status_ = _other.halfedge_status_;
+  edge_status_ = _other.edge_status_;
+  face_status_ = _other.face_status_;
+
+  //initialize refcounter to 1 for the new mesh, 
+  //if status is available.
+  refcount_estatus_ = _other.refcount_estatus_ > 0 ? 1 : 0;
+  refcount_vstatus_ = _other.refcount_vstatus_ > 0 ? 1 : 0;
+  refcount_hstatus_ = _other.refcount_hstatus_ > 0 ? 1 : 0;
+  refcount_fstatus_ = _other.refcount_fstatus_ > 0 ? 1 : 0;
 }
 
 // --- handle -> item ---
