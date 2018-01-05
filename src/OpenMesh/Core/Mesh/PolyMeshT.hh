@@ -445,7 +445,7 @@ public:
     Normal v0, v1;
     calc_sector_vectors(_in_heh, v0, v1);
     Scalar denom = v0.norm()*v1.norm();
-    if (is_zero(denom))
+    if ( denom == Scalar(0))
     {
       return 0;
     }

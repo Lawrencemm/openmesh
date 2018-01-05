@@ -24,6 +24,7 @@
 <li>Added 1-4 triangle split funtion(splits all edges at Midpoints)</li>
 <li>Boost range support (Thanks to Bastian Pranzas for the patch)</li>
 <li>Made the face and edge split operations that copy properties also copy builtin properties</li>
+<li>calc_sector_angle: Check for real division by zero not with epsilon that was way to large</li>
 </ul>
 
 <b>Utils</b>
