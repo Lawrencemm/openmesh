@@ -32,6 +32,7 @@
 <li>enable c++11 features of many classes for Visual Studio 2013</li>
 <li>Fixed broken version macros (Thanks to Frederik Salomonsson for the fix)</li>
 <li>Fixed Build on gcc-7.2 (Thanks to Gero Müller and Martial Tola for the patches)</li>
+<li>Small compilation fix for MINGW64 cross-compilation(Thanks to Manuel Massing for the patch)</li>
 </ul>
 
 <b>Tools</b>
