@@ -61,6 +61,7 @@
 <li>OM Writer: Added Mark to the format header to identify end of stream correctly (Thanks to Jamie Kydd for the patch)</li>
 <li>PLY Reader: Skip reading extra elements after face</li>
 <li>PLY Reader: Return error when reaching EOF</li>
+<li>OMFormat: Fix implicit fallthrough warning on gcc(Thanks to Manuel Massing for the patch)</li>
 </ul>
 
 <b>Unittests</b>
