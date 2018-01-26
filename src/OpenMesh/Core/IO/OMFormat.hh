@@ -315,16 +315,16 @@ namespace OMFormat {
   /// Return the size of chunk data in bytes
   inline size_t chunk_data_size( Header& _hdr,  Chunk::Header& _chunk_hdr )
   {
-    size_t C     = 0;
-
+    size_t C;
     switch( _chunk_hdr.entity_ )
     {
       case Chunk::Entity_Vertex:   C  = _hdr.n_vertices_; break;
       case Chunk::Entity_Face:     C  = _hdr.n_faces_;    break;
-      case Chunk::Entity_Halfedge: C  = _hdr.n_edges_;    // no break!
-      case Chunk::Entity_Edge:     C += _hdr.n_edges_;    break;
+      case Chunk::Entity_Halfedge: C  = _hdr.n_edges_*2;  break;
+      case Chunk::Entity_Edge:     C  = _hdr.n_edges_;    break;
       case Chunk::Entity_Mesh:     C  = 1;                break;
       default:
+        C = 0;
         std::cerr << "Invalid value in _chunk_hdr.entity_\n";
         assert( false );
         break;
