@@ -270,10 +270,10 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
     }
   }
 
-  //collect Texturevertices from vertices
+  //collect Texture coordinates from vertices
   if(_opt.check(Options::VertexTexCoord))
   {
-    for (size_t i=0, nF=_be.n_faces(); i<nF; ++i)
+    for (size_t i=0, nV=_be.n_vertices(); i<nV; ++i)
     {
       vh = VertexHandle(static_cast<int>(i));
       t  = _be.texcoord(vh);
