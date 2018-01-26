@@ -55,6 +55,7 @@
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
 <li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
 <li>OBJ Writer: Applied fix for bad or missing vertex tex coords (Thanks to Gero Müller for the patch)</li>>
+<li>OBJ Writer: Fix vertex texture coordinates export in OBJ writer</li>
 <li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
 <li>OBJ Loader: fixed handling of negative indices in OBJ loader</li>
 <li>OM Writer: Fixed OMWriter when no faces are available (Thanks to Jamie Kydd for the patch)</li>
