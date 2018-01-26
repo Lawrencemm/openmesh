@@ -224,12 +224,22 @@ write(std::ostream& _out, BaseExporter& _be, Options _opt, std::streamsize _prec
   if (!check( _be, _opt))
      return false;
 
+  // No binary mode for OBJ
+  if ( _opt.check(Options::Binary) ) {
+    omout() << "[OBJWriter] : Warning, Binary mode requested for OBJ Writer (No support for Binary mode), falling back to standard." <<  std::endl;
+  }
 
-  // check writer features
-  if ( _opt.check(Options::Binary)     || // not supported by format
-       _opt.check(Options::FaceNormal))
-     return false;
+  // check for unsupported writer features
+  if (_opt.check(Options::FaceNormal) ) {
+    omerr() << "[OBJWriter] : FaceNormal not supported by OBJ Writer" <<  std::endl;
+    return false;
+  }
 
+  // check for unsupported writer features
+  if (_opt.check(Options::VertexColor) ) {
+    omerr() << "[OBJWriter] : VertexColor not supported by OBJ Writer" <<  std::endl;
+    return false;
+  }
 
   //create material file if needed
   if ( _opt.check(Options::FaceColor) ){

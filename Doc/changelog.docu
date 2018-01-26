@@ -53,6 +53,7 @@
 <li>ImporterT: Modified the add_face function of importerT to always return a valid FaceHandle</li>
 <li>ImporterT: Return a valid FaceHandle when adding non-manifold faces.</li>
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
+<li>OBJ Writer: Fail if vertex color export was requested (Thanks to Manuel Massing)</li>
 <li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
 <li>OBJ Writer: Applied fix for bad or missing vertex tex coords (Thanks to Gero Müller for the patch)</li>>
 <li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
