@@ -773,7 +773,7 @@ TEST_F(OpenMeshIterators, FaceIterEmptyMeshOneDeletedFace) {
   vhandle[1] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
   vhandle[2] = mesh_.add_vertex(Mesh::Point(1, 1, 0));
 
-  // Add two faces
+  // Add one faces
   std::vector<Mesh::VertexHandle> face_vhandles;
 
   face_vhandles.push_back(vhandle[2]);
@@ -841,4 +841,154 @@ TEST_F(OpenMeshIterators, FaceIterEmptyMeshOneDeletedFace) {
   mesh_.release_face_status();
 
 }
+
+
+
+/*
+ * Test range iterators
+ */
+TEST_F(OpenMeshIterators, RangeIterators) {
+
+  mesh_.clear();
+
+  // request delete_face capability
+  mesh_.request_vertex_status();
+  mesh_.request_edge_status();
+  mesh_.request_halfedge_status();
+  mesh_.request_face_status();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[4];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 0, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(1, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[2]);
+  Mesh::FaceHandle fh = mesh_.add_face(face_vhandles);
+
+  // Delete one face
+  mesh_.delete_face(fh);
+
+  // Test setup (right face deleted)
+  //  1 --- 2
+  //  |   / |
+  //  |  /  |
+  //  | /   |
+  //  0 --- 3
+
+
+  // ====== Faces ======
+
+  int count_faces_iter = 0;
+  for (auto f_it = mesh_.faces_begin(); f_it != mesh_.faces_end(); ++f_it)
+    ++count_faces_iter;
+  EXPECT_EQ(2, count_faces_iter) << "Wrong number of visited faces.";
+
+  int count_faces_skipping_iter = 0;
+  for (auto f_it = mesh_.faces_sbegin(); f_it != mesh_.faces_end(); ++f_it)
+    ++count_faces_skipping_iter;
+  EXPECT_EQ(1, count_faces_skipping_iter) << "Wrong number of visited faces.";
+
+  int count_faces_range = 0;
+  for (auto fh : mesh_.faces())
+    ++count_faces_range;
+  EXPECT_EQ(1, count_faces_range) << "Wrong number of visited faces.";
+
+  int count_faces_range_all = 0;
+  for (auto fh : mesh_.all_faces())
+    ++count_faces_range_all;
+  EXPECT_EQ(2, count_faces_range_all) << "Wrong number of visited faces.";
+
+
+  // ====== Edges ======
+
+  int count_edges_iter = 0;
+  for (auto e_it = mesh_.edges_begin(); e_it != mesh_.edges_end(); ++e_it)
+    ++count_edges_iter;
+  EXPECT_EQ(5, count_edges_iter) << "Wrong number of visited edges.";
+
+  int count_edges_skipping_iter = 0;
+  for (auto e_it = mesh_.edges_sbegin(); e_it != mesh_.edges_end(); ++e_it)
+    ++count_edges_skipping_iter;
+  EXPECT_EQ(3, count_edges_skipping_iter) << "Wrong number of visited edges.";
+
+  int count_edges_range = 0;
+  for (auto eh : mesh_.edges())
+    ++count_edges_range;
+  EXPECT_EQ(3, count_edges_range) << "Wrong number of visited edges.";
+
+  int count_edges_range_all = 0;
+  for (auto eh : mesh_.all_edges())
+    ++count_edges_range_all;
+  EXPECT_EQ(5, count_edges_range_all) << "Wrong number of visited edges.";
+
+
+  // ====== Halfedges ======
+
+  int count_halfedges_iter = 0;
+  for (auto h_it = mesh_.halfedges_begin(); h_it != mesh_.halfedges_end(); ++h_it)
+    ++count_halfedges_iter;
+  EXPECT_EQ(10, count_halfedges_iter) << "Wrong number of visited halfedges.";
+
+  int count_halfedges_skipping_iter = 0;
+  for (auto h_it = mesh_.halfedges_sbegin(); h_it != mesh_.halfedges_end(); ++h_it)
+    ++count_halfedges_skipping_iter;
+  EXPECT_EQ(6, count_halfedges_skipping_iter) << "Wrong number of visited halfedges.";
+
+  int count_halfedges_range = 0;
+  for (auto heh : mesh_.halfedges())
+    ++count_halfedges_range;
+  EXPECT_EQ(6, count_halfedges_range) << "Wrong number of visited halfedges.";
+
+  int count_halfedges_range_all = 0;
+  for (auto heh : mesh_.all_halfedges())
+    ++count_halfedges_range_all;
+  EXPECT_EQ(10, count_halfedges_range_all) << "Wrong number of visited halfedges.";
+
+
+  // ====== Vertices ======
+
+  int count_vertices_iter = 0;
+  for (auto v_it = mesh_.vertices_begin(); v_it != mesh_.vertices_end(); ++v_it)
+    ++count_vertices_iter;
+  EXPECT_EQ(4, count_vertices_iter) << "Wrong number of visited vertices.";
+
+  int count_vertices_skipping_iter = 0;
+  for (auto v_it = mesh_.vertices_sbegin(); v_it != mesh_.vertices_end(); ++v_it)
+    ++count_vertices_skipping_iter;
+  EXPECT_EQ(3, count_vertices_skipping_iter) << "Wrong number of visited vertices.";
+
+  int count_vertices_range = 0;
+  for (auto vh : mesh_.vertices())
+    ++count_vertices_range;
+  EXPECT_EQ(3, count_vertices_range) << "Wrong number of visited vertices.";
+
+  int count_vertices_range_all = 0;
+  for (auto vh : mesh_.all_vertices())
+    ++count_vertices_range_all;
+  EXPECT_EQ(4, count_vertices_range_all) << "Wrong number of visited vertices.";
+
+
+  mesh_.release_vertex_status();
+  mesh_.release_edge_status();
+  mesh_.release_halfedge_status();
+  mesh_.release_face_status();
+
+}
+
+
+
 }
