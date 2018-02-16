@@ -1140,9 +1140,19 @@ public:
           &PolyConnectivity::vertices_end> ConstVertexRange;
   typedef EntityRange<
           const PolyConnectivity,
+          PolyConnectivity::ConstVertexIter,
+          &PolyConnectivity::vertices_sbegin,
+          &PolyConnectivity::vertices_end> ConstVertexRangeSkipping;
+  typedef EntityRange<
+          const PolyConnectivity,
           PolyConnectivity::ConstHalfedgeIter,
           &PolyConnectivity::halfedges_begin,
           &PolyConnectivity::halfedges_end> ConstHalfedgeRange;
+  typedef EntityRange<
+          const PolyConnectivity,
+          PolyConnectivity::ConstHalfedgeIter,
+          &PolyConnectivity::halfedges_sbegin,
+          &PolyConnectivity::halfedges_end> ConstHalfedgeRangeSkipping;
   typedef EntityRange<
           const PolyConnectivity,
           PolyConnectivity::ConstEdgeIter,
@@ -1150,33 +1160,67 @@ public:
           &PolyConnectivity::edges_end> ConstEdgeRange;
   typedef EntityRange<
           const PolyConnectivity,
+          PolyConnectivity::ConstEdgeIter,
+          &PolyConnectivity::edges_sbegin,
+          &PolyConnectivity::edges_end> ConstEdgeRangeSkipping;
+  typedef EntityRange<
+          const PolyConnectivity,
           PolyConnectivity::ConstFaceIter,
           &PolyConnectivity::faces_begin,
           &PolyConnectivity::faces_end> ConstFaceRange;
+  typedef EntityRange<
+          const PolyConnectivity,
+          PolyConnectivity::ConstFaceIter,
+          &PolyConnectivity::faces_sbegin,
+          &PolyConnectivity::faces_end> ConstFaceRangeSkipping;
 
   /**
    * @return The vertices as a range object suitable
-   * for C++11 range based for loops.
+   * for C++11 range based for loops. Will skip deleted vertices.
    */
-  ConstVertexRange vertices() const { return ConstVertexRange(*this); }
+  ConstVertexRangeSkipping vertices() const { return ConstVertexRangeSkipping(*this); }
+
+  /**
+   * @return The vertices as a range object suitable
+   * for C++11 range based for loops. Will include deleted vertices.
+   */
+  ConstVertexRange all_vertices() const { return ConstVertexRange(*this); }
 
   /**
    * @return The halfedges as a range object suitable
-   * for C++11 range based for loops.
+   * for C++11 range based for loops. Will skip deleted halfedges.
    */
-  ConstHalfedgeRange halfedges() const { return ConstHalfedgeRange(*this); }
+  ConstHalfedgeRangeSkipping halfedges() const { return ConstHalfedgeRangeSkipping(*this); }
 
   /**
-   * @return The edges as a range object suitabl
-   * for C++11 range based for loops.
+   * @return The halfedges as a range object suitable
+   * for C++11 range based for loops. Will include deleted halfedges.
    */
-  ConstEdgeRange edges() const { return ConstEdgeRange(*this); }
+  ConstHalfedgeRange all_halfedges() const { return ConstHalfedgeRange(*this); }
+
+  /**
+   * @return The edges as a range object suitable
+   * for C++11 range based for loops. Will skip deleted edges.
+   */
+  ConstEdgeRangeSkipping edges() const { return ConstEdgeRangeSkipping(*this); }
+
+  /**
+   * @return The edges as a range object suitable
+   * for C++11 range based for loops. Will include deleted edges.
+   */
+  ConstEdgeRange all_edges() const { return ConstEdgeRange(*this); }
 
   /**
    * @return The faces as a range object suitable
-   * for C++11 range based for loops.
+   * for C++11 range based for loops. Will skip deleted faces.
    */
-  ConstFaceRange faces() const { return ConstFaceRange(*this); }
+  ConstFaceRangeSkipping faces() const { return ConstFaceRangeSkipping(*this); }
+
+  /**
+   * @return The faces as a range object suitable
+   * for C++11 range based for loops. Will include deleted faces.
+   */
+  ConstFaceRange all_faces() const { return ConstFaceRange(*this); }
 
   /// Generic class for iterator ranges.
   template<
