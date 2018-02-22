@@ -777,6 +777,11 @@ void PolyConnectivity::collapse_edge(HalfedgeHandle _hh)
   // delete stuff
   status(edge_handle(h)).set_deleted(true);
   status(vo).set_deleted(true);
+  if (has_halfedge_status())
+  {
+    status(h).set_deleted(true);
+    status(o).set_deleted(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -827,6 +832,11 @@ void PolyConnectivity::collapse_loop(HalfedgeHandle _hh)
     status(fh).set_deleted(true);
   }
   status(edge_handle(h0)).set_deleted(true);
+  if (has_halfedge_status())
+  {
+    status(h0).set_deleted(true);
+    status(o0).set_deleted(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
