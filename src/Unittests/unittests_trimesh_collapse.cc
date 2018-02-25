@@ -607,4 +607,139 @@ TEST_F(OpenMeshCollapse, LargeCollapseHalfEdge) {
 
 }
 
+
+/*
+ * Test collapsing an halfedge in a triangle mesh
+ *
+ */
+TEST_F(OpenMeshCollapse, DeletedStatus) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[6];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(-1, 0, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point( 0, 2, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point( 0, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point( 0,-1, 0));
+  vhandle[4] = mesh_.add_vertex(Mesh::Point( 0,-2, 0));
+  vhandle[5] = mesh_.add_vertex(Mesh::Point( 1, 0, 0));
+
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[4]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  /* Test setup:
+   *      1
+   *     /|\
+   *    / | \
+   *   / _2_ \
+   *  /_/ | \_\
+   * 0__  |  __5
+   *  \ \_3_/ /
+   *   \  |  /
+   *    \ | /
+   *     \|/
+   *      4
+   */
+
+  EXPECT_EQ(mesh_.n_faces(), 6u) << "Could not add all faces";
+
+  // Request the status bits
+  mesh_.request_vertex_status();
+  mesh_.request_edge_status();
+  mesh_.request_halfedge_status();
+  mesh_.request_face_status();
+
+  // =============================================
+  // Collapse halfedge from 3 to 2
+  // =============================================
+
+  Mesh::HalfedgeHandle heh_collapse = mesh_.find_halfedge(Mesh::VertexHandle(2), Mesh::VertexHandle(3));
+
+  EXPECT_TRUE(heh_collapse.is_valid()) << "Could not find halfedge from vertex 2 to vetex 3";
+  EXPECT_TRUE(mesh_.is_collapse_ok(heh_collapse)) << "Collapse is not ok for halfedge from vertex 2 to vertex 3";
+
+  Mesh::HalfedgeHandle top_left     = mesh_.find_halfedge(Mesh::VertexHandle(2), Mesh::VertexHandle(0));
+  Mesh::HalfedgeHandle top_right    = mesh_.find_halfedge(Mesh::VertexHandle(5), Mesh::VertexHandle(2));
+  Mesh::HalfedgeHandle bottom_left  = mesh_.find_halfedge(Mesh::VertexHandle(0), Mesh::VertexHandle(3));
+  Mesh::HalfedgeHandle bottom_right = mesh_.find_halfedge(Mesh::VertexHandle(3), Mesh::VertexHandle(5));
+
+  EXPECT_TRUE(top_left.is_valid())     << "Could not find halfedge from vertex 2 to vetex 0";
+  EXPECT_TRUE(top_right.is_valid())    << "Could not find halfedge from vertex 5 to vetex 2";
+  EXPECT_TRUE(bottom_left.is_valid())  << "Could not find halfedge from vertex 0 to vetex 3";
+  EXPECT_TRUE(bottom_right.is_valid()) << "Could not find halfedge from vertex 3 to vetex 5";
+
+  Mesh::FaceHandle left  = mesh_.face_handle(top_left);
+  Mesh::FaceHandle right = mesh_.face_handle(top_right);
+  EXPECT_TRUE(left.is_valid())  << "Could not find left face";
+  EXPECT_TRUE(right.is_valid()) << "Could not find right";
+
+  mesh_.collapse(heh_collapse);
+
+  EXPECT_TRUE(mesh_.status(Mesh::VertexHandle(2)).deleted()) << "Collapsed vertex is not deleted.";
+
+  EXPECT_TRUE(mesh_.status(left).deleted()) << "Left face is not deleted.";
+  EXPECT_TRUE(mesh_.status(right).deleted()) << "Right face is not deleted.";
+
+  EXPECT_TRUE(mesh_.status(mesh_.edge_handle(heh_collapse)).deleted())  << "Collapsed edge is not deleted.";
+  EXPECT_TRUE(mesh_.status(mesh_.edge_handle(top_left)).deleted())      << "Top left edge is not deleted.";
+  EXPECT_TRUE(mesh_.status(mesh_.edge_handle(top_right)).deleted())     << "Top right edge is not deleted.";
+  EXPECT_FALSE(mesh_.status(mesh_.edge_handle(bottom_left)).deleted())  << "Bottom left edge is deleted.";
+  EXPECT_FALSE(mesh_.status(mesh_.edge_handle(bottom_right)).deleted()) << "Bottom right edge is deleted.";
+
+  EXPECT_TRUE(mesh_.status(heh_collapse).deleted())                                  << "Collapsed halfedge is not deleted.";
+  EXPECT_TRUE(mesh_.status(mesh_.opposite_halfedge_handle(heh_collapse)).deleted())  << "Opposite of collapsed halfedge is not deleted.";
+
+  EXPECT_TRUE(mesh_.status(top_left).deleted())                                      << "Halfedge from vertex 0 to vertex 2 is not deleted";
+  EXPECT_TRUE(mesh_.status(mesh_.opposite_halfedge_handle(top_left)).deleted())      << "Halfedge from vertex 2 to vertex 0 is not deleted";
+  EXPECT_TRUE(mesh_.status(top_right).deleted())                                     << "Halfedge from vertex 5 to vertex 2 is not deleted";
+  EXPECT_TRUE(mesh_.status(mesh_.opposite_halfedge_handle(top_right)).deleted())     << "Halfedge from vertex 2 to vertex 5 is not deleted";
+  EXPECT_FALSE(mesh_.status(bottom_left).deleted())                                  << "Halfedge from vertex 0 to vertex 3 is deleted";
+  EXPECT_FALSE(mesh_.status(mesh_.opposite_halfedge_handle(bottom_left)).deleted())  << "Halfedge from vertex 3 to vertex 0 is deleted";
+  EXPECT_FALSE(mesh_.status(bottom_right).deleted())                                 << "Halfedge from vertex 3 to vertex 5 is deleted";
+  EXPECT_FALSE(mesh_.status(mesh_.opposite_halfedge_handle(bottom_right)).deleted()) << "Halfedge from vertex 5 to vertex 3 is deleted";
+}
+
+
 }
