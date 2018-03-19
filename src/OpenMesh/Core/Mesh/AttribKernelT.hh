@@ -744,48 +744,34 @@ private:
       {
           //mesh has no points?
       }
-      if(this->get_property_handle(vertex_normals_,
-               "v:normals"))
-          refcount_vnormals_ = 1;
-      if(this->get_property_handle(vertex_colors_,
-               "v:colors"))
-          refcount_vcolors_ = 1;
-      if(this->get_property_handle(vertex_texcoords1D_,
-               "v:texcoords1D"))
-          refcount_vtexcoords1D_ = 1;
-      if(this->get_property_handle(vertex_texcoords2D_,
-               "v:texcoords2D"))
-          refcount_vtexcoords2D_ = 1;
-      if(this->get_property_handle(vertex_texcoords3D_,
-               "v:texcoords3D"))
-          refcount_vtexcoords3D_ = 1;
-      if(this->get_property_handle(halfedge_texcoords1D_,
-               "h:texcoords1D"))
-          refcount_htexcoords1D_ = 1;
-      if(this->get_property_handle(halfedge_texcoords2D_,
-               "h:texcoords2D"))
-          refcount_htexcoords2D_ = 1;
-      if(this->get_property_handle(halfedge_texcoords3D_,
-               "h:texcoords3D"))
-          refcount_htexcoords3D_ = 1;
-      if(this->get_property_handle(halfedge_normals_,
-               "h:normals"))
-          refcount_henormals_ = 1;
-      if(this->get_property_handle(halfedge_colors_,
-               "h:colors"))
-          refcount_hecolors_ = 1;
-      if(this->get_property_handle(edge_colors_,
-               "e:colors"))
-          refcount_ecolors_ = 1;
-      if(this->get_property_handle(face_normals_,
-               "f:normals"))
-          refcount_fnormals_ = 1;
-      if(this->get_property_handle(face_colors_,
-               "f:colors"))
-          refcount_fcolors_ = 1;
-      if(this->get_property_handle(face_texture_index_,
-               "f:textureindex"))
-          refcount_ftextureIndex_ = 1;
+      refcount_vnormals_ = this->get_property_handle(vertex_normals_,
+          "v:normals") ? 1 : 0 ;
+      refcount_vcolors_ = this->get_property_handle(vertex_colors_,
+          "v:colors") ? 1 : 0 ;
+      refcount_vtexcoords1D_ = this->get_property_handle(vertex_texcoords1D_,
+          "v:texcoords1D") ? 1 : 0 ;
+      refcount_vtexcoords2D_ = this->get_property_handle(vertex_texcoords2D_,
+          "v:texcoords2D") ? 1 : 0 ;
+      refcount_vtexcoords3D_ = this->get_property_handle(vertex_texcoords3D_,
+          "v:texcoords3D") ? 1 : 0 ;
+      refcount_htexcoords1D_ = this->get_property_handle(halfedge_texcoords1D_,
+          "h:texcoords1D") ? 1 : 0 ;
+      refcount_htexcoords2D_ = this->get_property_handle(halfedge_texcoords2D_,
+          "h:texcoords2D") ? 1 : 0 ;
+      refcount_htexcoords3D_ = this->get_property_handle(halfedge_texcoords3D_,
+          "h:texcoords3D") ? 1 : 0 ;
+      refcount_henormals_ = this->get_property_handle(halfedge_normals_,
+          "h:normals") ? 1 : 0 ;
+      refcount_hecolors_ = this->get_property_handle(halfedge_colors_,
+          "h:colors") ? 1 : 0 ;
+      refcount_ecolors_ = this->get_property_handle(edge_colors_,
+          "e:colors") ? 1 : 0 ;
+      refcount_fnormals_ = this->get_property_handle(face_normals_,
+          "f:normals") ? 1 : 0 ;
+      refcount_fcolors_ = this->get_property_handle(face_colors_,
+          "f:colors") ? 1 : 0 ;
+      refcount_ftextureIndex_ = this->get_property_handle(face_texture_index_,
+          "f:textureindex") ? 1 : 0 ;
   }
 };
 
