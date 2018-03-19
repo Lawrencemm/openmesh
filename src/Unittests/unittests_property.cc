@@ -746,5 +746,111 @@ TEST_F(OpenMeshProperties, PropertyIterators ) {
 }
 
 
+TEST_F(OpenMeshProperties, MeshAssignment ) {
+
+  mesh_.clear();
+  mesh_.add_vertex(Mesh::Point());
+
+  auto copy = mesh_;
+
+  copy.request_vertex_status();
+  copy.request_vertex_normals();
+  copy.request_vertex_colors();
+  copy.request_vertex_texcoords1D();
+  copy.request_vertex_texcoords2D();
+  copy.request_vertex_texcoords3D();
+  copy.request_halfedge_status();
+  copy.request_halfedge_texcoords1D();
+  copy.request_halfedge_texcoords2D();
+  copy.request_halfedge_texcoords3D();
+  copy.request_edge_status();
+  copy.request_edge_colors();
+  copy.request_halfedge_normals();
+  copy.request_halfedge_colors();
+  copy.request_face_status();
+  copy.request_face_normals();
+  copy.request_face_colors();
+  copy.request_face_texture_index();
+
+  EXPECT_TRUE(copy.has_vertex_status());
+  EXPECT_TRUE(copy.has_vertex_normals());
+  EXPECT_TRUE(copy.has_vertex_colors());
+  EXPECT_TRUE(copy.has_vertex_texcoords1D());
+  EXPECT_TRUE(copy.has_vertex_texcoords2D());
+  EXPECT_TRUE(copy.has_vertex_texcoords3D());
+  EXPECT_TRUE(copy.has_halfedge_status());
+  EXPECT_TRUE(copy.has_halfedge_texcoords1D());
+  EXPECT_TRUE(copy.has_halfedge_texcoords2D());
+  EXPECT_TRUE(copy.has_halfedge_texcoords3D());
+  EXPECT_TRUE(copy.has_edge_status());
+  EXPECT_TRUE(copy.has_edge_colors());
+  EXPECT_TRUE(copy.has_halfedge_normals());
+  EXPECT_TRUE(copy.has_halfedge_colors());
+  EXPECT_TRUE(copy.has_face_status());
+  EXPECT_TRUE(copy.has_face_normals());
+  EXPECT_TRUE(copy.has_face_colors());
+  EXPECT_TRUE(copy.has_face_texture_index());
+
+  copy.assign(mesh_, true);
+
+  EXPECT_FALSE(copy.has_vertex_status());
+  EXPECT_FALSE(copy.has_vertex_normals());
+  EXPECT_FALSE(copy.has_vertex_colors());
+  EXPECT_FALSE(copy.has_vertex_texcoords1D());
+  EXPECT_FALSE(copy.has_vertex_texcoords2D());
+  EXPECT_FALSE(copy.has_vertex_texcoords3D());
+  EXPECT_FALSE(copy.has_halfedge_status());
+  EXPECT_FALSE(copy.has_halfedge_texcoords1D());
+  EXPECT_FALSE(copy.has_halfedge_texcoords2D());
+  EXPECT_FALSE(copy.has_halfedge_texcoords3D());
+  EXPECT_FALSE(copy.has_edge_status());
+  EXPECT_FALSE(copy.has_edge_colors());
+  EXPECT_FALSE(copy.has_halfedge_normals());
+  EXPECT_FALSE(copy.has_halfedge_colors());
+  EXPECT_FALSE(copy.has_face_status());
+  EXPECT_FALSE(copy.has_face_normals());
+  EXPECT_FALSE(copy.has_face_colors());
+  EXPECT_FALSE(copy.has_face_texture_index());
+
+  copy.request_vertex_status();
+  copy.request_vertex_normals();
+  copy.request_vertex_colors();
+  copy.request_vertex_texcoords1D();
+  copy.request_vertex_texcoords2D();
+  copy.request_vertex_texcoords3D();
+  copy.request_halfedge_status();
+  copy.request_halfedge_texcoords1D();
+  copy.request_halfedge_texcoords2D();
+  copy.request_halfedge_texcoords3D();
+  copy.request_edge_status();
+  copy.request_edge_colors();
+  copy.request_halfedge_normals();
+  copy.request_halfedge_colors();
+  copy.request_face_status();
+  copy.request_face_normals();
+  copy.request_face_colors();
+  copy.request_face_texture_index();
+
+  EXPECT_TRUE(copy.has_vertex_status())        << "Mesh has no vertex status even though they have been requested";
+  EXPECT_TRUE(copy.has_vertex_normals())       << "Mesh has no vertex normals even though they have been requested";
+  EXPECT_TRUE(copy.has_vertex_colors())        << "Mesh has no vertex colors even though they have been requested";
+  EXPECT_TRUE(copy.has_vertex_texcoords1D())   << "Mesh has no vertex texcoord1D even though they have been requested";
+  EXPECT_TRUE(copy.has_vertex_texcoords2D())   << "Mesh has no vertex texcoord2D even though they have been requested";
+  EXPECT_TRUE(copy.has_vertex_texcoords3D())   << "Mesh has no vertex texcoord3D even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_status())      << "Mesh has no halfedge status even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_texcoords1D()) << "Mesh has no halfedge texcoords1D even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_texcoords2D()) << "Mesh has no halfedge texcoords2D even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_texcoords3D()) << "Mesh has no halfedge texcoords3D even though they have been requested";
+  EXPECT_TRUE(copy.has_edge_status())          << "Mesh has no edge status even though they have been requested";
+  EXPECT_TRUE(copy.has_edge_colors())          << "Mesh has no edge colors even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_normals())     << "Mesh has no halfedge normals even though they have been requested";
+  EXPECT_TRUE(copy.has_halfedge_colors())      << "Mesh has no halfedge colors even though they have been requested";
+  EXPECT_TRUE(copy.has_face_status())          << "Mesh has no face status even though they have been requested";
+  EXPECT_TRUE(copy.has_face_normals())         << "Mesh has no face normals even though they have been requested";
+  EXPECT_TRUE(copy.has_face_colors())          << "Mesh has no face colors even though they have been requested";
+  EXPECT_TRUE(copy.has_face_texture_index())   << "Mesh has no face texture index even though they have been requested";
+
+}
+
 
 }
