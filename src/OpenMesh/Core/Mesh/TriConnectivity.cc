@@ -488,6 +488,11 @@ void TriConnectivity::split(EdgeHandle _eh, VertexHandle _vh)
 
 void TriConnectivity::split_copy(EdgeHandle _eh, VertexHandle _vh)
 {
+  const VertexHandle v0 = to_vertex_handle(halfedge_handle(_eh, 0));
+  const VertexHandle v1 = to_vertex_handle(halfedge_handle(_eh, 1));
+
+  const int nf = n_faces();
+
   // Split the halfedge ( handle will be preserved)
   split(_eh, _vh);
 
@@ -495,6 +500,22 @@ void TriConnectivity::split_copy(EdgeHandle _eh, VertexHandle _vh)
   // have been created
   for(VEIter ve_it = ve_iter(_vh); ve_it.is_valid(); ++ve_it)
     copy_all_properties(_eh, *ve_it, true);
+
+  for (auto vh : {v0, v1})
+  {
+    // get the halfedge pointing from new vertex to old vertex
+    const HalfedgeHandle h = find_halfedge(_vh, vh);
+    if (!is_boundary(h)) // for boundaries there are no faces whose properties need to be copied
+    {
+      FaceHandle fh0 = face_handle(h);
+      FaceHandle fh1 = face_handle(opposite_halfedge_handle(prev_halfedge_handle(h)));
+      if (fh0.idx() >= nf) // is fh0 the new face?
+        std::swap(fh0, fh1);
+
+      // copy properties from old face to new face
+      copy_all_properties(fh0, fh1, true);
+    }
+  }
 }
 
 }// namespace OpenMesh
