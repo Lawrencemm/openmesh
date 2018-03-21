@@ -58,7 +58,7 @@ fi
 
 cd build-release-$BUILDPATH-Vector-Checks
 
-cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=OFF $OPTIONS ../
+cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON $OPTIONS ../
 
 #build it
 make
@@ -84,53 +84,6 @@ cd ..
 echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
-echo "Building Release version with vectorchecks disabled for python tests"
-echo "======================================================================"
-echo -e "${NC}"
-
-if [ ! -d build-release-$BUILDPATH ]; then
-  mkdir build-release-$BUILDPATH
-fi
-
-cd build-release-$BUILDPATH
-
-cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF -DCPACK_BINARY_DRAGNDROP=ON $OPTIONS ../
-
-#build it
-make
-
-echo -e "${OUTPUT}"
-echo ""
-echo "======================================================================"
-echo "Running Python unittests Release version "
-echo "======================================================================"
-echo -e "${NC}"
-
-
-if [ "$LANGUAGE" == "C++11" ]; then
-
-  # Execute Python unittests
-  cd Python-Unittests
-
-  rm -f openmesh.so
-  cp ../Build/python/openmesh.so .
-  python -m unittest discover -v
-
-  cd ..
-
-else
-  echo -e "${WARNING}"
-  echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
-  echo -e "${NC}"
-fi
-
-cd ..
-
-
-
-echo -e "${OUTPUT}"
-echo ""
-echo "======================================================================"
 echo "Building Debug version with vectorchecks enabled"
 echo "======================================================================"
 echo -e "${NC}"
@@ -142,7 +95,7 @@ fi
 
 cd build-debug-$BUILDPATH-Vector-Checks
 
-cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=OFF $OPTIONS ../
+cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON $OPTIONS ../
 
 #build it
 make
@@ -164,52 +117,6 @@ cd Unittests
 ./unittests --gtest_color=yes --gtest_output=xml
 
 cd ..
-cd ..
-
-echo -e "${OUTPUT}"
-echo ""
-echo "======================================================================"
-echo "Building Debug version with vectorchecks disabled for python tests"
-echo "======================================================================"
-echo -e "${NC}"
-
-if [ ! -d build-debug-$BUILDPATH ]; then
-  mkdir build-debug-$BUILDPATH
-fi
-
-cd build-debug-$BUILDPATH
-
-cmake -DCMAKE_BUILD_TYPE=DEBUG -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF $OPTIONS ../
-
-#build it
-make
-
-echo -e "${OUTPUT}"
-echo ""
-echo "======================================================================"
-echo "Running Python unittests Debug version "
-echo "======================================================================"
-echo -e "${NC}"
-
-if [ "$LANGUAGE" == "C++11" ]; then
-
-  # Execute Python unittests
-  cd Python-Unittests
-
-  rm -f openmesh.so
-  cp ../Build/python/openmesh.so .
-  python -m unittest discover -v
-
-  cd ..
-
-else
-
-  echo -e "${WARNING}"
-  echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
-  echo -e "${NC}"
-
-fi
-  
 cd ..
 
 echo -e "${OUTPUT}"
