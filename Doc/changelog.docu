@@ -11,6 +11,7 @@
 <b>Breaking changes</b>
 <ul>
 <li>The minimal standard for C++ has been raised to C++11. Compilers not supporting C++11 or higher are no longer supported</li>
+<li>Removed the python bindings from this project. They have migrated to a <a href="https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python">seperate project</a>.</li>
 </ul>
 
 <b>Core</b>
