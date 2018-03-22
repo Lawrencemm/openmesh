@@ -109,9 +109,6 @@ class GenericIteratorT {
         : mesh_(&_mesh), hnd_(_hnd), skip_bits_(0)
         {
             if (_skip) enable_skipping();
-
-            // Set vertex handle invalid if the mesh contains no vertex
-            if((mesh_->*PrimitiveCountMember)() == 0) hnd_ = value_handle(-1);
         }
 
         /// Standard dereferencing operator.
