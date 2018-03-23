@@ -10,7 +10,7 @@ https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh.git
 The gitlab site can be found here:  
 https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh  
 
-The python bindings can be found here:
+The python bindings can be found here: 
 https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python
 
 ## Installing
