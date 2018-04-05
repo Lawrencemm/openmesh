@@ -26,6 +26,7 @@
 <li>Boost range support (Thanks to Bastian Pranzas for the patch)</li>
 <li>Made the face and edge split operations that copy properties also copy builtin properties</li>
 <li>calc_sector_angle: Check for real division by zero not with epsilon that was way to large</li>
+<li>Don't return invalid iterators for empty element ranges</li>
 </ul>
 
 <b>Utils</b>
