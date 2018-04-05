@@ -176,7 +176,7 @@ class CmpVec
 {
 public:
 
-  CmpVec(float _eps=FLT_MIN) : eps_(_eps) {}
+  explicit CmpVec(float _eps=FLT_MIN) : eps_(_eps) {}
 
   bool operator()( const Vec3f& _v0, const Vec3f& _v1 ) const
   {

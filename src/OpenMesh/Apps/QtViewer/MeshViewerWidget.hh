@@ -82,7 +82,7 @@ class MeshViewerWidget : public MeshViewerWidgetT<MyMesh>
     Q_OBJECT
 public:
     /// default constructor
-    MeshViewerWidget(QWidget* parent=0) : MeshViewerWidgetT<MyMesh>(parent)
+    explicit MeshViewerWidget(QWidget* parent=0) : MeshViewerWidgetT<MyMesh>(parent)
     {}
     OpenMesh::IO::Options& options() { return _options; }
     const OpenMesh::IO::Options& options() const { return _options; }

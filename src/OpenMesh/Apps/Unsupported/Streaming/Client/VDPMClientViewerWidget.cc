@@ -138,17 +138,15 @@ void VDPMClientViewerWidget::mesh_coloring()
                       vEnd(mesh_.vertices_end());
 
   VHierarchyNodeHandle  node_handle;
-  float                 ratio;
-  unsigned char         r, g, b;
 
   for (; vIt!=vEnd; ++vIt)
   {
     node_handle = mesh_.data(*vIt).vhierarchy_node_handle();
-    ratio = vhierarchy_.node(node_handle).ratio();
+    const float ratio = vhierarchy_.node(node_handle).ratio();
     
-    r = (unsigned char) ((1.0f - ratio) * myYellow[0] + ratio * myBlue[0]);
-    g = (unsigned char) ((1.0f - ratio) * myYellow[1] + ratio * myBlue[1]);
-    b = (unsigned char) ((1.0f - ratio) * myYellow[2] + ratio * myBlue[2]);
+    const unsigned char r = (unsigned char) ((1.0f - ratio) * myYellow[0] + ratio * myBlue[0]);
+    const unsigned char g = (unsigned char) ((1.0f - ratio) * myYellow[1] + ratio * myBlue[1]);
+    const unsigned char b = (unsigned char) ((1.0f - ratio) * myYellow[2] + ratio * myBlue[2]);
 
     mesh_.set_color(*vIt, OpenMesh::Vec3uc(r,g,b));
   }

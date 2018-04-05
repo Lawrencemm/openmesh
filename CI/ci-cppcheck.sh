@@ -18,7 +18,7 @@ echo -e "${NC}"
 echo "Please Wait ..."
 
 # Run cppcheck and output into file
-cppcheck --enable=all . -I src -i Doc/ --force --suppress=unusedFunction --suppress=missingIncludeSystem --quiet -Umin -Umax -UBMPOSTFIX -DOPENMESHDLLEXPORT="" &> cppcheck.log
+cppcheck --enable=all . --force --suppress=unusedFunction --suppress=missingIncludeSystem --quiet -Umin -Umax -UCTIME -UBMPOSTFIX -DOPENMESHDLLEXPORT="" -UPRIVATE_NODE_TYPESYSTEM_SOURCE -USO_NODE_ABSTRACT_SOURCE -USO_NODE_SOURCE -UCLOCK_REALTIME_HR -i src/OpenMesh/Apps/Unsupported/ -i Doc/  &> cppcheck.log
 
 echo -e "${OUTPUT}"
 echo "=============================================================================="
@@ -38,7 +38,7 @@ echo "CPPCHECK Summary"
 echo "=============================================================================="
 echo -e "${NC}"
 
-MAX_COUNT=6
+MAX_COUNT=0
 
 if [ $COUNT -gt $MAX_COUNT ]; then
   echo -e ${WARNING}

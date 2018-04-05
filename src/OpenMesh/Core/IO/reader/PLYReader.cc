@@ -1062,7 +1062,7 @@ std::string get_property_name(std::string _string1, std::string _string2) {
 
 //-----------------------------------------------------------------------------
 
-_PLYReader_::ValueType get_property_type(std::string _string1, std::string _string2) {
+_PLYReader_::ValueType get_property_type(std::string& _string1, std::string& _string2) {
 
     if (_string1 == "float32" || _string2 == "float32")
 

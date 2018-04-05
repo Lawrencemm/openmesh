@@ -134,7 +134,7 @@ class UnittestObserver : public OpenMesh::Decimater::Observer
     size_t notifies_;
     size_t all_steps_;
 public:
-    UnittestObserver(size_t _steps) :Observer(_steps), notifies_(0), all_steps_(0) {}
+    explicit UnittestObserver(size_t _steps) :Observer(_steps), notifies_(0), all_steps_(0) {}
 
     void notify(size_t _step)
     {
