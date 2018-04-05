@@ -302,7 +302,8 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
     for (i=0, nF=header.n_faces_; i<nF; ++i)
     {
-      nV = _be.get_vhandles(FaceHandle(i), vhandles);
+      //nV = _be.get_vhandles(FaceHandle(i), vhandles);
+      _be.get_vhandles(FaceHandle(i), vhandles);
       if ( header.mesh_ == 'P' )
         bytes += store( _os, vhandles.size(), OMFormat::Chunk::Integer_16, swap );
 
