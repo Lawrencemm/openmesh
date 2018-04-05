@@ -89,7 +89,7 @@ public:
 public:
 
    /// Constructor
-  ModBalancerT( D &_dec )
+  explicit ModBalancerT( D &_dec )
     : BaseModQ( _dec ),
       max_level_(0), n_roots_(0), n_vertices_(0)
   {
