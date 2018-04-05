@@ -163,7 +163,7 @@ _OMWriter_::write(std::ostream& _os, BaseExporter& _be, Options _opt, std::strea
 #ifndef DOXY_IGNORE_THIS
 template <typename T> struct Enabler
 {
-  Enabler( T& obj ) : obj_(obj)
+  explicit Enabler( T& obj ) : obj_(obj)
   {}
 
   ~Enabler() { obj_.enable(); }

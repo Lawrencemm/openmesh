@@ -123,7 +123,7 @@ public:
 
 
   /// default constructor
-  DecimaterViewerWidget(QWidget* _parent=0)
+  explicit DecimaterViewerWidget(QWidget* _parent=0)
     : MeshViewerWidget(_parent),
       animate_(false),
       timer_(0),

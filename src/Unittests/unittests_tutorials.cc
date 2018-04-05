@@ -197,7 +197,7 @@ public:
 
 public:
   // construct with a given mesh
-  SmootherT(Mesh& _mesh)
+  explicit SmootherT(Mesh& _mesh)
     : mesh_(_mesh)
   {
     mesh_.add_property( cog_ );
