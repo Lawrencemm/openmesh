@@ -99,7 +99,7 @@ TEST_F(OpenMeshSplitEdgeCopyTriangleMesh, SplitEdgeCopyTriangleMesh) {
   EXPECT_EQ(999, mesh_.property(eprop_int, eh0)) << "Different Property value";
   EXPECT_TRUE(mesh_.status(eh0).tagged()) << "Different internal property value";
 
-  EXPECT_EQ(mesh_.valence(fh), 3) << "Face of TriMesh has valence other than 3";
+  EXPECT_EQ(3u, mesh_.valence(fh)) << "Face of TriMesh has valence other than 3";
 }
 
 /* splits an edge that has a property in a poly mesh with split_edge_copy
@@ -219,7 +219,7 @@ TEST_F(OpenMeshSplitEdgeCopyTriangleMesh, SplitEdgeCopyFacePropertiesTriangleMes
 
   for (auto fh : mesh_.faces())
   {
-    EXPECT_EQ(mesh_.valence(fh), 3);
+    EXPECT_EQ(3u, mesh_.valence(fh));
   }
 
   // Check setup
