@@ -539,7 +539,7 @@ public:
     calc_sector_normal(_heh, n0);
     calc_sector_normal(this->opposite_halfedge_handle(_heh), n1);
     calc_edge_vector(_heh, he);
-    Scalar denom = length(n0)*length(n1);
+    Scalar denom = norm(n0)*norm(n1);
     if (denom == Scalar(0))
     {
       return 0;
