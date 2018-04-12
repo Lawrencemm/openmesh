@@ -745,6 +745,19 @@ VectorT<Scalar, DIM>& normalize(VectorT<Scalar, DIM>& _v) {
     return _v.normalize();
 }
 
+/// \relates OpenMesh::VectorT
+/// non-member maximize
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM>& maximize(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2) {
+    return _v1.maximize(_v2);
+}
+
+/// \relates OpenMesh::VectorT
+/// non-member minimize
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM>& minimize(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2) {
+    return _v1.minimize(_v2);
+}
 
 //== TYPEDEFS =================================================================
 

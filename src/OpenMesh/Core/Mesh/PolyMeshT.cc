@@ -139,9 +139,9 @@ PolyMeshT<Kernel>::calc_face_normal_impl(FaceHandle _fh, PointIs3DTag) const
 
     // Due to traits, the value types of normals and points can be different.
     // Therefore we cast them here.
-    n[0] += static_cast<typename Normal::value_type>(a[1] * b[2]);
-    n[1] += static_cast<typename Normal::value_type>(a[2] * b[0]);
-    n[2] += static_cast<typename Normal::value_type>(a[0] * b[1]);
+    n[0] += static_cast<typename vector_traits<Normal>::value_type>(a[1] * b[2]);
+    n[1] += static_cast<typename vector_traits<Normal>::value_type>(a[2] * b[0]);
+    n[2] += static_cast<typename vector_traits<Normal>::value_type>(a[0] * b[1]);
   }
 
   const typename vector_traits<Normal>::value_type length = norm(n);
@@ -228,7 +228,7 @@ PolyMeshT<Kernel>::
 calc_face_centroid(FaceHandle _fh) const
 {
   Point _pt;
-  _pt.vectorize(0);
+  vectorize(_pt, 0);
   Scalar valence = 0.0;
   for (ConstFaceVertexIter cfv_it = this->cfv_iter(_fh); cfv_it.is_valid(); ++cfv_it, valence += 1.0)
   {
@@ -401,7 +401,7 @@ template <class Kernel>
 void PolyMeshT<Kernel>::
 calc_vertex_normal_correct(VertexHandle _vh, Normal& _n) const
 {
-  _n.vectorize(0.0);
+  vectorize(_n, 0.0);
   ConstVertexIHalfedgeIter cvih_it = this->cvih_iter(_vh);
   if (! cvih_it.is_valid() )
   {//don't crash on isolated vertices

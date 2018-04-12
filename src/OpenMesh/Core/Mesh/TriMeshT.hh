@@ -359,9 +359,9 @@ public:
     VertexHandle p2 = this->to_vertex_handle(he2);
 
     // Calculate midpoint coordinates
-    const Point new0 = (this->point(p0) + this->point(p2)) * static_cast< typename Point::value_type >(0.5);
-    const Point new1 = (this->point(p0) + this->point(p1)) * static_cast< typename Point::value_type >(0.5);
-    const Point new2 = (this->point(p1) + this->point(p2)) * static_cast< typename Point::value_type >(0.5);
+    const Point new0 = (this->point(p0) + this->point(p2)) * static_cast<typename vector_traits<Point>::value_type >(0.5);
+    const Point new1 = (this->point(p0) + this->point(p1)) * static_cast<typename vector_traits<Point>::value_type >(0.5);
+    const Point new2 = (this->point(p1) + this->point(p2)) * static_cast<typename vector_traits<Point>::value_type >(0.5);
 
     // Add vertices at midpoint coordinates
     VertexHandle v0 = this->add_vertex(new0);
