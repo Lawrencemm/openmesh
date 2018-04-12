@@ -7,8 +7,13 @@
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 
+#ifdef TEST_CUSTOM_TRAITS
+#include <Unittests/unittests_common_customtraits.hh>
+#else
 struct CustomTraits : public OpenMesh::DefaultTraits {
 };
+#endif
+
 
 typedef OpenMesh::TriMesh_ArrayKernelT<CustomTraits> Mesh;
 
