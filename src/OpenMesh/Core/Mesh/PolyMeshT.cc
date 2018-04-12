@@ -144,13 +144,13 @@ PolyMeshT<Kernel>::calc_face_normal_impl(FaceHandle _fh, PointIs3DTag) const
     n[2] += static_cast<typename Normal::value_type>(a[0] * b[1]);
   }
 
-  const typename vector_traits<Normal>::value_type norm = n.length();
+  const typename vector_traits<Normal>::value_type length = norm(n);
   
   // The expression ((n *= (1.0/norm)),n) is used because the OpenSG
   // vector class does not return self after component-wise
   // self-multiplication with a scalar!!!
-  return (norm != typename vector_traits<Normal>::value_type(0))
-          ? ((n *= (typename vector_traits<Normal>::value_type(1)/norm)), n)
+  return (length != typename vector_traits<Normal>::value_type(0))
+          ? ((n *= (typename vector_traits<Normal>::value_type(1)/length)), n)
           : Normal(0, 0, 0);
 }
 
@@ -194,20 +194,22 @@ calc_face_normal_impl(const Point& _p0,
   Normal p1p2(vector_cast<Normal>(_p2));  p1p2 -= vector_cast<Normal>(_p1);
 
   Normal n    = cross(p1p2, p1p0);
-  typename vector_traits<Normal>::value_type norm = n.length();
+  typename vector_traits<Normal>::value_type length = norm(n);
 
   // The expression ((n *= (1.0/norm)),n) is used because the OpenSG
   // vector class does not return self after component-wise
   // self-multiplication with a scalar!!!
-  return (norm != typename vector_traits<Normal>::value_type(0)) ? ((n *= (typename vector_traits<Normal>::value_type(1)/norm)),n) : Normal(0,0,0);
+  return (length != typename vector_traits<Normal>::value_type(0))
+          ? ((n *= (typename vector_traits<Normal>::value_type(1)/length)),n)
+          : Normal(0,0,0);
 #else
   Point p1p0 = _p0;  p1p0 -= _p1;
   Point p1p2 = _p2;  p1p2 -= _p1;
 
   Normal n = vector_cast<Normal>(cross(p1p2, p1p0));
-  typename vector_traits<Normal>::value_type norm = n.length();
+  typename vector_traits<Normal>::value_type length = norm(n);
 
-  return (norm != 0.0) ? n *= (1.0/norm) : Normal(0,0,0);
+  return (length != 0.0) ? n *= (1.0/length) : Normal(0,0,0);
 #endif
 }
 
@@ -331,7 +333,7 @@ calc_halfedge_normal(HalfedgeHandle _heh, const double _feature_angle) const
     for(unsigned int i=0; i<fhs.size(); ++i)
       n += Kernel::normal(fhs[i]);
 
-    return n.normalize();
+    return normalize(n);
   }
 }
 
@@ -378,8 +380,8 @@ calc_vertex_normal(VertexHandle _vh) const
   Normal n;
   calc_vertex_normal_fast(_vh,n);
 
-  Scalar norm = n.length();
-  if (norm != 0.0) n *= (Scalar(1.0)/norm);
+  Scalar length = norm(n);
+  if (length != 0.0) n *= (Scalar(1.0)/length);
 
   return n;
 }
@@ -389,7 +391,7 @@ template <class Kernel>
 void PolyMeshT<Kernel>::
 calc_vertex_normal_fast(VertexHandle _vh, Normal& _n) const
 {
-  _n.vectorize(0.0);
+  vectorize(_n, 0.0);
   for (ConstVertexFaceIter vf_it = this->cvf_iter(_vh); vf_it.is_valid(); ++vf_it)
     _n += this->normal(*vf_it);
 }
