@@ -74,8 +74,7 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
 	else()
 	    # Set compiler flags
       set_target_properties(unittests PROPERTIES COMPILE_FLAGS "" )
-      set_target_properties(unittests_customvec PROPERTIES COMPILE_FLAGS "-g -pedantic -Wno-long-long")
-
+      set_target_properties(unittests_customvec PROPERTIES COMPILE_FLAGS "" )
     endif()
     
     if ( OPENMESH_BUILD_SHARED )

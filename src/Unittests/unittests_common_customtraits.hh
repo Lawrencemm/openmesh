@@ -2,6 +2,7 @@
 #define UNITTESTS_COMMON_DUMMYTRAITS
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
+#include <array>
 
 namespace Custom {
 
@@ -10,20 +11,13 @@ namespace Custom {
 template <int DIM> class Vec {
   public:
     // Constructor with DIM components
-    template <typename T, typename... Ts,
-              typename = typename std::enable_if<sizeof...(Ts)+1 == DIM>::type,
-              typename = typename std::enable_if<
-                  are_convertible_to<float, T, Ts...>::value>::type>
-    constexpr Vec(T v, Ts... vs)
-        : data{{static_cast<float>(v), static_cast<float>(vs)...}} {
-        static_assert(sizeof...(Ts)+1 == DIM,
-                      "Invalid number of components specified in constructor.");
-        static_assert(are_convertible_to<float, T, Ts...>::value,
-                      "Not all components are convertible to Scalar.");
-    }
-
-    constexpr Vec() = default;
-    constexpr Vec(Vec<DIM> const &) = default;
+	Vec(float x) : data({ x }) {}
+	Vec(float x, float y) : data({ x, y }) {}
+	Vec(float x, float y, float z) : data({ x, y, z }) {}
+	Vec(float x, float y, float z, float w) : data({ x, y, z, w }) {}
+	  
+    Vec() = default;
+    Vec(Vec<DIM> const &) = default;
 
     float &operator[](int i) { return data[i]; }
     float operator[](int i) const { return data[i]; }

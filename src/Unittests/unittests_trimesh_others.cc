@@ -165,7 +165,7 @@ TEST_F(OpenMeshOthers, CalcDihedralAngre ) {
 
   // Modify point
   Mesh::Point tmp = ( Mesh::Point(0.0, 0.0, -1.0) + Mesh::Point(1.0, 1.0, -1.0) )
-                  * static_cast<typename OpenMesh::vector_traits<typename Mesh::Point>::value_type>(0.5);
+                  * static_cast<OpenMesh::vector_traits<Mesh::Point>::value_type>(0.5);
   mesh_.point(vhandle[2]) = tmp;
 
   double difference = fabs( 1.36944 - mesh_.calc_dihedral_angle(eh) );
