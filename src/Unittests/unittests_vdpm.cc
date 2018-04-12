@@ -185,7 +185,7 @@ LoadInfo open_progresult_mesh(const std::string& _filename)
         OpenMesh::IO::restore(ifs, vr, swap);
 
         PMInfo pminfo;
-        pminfo.p0 = p;
+        pminfo.p0 = OpenMesh::vector_cast<Mesh::Point>(p);
         pminfo.v0 = result.mesh.add_vertex(p);
         pminfo.v1 = Mesh::VertexHandle(v1);
         pminfo.vl = Mesh::VertexHandle(vl);
