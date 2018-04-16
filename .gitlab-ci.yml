@@ -153,6 +153,7 @@ VS2017-32-bit-static-no-apps:
     paths:
       - build-release/*.exe
 	   
+     
 VS2015-64-bit-shared-apps:
   variables:
     BUILD_PLATFORM: "VS2015"
