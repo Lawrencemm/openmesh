@@ -622,14 +622,14 @@ TEST_F(OpenMeshTutorials, deleting_geometry_elements) {
   MyMeshWithStatus::VertexHandle vhandle[8];
   MyMeshWithStatus::FaceHandle   fhandle[6];
 
-  vhandle[0] = mesh.add_vertex(Mesh::Point(-1, -1,  1));
-  vhandle[1] = mesh.add_vertex(Mesh::Point( 1, -1,  1));
-  vhandle[2] = mesh.add_vertex(Mesh::Point( 1,  1,  1));
-  vhandle[3] = mesh.add_vertex(Mesh::Point(-1,  1,  1));
-  vhandle[4] = mesh.add_vertex(Mesh::Point(-1, -1, -1));
-  vhandle[5] = mesh.add_vertex(Mesh::Point( 1, -1, -1));
-  vhandle[6] = mesh.add_vertex(Mesh::Point( 1,  1, -1));
-  vhandle[7] = mesh.add_vertex(Mesh::Point(-1,  1, -1));
+  vhandle[0] = mesh.add_vertex(MyMeshWithStatus::Point(-1, -1,  1));
+  vhandle[1] = mesh.add_vertex(MyMeshWithStatus::Point( 1, -1,  1));
+  vhandle[2] = mesh.add_vertex(MyMeshWithStatus::Point( 1,  1,  1));
+  vhandle[3] = mesh.add_vertex(MyMeshWithStatus::Point(-1,  1,  1));
+  vhandle[4] = mesh.add_vertex(MyMeshWithStatus::Point(-1, -1, -1));
+  vhandle[5] = mesh.add_vertex(MyMeshWithStatus::Point( 1, -1, -1));
+  vhandle[6] = mesh.add_vertex(MyMeshWithStatus::Point( 1,  1, -1));
+  vhandle[7] = mesh.add_vertex(MyMeshWithStatus::Point(-1,  1, -1));
 
   // generate (quadrilateral) faces
   std::vector<MyMesh::VertexHandle>  tmp_face_vhandles;
