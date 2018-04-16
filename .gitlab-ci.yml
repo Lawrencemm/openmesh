@@ -24,7 +24,7 @@ macos-c++11:
     - Apple
   artifacts:
     paths:
-	  - build-release-cpp11/*.dmg
+      - build-release-cpp11/*.dmg
       - build-release-cpp11/*.tar.gz
 
 macos-c++98:
