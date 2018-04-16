@@ -24,7 +24,7 @@ macos-c++11:
     - Apple
   artifacts:
     paths:
-      - build-release-cpp11/*.dmg
+	  - build-release-cpp11/*.dmg
       - build-release-cpp11/*.tar.gz
 
 macos-c++98:
@@ -69,8 +69,8 @@ cppcheck:
     - VS2015
   artifacts:
     paths:
-      - build-release/*.exe
-	  
+		- build-release/*.exe
+
 .VS2015-64-bit-static-apps:
   variables:
     BUILD_PLATFORM: "VS2015"
@@ -82,7 +82,7 @@ cppcheck:
     - VS2015
   artifacts:
     paths:
-      - build-release/*.exe
+	  - build-release/*.exe
 
 .VS2015-32-bit-static-apps:
   variables:
