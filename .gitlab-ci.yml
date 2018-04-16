@@ -45,18 +45,58 @@ cppcheck:
       - cppcheck.log
 
 
-#VS2015-64-bit-shared-apps:
-#  variables:
-#    BUILD_PLATFORM: "VS2015"
-#    ARCHITECTURE:   "x64"
-#    SHARED:         "TRUE"
-#    APPS:           "ON"
-#  script: "CI\\Windows.bat"
-#  tags:
-#    - VS2015
-#  artifacts:
-#    paths:
-#      - build-release/*.exe
+.VS2015-64-bit-shared-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+    SHARED:         "TRUE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015-32-bit-shared-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x32"
+    SHARED:         "TRUE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+	  
+.VS2015-64-bit-static-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+    SHARED:         "FALSE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015-32-bit-static-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x32"
+    SHARED:         "FALSE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
       
 VS2017-64-bit-shared-no-apps:
   variables:
@@ -71,18 +111,6 @@ VS2017-64-bit-shared-no-apps:
     paths:
       - build-release/*.exe
 
-#VS2015-32-bit-shared-apps:
-#  variables:
-#    BUILD_PLATFORM: "VS2015"
-#    ARCHITECTURE:   "x32"
-#    SHARED:         "TRUE"
-#    APPS:           "ON"
-#  script: "CI\\Windows.bat"
-#  tags:
-#    - VS2015
-#  artifacts:
-#    paths:
-#      - build-release/*.exe
 
 VS2017-32-bit-shared-no-apps:
   variables:
@@ -97,18 +125,6 @@ VS2017-32-bit-shared-no-apps:
     paths:
       - build-release/*.exe
       
-#VS2015-64-bit-static-apps:
-#  variables:
-#    BUILD_PLATFORM: "VS2015"
-#    ARCHITECTURE:   "x64"
-#    SHARED:         "FALSE"
-#    APPS:           "ON"
-#  script: "CI\\Windows.bat"
-#  tags:
-#    - VS2015
-#  artifacts:
-#    paths:
-#      - build-release/*.exe
 
 VS2017-64-bit-static-no-apps:
   variables:
@@ -123,18 +139,6 @@ VS2017-64-bit-static-no-apps:
     paths:
       - build-release/*.exe
 
-#VS2015-32-bit-static-apps:
-#  variables:
-#    BUILD_PLATFORM: "VS2015"
-#    ARCHITECTURE:   "x32"
-#    SHARED:         "FALSE"
-#    APPS:           "ON"
-#  script: "CI\\Windows.bat"
-#  tags:
-#    - VS2015
-#  artifacts:
-#    paths:
-#      - build-release/*.exe
 
 VS2017-32-bit-static-no-apps:
   variables:
