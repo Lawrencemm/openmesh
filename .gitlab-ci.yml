@@ -69,7 +69,7 @@ cppcheck:
     - VS2015
   artifacts:
     paths:
-		- build-release/*.exe
+      - build-release/*.exe
 
 .VS2015-64-bit-static-apps:
   variables:
@@ -82,7 +82,7 @@ cppcheck:
     - VS2015
   artifacts:
     paths:
-	  - build-release/*.exe
+      - build-release/*.exe
 
 .VS2015-32-bit-static-apps:
   variables:
