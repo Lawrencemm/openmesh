@@ -96,6 +96,8 @@ cd Unittests
 #execute tests
 ./unittests --gtest_color=yes --gtest_output=xml
 
+./unittests_customvec --gtest_color=yes --gtest_output=xml
+
 cd ..
 cd ..
 
@@ -133,6 +135,8 @@ cd Unittests
 
 #execute tests
 ./unittests --gtest_color=yes --gtest_output=xml
+
+./unittests_customvec --gtest_color=yes --gtest_output=xml
 
 cd ..
 cd ..
