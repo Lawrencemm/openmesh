@@ -166,6 +166,7 @@ VS2015-64-bit-shared-apps:
     paths:
       - build-release/*.exe
       
+      
 VS2015-64-bit-shared-no-apps:
   variables:
     BUILD_PLATFORM: "VS2015"
