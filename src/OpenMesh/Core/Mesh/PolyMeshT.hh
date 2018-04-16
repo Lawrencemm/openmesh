@@ -444,7 +444,7 @@ public:
   {
     Normal v0, v1;
     calc_sector_vectors(_in_heh, v0, v1);
-    Scalar denom = length(v0)*length(v1);
+    Scalar denom = norm(v0)*norm(v1);
     if ( denom == Scalar(0))
     {
       return 0;
@@ -470,7 +470,7 @@ public:
     Normal in_vec, out_vec;
     calc_edge_vector(_in_heh, in_vec);
     calc_edge_vector(next_halfedge_handle(_in_heh), out_vec);
-    Scalar denom = length(in_vec)*length(out_vec);
+    Scalar denom = norm(in_vec)*norm(out_vec);
     if (is_zero(denom))
     {
       _cos_a = 1;
@@ -479,7 +479,7 @@ public:
     else
     {
       _cos_a = dot(in_vec, out_vec)/denom;
-      _sin_a = length(cross(in_vec, out_vec))/denom;
+      _sin_a = norm(cross(in_vec, out_vec))/denom;
     }
   }
   */
@@ -499,7 +499,7 @@ public:
   {
     Normal sector_normal;
     calc_sector_normal(_in_heh, sector_normal);
-    return length(sector_normal)/2;
+    return norm(sector_normal)/2;
   }
 
   /** calculates the dihedral angle on the halfedge _heh
