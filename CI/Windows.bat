@@ -69,6 +69,20 @@ IF "%BUILD_PLATFORM%" == "VS2015" (
 
 ) 
 
+IF "%BUILD_PLATFORM%" == "VS2017" (
+    set LIBPATH=E:\libs\VS2017
+    set GTESTVERSION=gtest-1.7.0
+    set GENERATOR=Visual Studio 15%ARCH_VS%
+    set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio 15.0\Common7\IDE\devenv.com"
+
+    set QT_VERSION=
+    IF "%ARCHITECTURE%" == "x64" (
+      set QT_INSTALL_PATH=E:\Qt\Qt5.10.1\5.10.1\msvc2017_64
+      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.10.1\5.10.1\msvc2017_64
+    )
+
+) 
+
 
 IF "%APPS%" == "ON" (
   set STRING_APPS=
