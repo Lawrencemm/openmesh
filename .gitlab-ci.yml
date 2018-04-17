@@ -44,6 +44,115 @@ cppcheck:
     paths:
       - cppcheck.log
 
+
+.VS2015-64-bit-shared-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+    SHARED:         "TRUE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015-32-bit-shared-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x32"
+    SHARED:         "TRUE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015-64-bit-static-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+    SHARED:         "FALSE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015-32-bit-static-apps:
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x32"
+    SHARED:         "FALSE"
+    APPS:           "ON"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+      
+VS2017-64-bit-shared-no-apps:
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x64"
+    SHARED:         "TRUE"
+    APPS:           "OFF"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2017
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+
+VS2017-32-bit-shared-no-apps:
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x32"
+    SHARED:         "TRUE"
+    APPS:           "OFF"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2017
+  artifacts:
+    paths:
+      - build-release/*.exe
+      
+
+VS2017-64-bit-static-no-apps:
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x64"
+    SHARED:         "FALSE"
+    APPS:           "OFF"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2017
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+
+VS2017-32-bit-static-no-apps:
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x32"
+    SHARED:         "FALSE"
+    APPS:           "OFF"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2017
+  artifacts:
+    paths:
+      - build-release/*.exe
+
 VS2015-64-bit-shared-apps:
   variables:
     BUILD_PLATFORM: "VS2015"
@@ -56,6 +165,7 @@ VS2015-64-bit-shared-apps:
   artifacts:
     paths:
       - build-release/*.exe
+      
       
 VS2015-64-bit-shared-no-apps:
   variables:
@@ -260,10 +370,3 @@ Doc-publish:
   script: "CI/ci-doc.sh"
   tags:
      - Linux
-  
-
-
-
-
-
-
