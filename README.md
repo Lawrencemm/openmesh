@@ -13,6 +13,14 @@ https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh
 The python bindings can be found here:    
 https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python
 
+## Download Binaries
+
+### Windows
+* [VS2017 32-bit shared no apps ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-32-bit-shared-no-apps)
+* [VS2017 64-bit shared no apps ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-64-bit-shared-no-apps)
+* [VS2017 32-bit static no apps ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-32-bit-static-no-apps)
+* [VS2017 64-bit static no apps ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-64-bit-static-no-apps)
+
 ## Installing
 Unpack the tar-ball to a suitable place.  
 
