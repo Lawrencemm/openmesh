@@ -1,5 +1,7 @@
 # OpenMesh, 7.0
 
+[![](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/badges/master/pipeline.svg)](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/commits/master)
+
 
 ## Getting OpenMesh
 All Documentation, binaries and original source code are available at www.openmesh.org  
@@ -19,10 +21,10 @@ https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python
 
 | VS Version: | 2017 | 2015 | 2013 |
 | -------- | -------- |-------- |-------- |
-| 64-Bit shared, no apps  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-64-bit-shared-no-apps)  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2015-64-bit-shared-no-apps)  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2013-64-bit-shared-no-apps)  |
-| 32-Bit shared, no apps   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-32-bit-shared-no-apps)   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2015-32-bit-shared-no-apps)   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2013-32-bit-shared-no-apps)   |
-| 64-Bit static, no apps  | [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-64-bit-static-no-apps)   | [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2015-64-bit-static-no-apps)  |  [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2013-64-bit-static-no-apps)    |
-| 32-Bit static, no apps   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2017-32-bit-static-no-apps)  | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2015-32-bit-static-no-apps)   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/rel?job=test:VS2013-32-bit-static-no-apps)   |
+| 64-Bit shared, no apps  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2017-64-bit-shared-no-apps)  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2015-64-bit-shared-no-apps)  | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2013-64-bit-shared-no-apps)  |
+| 32-Bit shared, no apps   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2017-32-bit-shared-no-apps)   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2015-32-bit-shared-no-apps)   | [Download](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2013-32-bit-shared-no-apps)   |
+| 64-Bit static, no apps  | [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2017-64-bit-static-no-apps)   | [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2015-64-bit-static-no-apps)  |  [Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2013-64-bit-static-no-apps)    |
+| 32-Bit static, no apps   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2017-32-bit-static-no-apps)  | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2015-32-bit-static-no-apps)   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2013-32-bit-static-no-apps)   |
 
 
 ## Installing
