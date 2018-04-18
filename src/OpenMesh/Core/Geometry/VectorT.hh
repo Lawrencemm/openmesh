@@ -274,6 +274,52 @@ cross(const VectorT<Scalar,N>& _v1, const VectorT<Scalar,N>& _v2) {
 }
 
 
+/// \relates OpenMesh::VectorT
+/// non-member norm
+template<typename Scalar, int DIM>
+Scalar norm(const VectorT<Scalar, DIM>& _v) {
+    return _v.norm();
+}
+
+
+/// \relates OpenMesh::VectorT
+/// non-member sqrnorm
+template<typename Scalar, int DIM>
+Scalar sqrnorm(const VectorT<Scalar, DIM>& _v) {
+    return _v.sqrnorm();
+}
+
+
+/// \relates OpenMesh::VectorT
+/// non-member vectorize
+template<typename Scalar, int DIM, typename OtherScalar>
+VectorT<Scalar, DIM>& vectorize(VectorT<Scalar, DIM>& _v, OtherScalar const& _val) {
+    return _v.vectorize(_val);
+}
+
+
+/// \relates OpenMesh::VectorT
+/// non-member normalize
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM>& normalize(VectorT<Scalar, DIM>& _v) {
+    return _v.normalize();
+}
+
+
+/// \relates OpenMesh::VectorT
+/// non-member maximize
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM>& maximize(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2) {
+    return _v1.maximize(_v2);
+}
+
+
+/// \relates OpenMesh::VectorT
+/// non-member minimize
+template<typename Scalar, int DIM>
+VectorT<Scalar, DIM>& minimize(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2) {
+    return _v1.minimize(_v2);
+}
 
 
 //== TYPEDEFS =================================================================

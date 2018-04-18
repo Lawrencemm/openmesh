@@ -95,7 +95,6 @@ inline void vector_cast( const src_t & /*_src*/, dst_t & /*_dst*/, GenProg::Int2
 {
 }
 
-
 template <typename src_t, typename dst_t, int n>
 inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {

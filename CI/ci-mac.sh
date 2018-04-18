@@ -78,6 +78,15 @@ cd Unittests
 #execute tests
 ./unittests --gtest_color=yes --gtest_output=xml
 
+echo -e "${OUTPUT}"
+echo ""
+echo "======================================================================"
+echo "Running unittests Release version with minimal vector type"
+echo "======================================================================"
+echo -e "${NC}"
+
+./unittests_customvec --gtest_color=yes --gtest_output=xml
+
 cd ..
 cd ..
 
@@ -115,6 +124,15 @@ cd Unittests
 
 #execute tests
 ./unittests --gtest_color=yes --gtest_output=xml
+
+echo -e "${OUTPUT}"
+echo ""
+echo "======================================================================"
+echo "Running unittests Debug version with minimal vector type"
+echo "======================================================================"
+echo -e "${NC}"
+
+./unittests_customvec --gtest_color=yes --gtest_output=xml
 
 cd ..
 cd ..

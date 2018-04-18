@@ -247,7 +247,7 @@ TEST_F(OpenMeshNormals, NormalCalculations_calc_vertex_normal_fast) {
   mesh_.request_face_normals();
 
 
-  OpenMesh::Vec3f normal;
+  Mesh::Normal normal;
 
   mesh_.calc_vertex_normal_fast(vhandle[2],normal);
 
@@ -304,7 +304,7 @@ TEST_F(OpenMeshNormals, NormalCalculations_calc_vertex_normal_correct) {
   mesh_.request_halfedge_normals();
   mesh_.request_face_normals();
 
-  OpenMesh::Vec3f normal;
+  Mesh::Normal normal;
 
 
   mesh_.calc_vertex_normal_correct(vhandle[2],normal);
@@ -361,7 +361,7 @@ TEST_F(OpenMeshNormals, NormalCalculations_calc_vertex_normal_loop) {
   mesh_.request_halfedge_normals();
   mesh_.request_face_normals();
 
-  OpenMesh::Vec3f normal;
+  Mesh::Normal normal;
 
   mesh_.calc_vertex_normal_loop(vhandle[2],normal);
 

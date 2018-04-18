@@ -117,6 +117,8 @@ cd unittests
 
 unittests.exe --gtest_output=xml
 
+unittests_customvec.exe --gtest_output=xml
+
 cd ..
 
 cd ..
@@ -142,6 +144,8 @@ IF "%SHARED%" == "TRUE" (
 cd unittests
 
 unittests.exe --gtest_output=xml
+
+unittests_customvec.exe --gtest_output=xml
 
 IF %errorlevel% NEQ 0 exit /b %errorlevel%
 

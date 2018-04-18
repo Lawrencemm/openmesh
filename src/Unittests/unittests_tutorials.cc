@@ -619,20 +619,20 @@ TEST_F(OpenMeshTutorials, deleting_geometry_elements) {
   mesh.request_vertex_status();
 
   // generate vertices
-  MyMeshWithStatus::VertexHandle vhandle[8];
-  MyMeshWithStatus::FaceHandle   fhandle[6];
+  Mesh::VertexHandle vhandle[8];
+  Mesh::FaceHandle   fhandle[6];
 
-  vhandle[0] = mesh.add_vertex(MyMesh::Point(-1, -1,  1));
-  vhandle[1] = mesh.add_vertex(MyMesh::Point( 1, -1,  1));
-  vhandle[2] = mesh.add_vertex(MyMesh::Point( 1,  1,  1));
-  vhandle[3] = mesh.add_vertex(MyMesh::Point(-1,  1,  1));
-  vhandle[4] = mesh.add_vertex(MyMesh::Point(-1, -1, -1));
-  vhandle[5] = mesh.add_vertex(MyMesh::Point( 1, -1, -1));
-  vhandle[6] = mesh.add_vertex(MyMesh::Point( 1,  1, -1));
-  vhandle[7] = mesh.add_vertex(MyMesh::Point(-1,  1, -1));
+  vhandle[0] = mesh.add_vertex(Mesh::Point(-1, -1,  1));
+  vhandle[1] = mesh.add_vertex(Mesh::Point( 1, -1,  1));
+  vhandle[2] = mesh.add_vertex(Mesh::Point( 1,  1,  1));
+  vhandle[3] = mesh.add_vertex(Mesh::Point(-1,  1,  1));
+  vhandle[4] = mesh.add_vertex(Mesh::Point(-1, -1, -1));
+  vhandle[5] = mesh.add_vertex(Mesh::Point( 1, -1, -1));
+  vhandle[6] = mesh.add_vertex(Mesh::Point( 1,  1, -1));
+  vhandle[7] = mesh.add_vertex(Mesh::Point(-1,  1, -1));
 
   // generate (quadrilateral) faces
-  std::vector<MyMesh::VertexHandle>  tmp_face_vhandles;
+  std::vector<Mesh::VertexHandle>  tmp_face_vhandles;
   tmp_face_vhandles.clear();
   tmp_face_vhandles.push_back(vhandle[0]);
   tmp_face_vhandles.push_back(vhandle[1]);
@@ -807,10 +807,10 @@ TEST_F(OpenMeshTutorials, flipping_edges) {
   Mesh mesh;
   // Add some vertices
   Mesh::VertexHandle vhandle[4];
-  vhandle[0] = mesh.add_vertex(MyMesh::Point(0, 0, 0));
-  vhandle[1] = mesh.add_vertex(MyMesh::Point(0, 1, 0));
-  vhandle[2] = mesh.add_vertex(MyMesh::Point(1, 1, 0));
-  vhandle[3] = mesh.add_vertex(MyMesh::Point(1, 0, 0));
+  vhandle[0] = mesh.add_vertex(Mesh::Point(0, 0, 0));
+  vhandle[1] = mesh.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[2] = mesh.add_vertex(Mesh::Point(1, 1, 0));
+  vhandle[3] = mesh.add_vertex(Mesh::Point(1, 0, 0));
   // Add two faces
   std::vector<Mesh::VertexHandle> face_vhandles;
   face_vhandles.push_back(vhandle[2]);
@@ -846,13 +846,13 @@ TEST_F(OpenMeshTutorials, collapsing_edges) {
   mesh.request_edge_status();
   // Add some vertices as in the illustration above
   PolyMesh::VertexHandle vhandle[7];
-  vhandle[0] = mesh.add_vertex(MyMesh::Point(-1, 1, 0));
-  vhandle[1] = mesh.add_vertex(MyMesh::Point(-1, 3, 0));
-  vhandle[2] = mesh.add_vertex(MyMesh::Point(0, 0, 0));
-  vhandle[3] = mesh.add_vertex(MyMesh::Point(0, 2, 0));
-  vhandle[4] = mesh.add_vertex(MyMesh::Point(0, 4, 0));
-  vhandle[5] = mesh.add_vertex(MyMesh::Point(1, 1, 0));
-  vhandle[6] = mesh.add_vertex(MyMesh::Point(1, 3, 0));
+  vhandle[0] = mesh.add_vertex(PolyMesh::Point(-1, 1, 0));
+  vhandle[1] = mesh.add_vertex(PolyMesh::Point(-1, 3, 0));
+  vhandle[2] = mesh.add_vertex(PolyMesh::Point(0, 0, 0));
+  vhandle[3] = mesh.add_vertex(PolyMesh::Point(0, 2, 0));
+  vhandle[4] = mesh.add_vertex(PolyMesh::Point(0, 4, 0));
+  vhandle[5] = mesh.add_vertex(PolyMesh::Point(1, 1, 0));
+  vhandle[6] = mesh.add_vertex(PolyMesh::Point(1, 3, 0));
   // Add three quad faces
   std::vector<PolyMesh::VertexHandle> face_vhandles;
   face_vhandles.push_back(vhandle[1]);
