@@ -44,7 +44,7 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
       foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
         string(TOUPPER ${CONFIG} UPCONFIG)
         set_target_properties(unittests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${UPCONFIG} ${OUTPUT_DIR})
-        set_target_properties(unittests_customvec PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
+        set_target_properties(unittests_customvec PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${UPCONFIG} ${OUTPUT_DIR})
     endforeach()
 
 	
