@@ -129,6 +129,8 @@ IF "%SHARED%" == "TRUE" (
 
 cd unittests
 
+dir 
+
 unittests.exe --gtest_output=xml
 
 unittests_customvec.exe --gtest_output=xml
