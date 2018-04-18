@@ -177,7 +177,6 @@ static inline std::string &left_trim(std::string &_string) {
  * @return trimmed string
  */
 static inline std::string &right_trim(std::string &_string) {
-#error "Apply the same fix here"  
 
   // Find out if the compiler supports CXX11
   #if ( __cplusplus >= 201103L || _MSVC_LANG >= 201103L )
