@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>7.0</b> (?/?/?)</td><td>
+<tr valign=top><td><b>7.0</b> (2018/04/19)</td><td>
 
 <b>Breaking changes</b>
 <ul>
@@ -20,6 +20,7 @@
 <li>make all negative handles invalid, not just -1</li>
 <li>Several warnings fixed (Including the checked iterators)</li>
 <li>split_copy and split_edge_copy operations now also copy internal properties.</li>
+<li>copy face properties in split_copy(EdgeHandle, VertexHandle)</li>
 <li>fix halfedge indices in OpenMeshTrimeshCirculatorHalfedgeLoop CWAndCCWCheck</li>
 <li>Fix wrong behaviour of HalfedgeLoopIterators by changing the template parameter</li>
 <li>Added 1-4 triangle split funtion(splits all edges at Midpoints)</li>
@@ -27,6 +28,9 @@
 <li>Made the face and edge split operations that copy properties also copy builtin properties</li>
 <li>calc_sector_angle: Check for real division by zero not with epsilon that was way to large</li>
 <li>Don't return invalid iterators for empty element ranges</li>
+<li>Mark halfedges as deleted after collapse</li>
+<li>Let default range-based for skip deleted elements and add a version that includes deleted elements</li>
+<li>Moved length() by norm() to external functions. This allows us to support other vector types instead of Vec3d (e.g. via Eigen) </li>
 </ul>
 
 <b>Utils</b>
@@ -75,14 +79,10 @@
 <li>Added unittest for split_edge_copy operations on Tri and PolyMeshes</li>
 </ul>
 
-<b>Python</b>
-<ul>
-<li>fix the stripping of the python libs version string</li>
-</ul>
-
 <b>General</b>
 <ul>
 <li>Updated Logo</li>
+<li>Only Issue Warning if compile Order for MeshIO.hh is violated. Check will be removed if no errors are reported.</li>
 </ul>
 
 </tr>
