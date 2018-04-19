@@ -6,6 +6,19 @@
 
 <!-- --------------------------------------------------------------------- -->
 
+
+<tr valign=top><td><b>7.1</b> (?/?/?)</td><td>
+
+
+<b>General</b>
+<ul>
+<li>Remove old qmake project files. Unmaintained for a very long time</li>
+</ul>
+
+</tr>
+
+
+
 <tr valign=top><td><b>7.0</b> (2018/04/19)</td><td>
 
 <b>Breaking changes</b>
@@ -62,7 +75,7 @@
 <li>BaseExporter: Added accessor functions for HalfEdgeHandles and faceTexCoords to base exporter and exporter template.</li>
 <li>OBJ Writer: Fail if vertex color export was requested (Thanks to Manuel Massing)</li>
 <li>OBJ Writer: Added functionality to store FaceTexCoords to objwriter</li>
-<li>OBJ Writer: Applied fix for bad or missing vertex tex coords (Thanks to Gero Müller for the patch)</li>>
+<li>OBJ Writer: Applied fix for bad or missing vertex tex coords (Thanks to Gero Müller for the patch)</li>
 <li>OBJ Writer: Fix vertex texture coordinates export in OBJ writer</li>
 <li>OBJ Loader: range check for vertex colors and normals in OBJ loader</li>
 <li>OBJ Loader: fixed handling of negative indices in OBJ loader</li>
