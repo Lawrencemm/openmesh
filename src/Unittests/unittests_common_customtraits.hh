@@ -13,7 +13,7 @@ template <int DIM> class Vec {
     // Constructor with DIM components
 	Vec(float x) : data({ x }) {}
 	Vec(float x, float y) : data({ x, y }) {}
-	Vec(float x, float y, float z) : data({ x, y, z }) {}
+	Vec(float x, float y, float z) : data({{ x, y, z }}) {}
 	Vec(float x, float y, float z, float w) : data({ x, y, z, w }) {}
 	  
     Vec() = default;
