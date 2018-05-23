@@ -41,6 +41,7 @@ if(${PROJECT_NAME} MATCHES "OpenMesh")
 endif()
 
 include (ACGOutput)
+include(ACGQt)
 
 # ========================================================================
 # Definitions
