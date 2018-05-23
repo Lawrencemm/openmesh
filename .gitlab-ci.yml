@@ -44,29 +44,30 @@ cppcheck:
     paths:
       - cppcheck.log
 
-.VS2015-32-bit-shared-apps:
+VS2017-32-bit-shared-apps:
   variables:
-    BUILD_PLATFORM: "VS2015"
+    BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x32"
     SHARED:         "TRUE"
     APPS:           "ON"
   script: "CI\\Windows.bat"
   tags:
-    - VS2015
+    - VS2017
+    - Qt5101
   artifacts:
     paths:
       - build-release/*.exe
 
-
-.VS2015-32-bit-static-apps:
+VS2017-32-bit-static-apps:
   variables:
-    BUILD_PLATFORM: "VS2015"
+    BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x32"
     SHARED:         "FALSE"
     APPS:           "ON"
   script: "CI\\Windows.bat"
   tags:
-    - VS2015
+    - VS2017
+    - Qt5101
   artifacts:
     paths:
       - build-release/*.exe
@@ -81,6 +82,7 @@ VS2017-64-bit-shared-apps:
   script: "CI\\Windows.bat"
   tags:
     - VS2017
+    - Qt5101
   artifacts:
     paths:
       - build-release/*.exe      
@@ -94,6 +96,7 @@ VS2017-64-bit-static-apps:
   script: "CI\\Windows.bat"
   tags:
     - VS2017
+    - Qt5101    
   artifacts:
     paths:
       - build-release/*.exe
