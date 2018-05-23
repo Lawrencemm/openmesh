@@ -89,14 +89,7 @@ IF "%APPS%" == "ON" (
 
   REM Copy the platform plugins subdirectory for the qt plugins required to run the gui apps
   xcopy /Y %QT_INSTALL_PATH%\plugins\platforms Build\plugins\platforms 
-
-  IF "%BUILD_PLATFORM%" == "VS2015" (
-    set CMAKE_CONFIGURATION=%QT_BASE_CONFIG% -DGLUT_INCLUDE_DIR="%LIBPATH%\%ARCHITECTURE%\freeglut-3.0.0\include" -DGLUT_glut_LIBRARY="%LIBPATH%\%ARCHITECTURE%\freeglut-3.0.0\lib\freeglut.lib"
-
-
-  ) ELSE (
-    set CMAKE_CONFIGURATION=%QT_BASE_CONFIG% -DGLUT_INCLUDE_DIR="%LIBPATH%\%ARCHITECTURE%\freeglut-2.8.1\include" -DGLUT_glut_LIBRARY="%LIBPATH%\%ARCHITECTURE%\freeglut-2.8.1\lib\freeglut.lib"
-  )
+  set CMAKE_CONFIGURATION=%QT_BASE_CONFIG%"
 ) ELSE (
   set STRING_APPS=-no-apps
   set CMAKE_CONFIGURATION=
