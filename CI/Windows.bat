@@ -89,7 +89,7 @@ IF "%APPS%" == "ON" (
 
   REM Copy the platform plugins subdirectory for the qt plugins required to run the gui apps
   xcopy /Y %QT_INSTALL_PATH%\plugins\platforms Build\plugins\platforms 
-  set CMAKE_CONFIGURATION=%QT_BASE_CONFIG%"
+  set CMAKE_CONFIGURATION=%QT_BASE_CONFIG%
 ) ELSE (
   set STRING_APPS=-no-apps
   set CMAKE_CONFIGURATION=
