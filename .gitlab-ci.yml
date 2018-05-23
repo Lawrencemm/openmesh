@@ -60,28 +60,28 @@ VS2017-64-bit-shared-apps:
   variables:
     SHARED:         "TRUE"
     APPS:           "ON"
-    <<: *VS2017_x64
+  <<: *VS2017_x64
   
       
 VS2017-64-bit-static-apps:
   variables:
     SHARED:         "FALSE"
     APPS:           "ON"
-    <<: *VS2017_x64
+  <<: *VS2017_x64
 
       
 VS2017-64-bit-shared-no-apps:
   variables:
     SHARED:         "TRUE"
     APPS:           "OFF"
-    <<: *VS2017_x64
+  <<: *VS2017_x64
 
 
 VS2017-64-bit-static-no-apps:
   variables:
     SHARED:         "FALSE"
     APPS:           "OFF"
-    <<: *VS2017_x64
+  <<: *VS2017_x64
 
 
 VS2017-32-bit-shared-no-apps:
