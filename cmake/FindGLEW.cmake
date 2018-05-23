@@ -32,6 +32,10 @@ if( WIN32 )
      SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x64/")
    elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 14.*" )
      SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x32/")
+   elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 15.*Win64" )
+     SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2017/x64/")
+   elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 15.*" )
+     SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2017/x32/")
    endif()
 
    if( MSVC80 )
@@ -45,7 +49,9 @@ if( WIN32 )
               PATHS "${CMAKE_WINDOWS_LIBS_DIR}/glew/include" 
                     "${CMAKE_WINDOWS_LIBS_DIR}/glew-1.6.0/include" 
                     ${COMPILER_PATH}/PlatformSDK/Include 
-                    "${VS_SEARCH_PATH}glew-1.10.0/include")
+  		    "${VS_SEARCH_PATH}glew-2.0.0/include"
+                    "${VS_SEARCH_PATH}glew-1.10.0/include"
+                    "${VS_SEARCH_PATH}glew-1.13.0/include")
 
    SET( GLEW_NAMES glew32 )
    FIND_LIBRARY( GLEW_LIBRARY
@@ -53,7 +59,9 @@ if( WIN32 )
                  PATHS "${CMAKE_WINDOWS_LIBS_DIR}/glew/lib" 
                        "${CMAKE_WINDOWS_LIBS_DIR}/glew-1.6.0/lib" 
                        ${COMPILER_PATH}/PlatformSDK/Lib 
-                       "${VS_SEARCH_PATH}glew-1.10.0/lib" )
+  		       "${VS_SEARCH_PATH}glew-2.0.0/lib"
+                       "${VS_SEARCH_PATH}glew-1.10.0/lib" 
+                       "${VS_SEARCH_PATH}glew-1.13.0/lib" )
 
 else( WIN32 )
    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h GL/wglew.h

@@ -40,6 +40,10 @@ IF (WIN32)
     SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x64/")
   elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 14.*" )
     SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2015/x32/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 15.*Win64" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2017/x64/")
+  elseif ( CMAKE_GENERATOR MATCHES "^Visual Studio 15.*" )
+    SET(VS_SEARCH_PATH "${CMAKE_WINDOWS_LIBS_DIR}/vs2017/x32/")
   endif()
 
 
@@ -49,7 +53,17 @@ IF (WIN32)
            "${VS_SEARCH_PATH}/freeglut-3.0.0/include" 
            "${VS_SEARCH_PATH}/freeglut-2.8.1/include" )
 
-  FIND_LIBRARY( GLUT_glut_LIBRARY NAMES glut32 glut freeglut
+  FIND_LIBRARY( GLUT_release_LIBRARY NAMES glut32 glut freeglut
+    PATHS
+    ${OPENGL_LIBRARY_DIR}
+    ${GLUT_ROOT_PATH}/Release
+    "${CMAKE_WINDOWS_LIBS_DIR}/glut-3.7/lib"
+    "${VS_SEARCH_PATH}/freeglut-3.0.0/lib"
+    "${VS_SEARCH_PATH}/freeglut-2.8.1/lib"
+    )
+  GET_FILENAME_COMPONENT( GLUT_LIBRARY_DIR ${GLUT_release_LIBRARY} PATH )
+	
+  FIND_LIBRARY( GLUT_debug_LIBRARY NAMES glut32d glutd freeglutd
     PATHS
     ${OPENGL_LIBRARY_DIR}
     ${GLUT_ROOT_PATH}/Release
@@ -58,7 +72,7 @@ IF (WIN32)
     "${VS_SEARCH_PATH}/freeglut-2.8.1/lib"
     )
 
-  GET_FILENAME_COMPONENT( GLUT_LIBRARY_DIR ${GLUT_glut_LIBRARY} PATH ) 
+  set(GLUT_glut_LIBRARY optimized ${GLUT_release_LIBRARY} debug ${GLUT_debug_LIBRARY} CACHE STRING "Path to the glut libraries")
  
 ELSE (WIN32)
   
@@ -99,9 +113,12 @@ ENDIF (WIN32)
 SET( GLUT_FOUND "NO" )
 IF(GLUT_INCLUDE_DIR)
   IF(GLUT_glut_LIBRARY)
-    
+    # Is -lXi and -lXmu required on all platforms that have it?
+    # If not, we need some way to figure out what platform we are on.
     SET( GLUT_LIBRARIES
       ${GLUT_glut_LIBRARY}
+      ${GLUT_Xmu_LIBRARY}
+      ${GLUT_Xi_LIBRARY} 
       ${GLUT_cocoa_LIBRARY}
       )
     SET( GLUT_FOUND "YES" )
