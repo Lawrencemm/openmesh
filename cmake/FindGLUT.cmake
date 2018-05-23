@@ -72,7 +72,7 @@ IF (WIN32)
     "${VS_SEARCH_PATH}/freeglut-2.8.1/lib"
     )
 
-  set(GLUT_glut_LIBRARY optimized ${GLUT_release_LIBRARY} debug ${GLUT_debug_LIBRARY})  
+  set(GLUT_glut_LIBRARY optimized ${GLUT_release_LIBRARY} debug ${GLUT_debug_LIBRARY} CACHE STRING "Path to the glut libraries")
  
 ELSE (WIN32)
   
