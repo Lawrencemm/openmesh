@@ -48,7 +48,7 @@ cppcheck:
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x64"
-  script: "CI\Windows.bat"
+  script: "CI\\Windows.bat"
   artifacts:
     paths:
       - build-release/*.exe
