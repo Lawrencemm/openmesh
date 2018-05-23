@@ -1,22 +1,120 @@
-gcc-c++11:
-  script: "CI/ci-linux.sh gcc C++11"
+### Templates for common job definitions ###
+.LINUX_TAG: &LINUX_TAG
   tags:
     - Linux
+
+### VS2017 ###
+
+.VS2017_64_TEMPLATE: &VS2017_x64
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x64"
+  script: "CI\\Windows.bat"
+  artifacts:
+    paths:
+      - build-release/*.exe
+  tags:
+    - VS2017
+    - Qt5101
+
+.VS2017_32_TEMPLATE: &VS2017_x32
+  variables:
+    BUILD_PLATFORM: "VS2017"
+    ARCHITECTURE:   "x32"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2017
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+### VS2015 ###
+
+.VS2015_64_TEMPLATE: &VS2015_x64
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x64"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2015_32_TEMPLATE: &VS2015_x32
+  variables:
+    BUILD_PLATFORM: "VS2015"
+    ARCHITECTURE:   "x32"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2015
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+### VS2013 ###
+
+.VS2013_64_TEMPLATE: &VS2013_x64
+  variables:
+    BUILD_PLATFORM: "VS2013"
+    ARCHITECTURE:   "x64"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2013
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+.VS2013_32_TEMPLATE: &VS2013_x32
+  variables:
+    BUILD_PLATFORM: "VS2013"
+    ARCHITECTURE:   "x32"
+  script: "CI\\Windows.bat"
+  tags:
+    - VS2013
+  artifacts:
+    paths:
+      - build-release/*.exe
+
+### Linker and App configurations for VS ###
+
+.STATIC_NO_APPS: &STATIC_NO_APPS
+  variables:
+    SHARED:         "FALSE"
+    APPS:           "OFF"
+    
+.STATIC_APPS: &STATIC_APPS
+  variables:
+    SHARED:         "FLASE"
+    APPS:           "ON"
+    
+.SHARED_NO_APPS: &SHARED_NO_APPS
+  variables:
+    SHARED:         "TRUE"
+    APPS:           "OFF"
+
+.SHARED_APPS: &SHARED_APPS
+  variables:
+    SHARED:         "TRUE"
+    APPS:           "ON"
+ 
+### actual job definitions ###
+
+gcc-c++11:
+  script: "CI/ci-linux.sh gcc C++11"
+  <<: *LINUX_TAG
 
 clang-c++11:
   script: "CI/ci-linux.sh clang C++11"
-  tags:
-    - Linux
+  <<: *LINUX_TAG
 
 gcc-c++14:
   script: "CI/ci-linux.sh gcc C++14"
-  tags:
-    - Linux
+  <<: *LINUX_TAG
 
 clang-c++14:
   script: "CI/ci-linux.sh clang C++14"
-  tags: 
-    - Linux
+  <<: *LINUX_TAG
 
 macos-c++11:
   script: "CI/ci-mac.sh C++11"
@@ -44,283 +142,93 @@ cppcheck:
     paths:
       - cppcheck.log
 
-.VS2017_64_TEMPLATE: &VS2017_x64
-  variables:
-    BUILD_PLATFORM: "VS2017"
-    ARCHITECTURE:   "x64"
-  script: "CI\\Windows.bat"
-  artifacts:
-    paths:
-      - build-release/*.exe
-  tags:
-    - VS2017
-    - Qt5101
-      
 VS2017-64-bit-shared-apps:
-  variables:
-    SHARED:         "TRUE"
-    APPS:           "ON"
+  variables: *SHARED_APPS
   <<: *VS2017_x64
   
-      
 VS2017-64-bit-static-apps:
-  variables:
-    SHARED:         "FALSE"
-    APPS:           "ON"
+  variables: *STATIC_APPS
   <<: *VS2017_x64
 
-      
 VS2017-64-bit-shared-no-apps:
-  variables:
-    SHARED:         "TRUE"
-    APPS:           "OFF"
+  variables: *SHARED_NO_APPS
   <<: *VS2017_x64
-
 
 VS2017-64-bit-static-no-apps:
-  variables:
-    SHARED:         "FALSE"
-    APPS:           "OFF"
+  variables: *STATIC_NO_APPS
   <<: *VS2017_x64
 
-
 VS2017-32-bit-shared-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2017"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2017
-  artifacts:
-    paths:
-      - build-release/*.exe
-
+  variables: *SHARED_NO_APPS
+  <<: *VS2017_x32
 
 VS2017-32-bit-static-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2017"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2017
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_NO_APPS
+  <<: *VS2017_x32
 
 VS2015-64-bit-shared-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x64"
-    SHARED:         "TRUE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
-      
-      
+  variables: *SHARED_APPS
+  <<: *VS2015_x64
+
 VS2015-64-bit-shared-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x64"
-    SHARED:         "TRUE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *SHARED_NO_APPS
+  <<: *VS2015_x64
 
-VS2015-32-bit-shared-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
-
-VS2015-32-bit-shared-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
-      
 VS2015-64-bit-static-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x64"
-    SHARED:         "FALSE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_APPS
+  <<: *VS2015_x64
 
 VS2015-64-bit-static-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x64"
-    SHARED:         "FALSE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_NO_APPS
+  <<: *VS2015_x64
+
+VS2015-32-bit-shared-apps:
+  variables: *SHARED_APPS
+  <<: *VS2015_x32
+
+VS2015-32-bit-shared-no-apps:
+  variables: *SHARED_NO_APPS
+  <<: *VS2015_x32
 
 VS2015-32-bit-static-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_APPS
+  <<: *VS2015_x32
 
 VS2015-32-bit-static-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2015"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2015
-  artifacts:
-    paths:
-      - build-release/*.exe
-      
-      
-      
+  variables: *STATIC_NO_APPS
+  <<: *VS2015_x32
+
 VS2013-64-bit-shared-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "TRUE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *SHARED_APPS
+  <<: *VS2013_x64
 
 VS2013-64-bit-shared-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "TRUE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *SHARED_NO_APPS
+  <<: *VS2013_x64
 
-VS2013-32-bit-shared-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-
-VS2013-32-bit-shared-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-      
 VS2013-64-bit-static-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "FALSE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_APPS
+  <<: *VS2013_x64
 
 VS2013-64-bit-static-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "FALSE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_NO_APPS
+  <<: *VS2013_x64
+
+VS2013-32-bit-shared-apps:
+  variables: *SHARED_APPS
+  <<: *VS2013_x32
+
+VS2013-32-bit-shared-no-apps:
+  variables: *SHARED_NO_APPS
+  <<: *VS2013_x32
 
 VS2013-32-bit-static-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
+  variables: *STATIC_APPS
+  <<: *VS2013_x32
 
 VS2013-32-bit-static-no-apps:
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe      
+  variables: *STATIC_NO_APPS
+  <<: *VS2013_x32
       
 Doc-publish:
   only:
