@@ -95,6 +95,8 @@ IF "%APPS%" == "ON" (
   set CMAKE_CONFIGURATION=
 )
 
+ECHO "============================================================="
+ECHO "============================================================="
 ECHO "Building with :"
 ECHO "ARCHITECTURE        : %ARCHITECTURE%"
 ECHO "BUILD_PLATFORM      : %BUILD_PLATFORM%"
@@ -106,6 +108,8 @@ ECHO "APPS                : %APPS%"
 ECHO "SHARED              : %SHARED%"
 ECHO "QT_INSTALL_PATH     : %QT_INSTALL_PATH%"
 ECHO "CMAKE_CONFIGURATION : %CMAKE_CONFIGURATION%"
+ECHO "============================================================="
+ECHO "============================================================="
 
 
 
