@@ -1,4 +1,4 @@
-# OpenMesh, 7.0
+# OpenMesh, 7.1
 
 [![](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/badges/master/pipeline.svg)](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/commits/master)
 
