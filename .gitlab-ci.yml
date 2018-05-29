@@ -385,6 +385,8 @@ Sources:
   only:
      - master
   script: "CI/ci-source.sh"
+  tags:
+     - Linux
   artifacts:
     paths:
       - OpenMesh*.zip
