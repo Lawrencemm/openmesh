@@ -115,8 +115,8 @@ Building OpenMesh on Windows requires cmake to generate the project files for Vi
 \section sec_compiling_macosx MacOS X
 
 Download and install required libraries as stated above.
-You can download %OpenMesh's sources from <tt>www.openmesh.org</tt> or check out the latest repository via SVN:<br/>
-<tt>svn co http://www.openmesh.org/svnrepo/OpenMesh/trunk %OpenMesh</tt>.<br/><br/>
+You can download %OpenMesh's sources from <tt>www.openmesh.org</tt> or check out the latest repository via GIT:<br/>
+<tt>https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh</tt>.<br/><br/>
 
 \subsection mac_using_cmake Compiling OpenMesh using CMake
 
