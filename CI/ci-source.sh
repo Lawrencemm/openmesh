@@ -2,9 +2,9 @@
 # This script just creates compressed files of OpenMesh sources
 
 # Create Build directory and Build documentation
-mkdir build
+mkdir build-doc
 
-cd build
+cd build-doc
 cmake ..
 make doc
 cd ..
@@ -13,7 +13,7 @@ cd ..
 VERSION=OpenMesh-$(cat VERSION | grep VERSION | tr -d "VERSION=")
 
 # Create Publishing directory
-mkdir OpenMesh-$VERSION
+mkdir $VERSION
 
 # Move all files into Publishing directory
 mv CHANGELOG.md   $VERSION/
@@ -26,7 +26,7 @@ mv README.md      $VERSION/
 mv src            $VERSION/
 mv VERSION        $VERSION/ 
 
-mv build/Build/share/OpenMesh/Doc/html/  OpenMesh-$VERSION/Documentation
+mv build-doc/Build/share/OpenMesh/Doc/html/  $VERSION/Documentation
 
 tar 
 
