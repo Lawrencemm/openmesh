@@ -17,6 +17,7 @@
 
 <b>Build System</b>
 <ul>
+<li>Default to C++11 in cmake files</li>
 <li>Remove old qmake project files. Unmaintained for a very long time</li>
 <li>Replaced Qt finders</li>
 <li>Added VS 2017 to CI builds</li>
