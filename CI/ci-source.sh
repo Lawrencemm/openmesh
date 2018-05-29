@@ -10,7 +10,7 @@ make doc
 cd ..
 
 # Extract Version Information
-VERSION=OpenMesh-$(cat ../VERSION | grep VERSION | tr -d "VERSION=")
+VERSION=OpenMesh-$(cat VERSION | grep VERSION | tr -d "VERSION=")
 
 # Create Publishing directory
 mkdir OpenMesh-$VERSION
