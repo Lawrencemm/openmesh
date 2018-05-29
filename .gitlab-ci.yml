@@ -347,5 +347,12 @@ Doc-publish:
      - Linux
 
 Sources:
+  only:
+     - master
   script: "CI/ci-source.sh"
+  artifacts:
+    paths:
+      - *.zip
+      - *.tar.bz2
+      - *.tar.gz
 
