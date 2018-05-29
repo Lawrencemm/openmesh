@@ -31,7 +31,7 @@ https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python
 | 32-Bit static, no apps   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2017-32-bit-static-no-apps)  | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2015-32-bit-static-no-apps)   | [ Download ](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=VS2013-32-bit-static-no-apps)   |
 
 Sources:
-https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/build-release?job=Sources)   | [ Download Sources](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/?job=Sources
+[ Download Sources](https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse/?job=Sources )
 
 
 ## Installing
