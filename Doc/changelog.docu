@@ -9,7 +9,7 @@
 
 <tr valign=top><td><b>7.1</b> (2018/05/29)</td><td>
 
-b>IO</b>
+<b>IO</b>
 <ul>
 <li>Fixed slow OBJ reader (Thanks to Etienne Danvoye for the patch) </li>
 </ul>
