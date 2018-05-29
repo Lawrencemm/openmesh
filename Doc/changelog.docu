@@ -9,10 +9,17 @@
 
 <tr valign=top><td><b>7.1</b> (?/?/?)</td><td>
 
+b>IO</b>
+<ul>
+<li>Fixed slow OBJ reader (Thanks to Etienne Danvoye for the patch) </li>
+</ul>
 
-<b>General</b>
+
+<b>Build System</b>
 <ul>
 <li>Remove old qmake project files. Unmaintained for a very long time</li>
+<li>Replaced Qt finders</li>
+<li>Added VS 2017 to CI builds</li>
 </ul>
 
 </tr>
