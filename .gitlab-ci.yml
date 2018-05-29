@@ -387,7 +387,7 @@ Sources:
   script: "CI/ci-source.sh"
   artifacts:
     paths:
-      - *.zip
-      - *.tar.bz2
-      - *.tar.gz
+      - OpenMesh*.zip
+      - OpenMesh*.tar.bz2
+      - OpenMesh*.tar.gz
 
