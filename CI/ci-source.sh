@@ -28,9 +28,7 @@ mv VERSION        $VERSION/
 
 mv build-doc/Build/share/OpenMesh/Doc/html/  $VERSION/Documentation
 
-tar 
-
-tar cjf $VERSION.tar.bz2 $VERSION &
-tar czf $VERSION.tar.gz $VERSION &
-zip -9 -q -r $VERSION.zip $VERSION &
+tar cjf $VERSION.tar.bz2 $VERSION 
+tar czf $VERSION.tar.gz $VERSION 
+zip -9 -q -r $VERSION.zip $VERSION 
 
