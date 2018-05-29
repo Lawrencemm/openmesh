@@ -1270,6 +1270,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
 						omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
 						elements_.back().properties_.clear();
 					}
+                  } else {
+                      options_ += Options::Custom;
                   }
 
                 }
