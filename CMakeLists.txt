@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
 
+
+# Set and enforce C++-11 flags
+set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
+set( CMAKE_CXX_STANDARD 11 )
+
 enable_testing()
 
 # Only set project name if OpenMesh is built as stand-alone library
