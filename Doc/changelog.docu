@@ -9,6 +9,12 @@
 
 <tr valign=top><td><b>7.2</b> (?/?/?)</td><td>
 
+<b>IO</b>
+<ul>
+<li>PLY Reader: Allowing the PLY reader to read custom face ( Thanks to morgan Leborgne for the patch)</li>
+</ul>
+
+
 </tr>
 
 
@@ -16,7 +22,7 @@
 
 <b>IO</b>
 <ul>
-<li>Fixed slow OBJ reader (Thanks to Etienne Danvoye for the patch) </li>
+<li>OBJ Reader: Fixed slow OBJ reader (Thanks to Etienne Danvoye for the patch) </li>
 </ul>
 
 <b>Documentation</b>
