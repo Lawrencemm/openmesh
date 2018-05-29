@@ -14,6 +14,10 @@
 <li>Fixed slow OBJ reader (Thanks to Etienne Danvoye for the patch) </li>
 </ul>
 
+<b>Documentation</b>
+<ul>
+<li>Updated build instructions.</li>
+</ul>
 
 <b>Build System</b>
 <ul>
