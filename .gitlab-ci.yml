@@ -1,24 +1,33 @@
+stages:
+  - build
+  - deploy
+
 gcc-c++11:
+  stage: build
   script: "CI/ci-linux.sh gcc C++11"
   tags:
     - Linux
 
 clang-c++11:
+  stage: build
   script: "CI/ci-linux.sh clang C++11"
   tags:
     - Linux
 
 gcc-c++14:
+  stage: build
   script: "CI/ci-linux.sh gcc C++14"
   tags:
     - Linux
 
 clang-c++14:
+  stage: build
   script: "CI/ci-linux.sh clang C++14"
   tags: 
     - Linux
 
 macos-c++11:
+  stage: build
   script: "CI/ci-mac.sh C++11"
   tags:
     - Apple
@@ -28,6 +37,7 @@ macos-c++11:
       - build-release-cpp11/*.tar.gz
 
 macos-c++98:
+  stage: build
   script: "CI/ci-mac.sh C++14"
   tags:
     - Apple
@@ -37,6 +47,7 @@ macos-c++98:
       - build-release-cpp14/*.tar.gz
 
 cppcheck:
+  stage: build
   script: "CI/ci-cppcheck.sh"
   tags:
     - Linux
@@ -45,6 +56,7 @@ cppcheck:
       - cppcheck.log
       
 VS2017-64-bit-shared-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x64"
@@ -59,6 +71,7 @@ VS2017-64-bit-shared-apps:
       - build-release/*.exe      
       
 VS2017-64-bit-static-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x64"
@@ -74,6 +87,7 @@ VS2017-64-bit-static-apps:
 
       
 VS2017-64-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x64"
@@ -88,6 +102,7 @@ VS2017-64-bit-shared-no-apps:
 
 
 VS2017-32-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x32"
@@ -102,6 +117,7 @@ VS2017-32-bit-shared-no-apps:
       
 
 VS2017-64-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x64"
@@ -116,6 +132,7 @@ VS2017-64-bit-static-no-apps:
 
 
 VS2017-32-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2017"
     ARCHITECTURE:   "x32"
@@ -129,6 +146,7 @@ VS2017-32-bit-static-no-apps:
       - build-release/*.exe
 
 VS2015-64-bit-shared-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x64"
@@ -143,6 +161,7 @@ VS2015-64-bit-shared-apps:
       
       
 VS2015-64-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x64"
@@ -156,6 +175,7 @@ VS2015-64-bit-shared-no-apps:
       - build-release/*.exe
 
 VS2015-32-bit-shared-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x32"
@@ -169,6 +189,7 @@ VS2015-32-bit-shared-apps:
       - build-release/*.exe
 
 VS2015-32-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x32"
@@ -182,6 +203,7 @@ VS2015-32-bit-shared-no-apps:
       - build-release/*.exe
       
 VS2015-64-bit-static-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x64"
@@ -195,6 +217,7 @@ VS2015-64-bit-static-apps:
       - build-release/*.exe
 
 VS2015-64-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x64"
@@ -208,6 +231,7 @@ VS2015-64-bit-static-no-apps:
       - build-release/*.exe
 
 VS2015-32-bit-static-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x32"
@@ -221,6 +245,7 @@ VS2015-32-bit-static-apps:
       - build-release/*.exe
 
 VS2015-32-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2015"
     ARCHITECTURE:   "x32"
@@ -236,6 +261,7 @@ VS2015-32-bit-static-no-apps:
       
       
 VS2013-64-bit-shared-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x64"
@@ -249,6 +275,7 @@ VS2013-64-bit-shared-apps:
       - build-release/*.exe
 
 VS2013-64-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x64"
@@ -262,6 +289,7 @@ VS2013-64-bit-shared-no-apps:
       - build-release/*.exe
 
 VS2013-32-bit-shared-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x32"
@@ -275,6 +303,7 @@ VS2013-32-bit-shared-apps:
       - build-release/*.exe
 
 VS2013-32-bit-shared-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x32"
@@ -288,6 +317,7 @@ VS2013-32-bit-shared-no-apps:
       - build-release/*.exe
       
 VS2013-64-bit-static-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x64"
@@ -301,6 +331,7 @@ VS2013-64-bit-static-apps:
       - build-release/*.exe
 
 VS2013-64-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x64"
@@ -314,6 +345,7 @@ VS2013-64-bit-static-no-apps:
       - build-release/*.exe
 
 VS2013-32-bit-static-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x32"
@@ -327,6 +359,7 @@ VS2013-32-bit-static-apps:
       - build-release/*.exe
 
 VS2013-32-bit-static-no-apps:
+  stage: build
   variables:
     BUILD_PLATFORM: "VS2013"
     ARCHITECTURE:   "x32"
@@ -340,6 +373,7 @@ VS2013-32-bit-static-no-apps:
       - build-release/*.exe      
       
 Doc-publish:
+  stage: deploy
   only:
      - master
   script: "CI/ci-doc.sh"
@@ -347,6 +381,7 @@ Doc-publish:
      - Linux
 
 Sources:
+  stage: deploy
   only:
      - master
   script: "CI/ci-source.sh"
