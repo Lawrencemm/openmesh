@@ -540,6 +540,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
       vhandles.clear();
       face_texcoords.clear();
+      face_texcoords3d.clear();
 
       // read full line after detecting a face
       std::string faceLine;
