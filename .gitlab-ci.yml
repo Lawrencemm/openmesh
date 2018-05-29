@@ -345,3 +345,7 @@ Doc-publish:
   script: "CI/ci-doc.sh"
   tags:
      - Linux
+
+Sources:
+  script: "CI/ci-source.sh"
+
