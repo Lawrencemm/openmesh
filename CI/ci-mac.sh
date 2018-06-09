@@ -12,7 +12,7 @@ export PATH
 OPTIONS=""
 
 # set GTEST path
-OPTIONS = "$OPTIONS -DGTEST_ROOT=~/sw/gtest-1.7.0/"
+OPTIONS="$OPTIONS -DGTEST_ROOT=~/sw/gtest-1.7.0/"
 
 if [ "$LANGUAGE" == "C++98" ]; then
   echo "Building with C++98";
