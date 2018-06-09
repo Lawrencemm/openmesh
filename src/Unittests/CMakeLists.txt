@@ -11,7 +11,7 @@ endif()
 
 if ( OPENMESH_BUILD_UNIT_TESTS )
   # Search for gtest headers and libraries
-  find_package(GoogleTest)
+  find_package(GTest)
 
   if(GTEST_FOUND)
 
