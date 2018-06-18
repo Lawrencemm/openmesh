@@ -728,4 +728,58 @@ TEST_F(OpenMeshReadWritePLY, LoadSimpleBinaryPLYWithExtraElements) {
 	EXPECT_EQ(12u, mesh_.n_faces()) << "The number of loaded faces is not correct!";
 
 }
+
+/*
+* Ignore a file that does not contain vertices and faces
+*/
+TEST_F(OpenMeshReadWritePLY, IgnoreNonMeshPlyFile) {
+
+    mesh_.clear();
+
+    std::stringstream data;
+    data << "ply" << "\n";
+    data << "format binary_little_endian 1.0" << "\n";
+    data << "comment Image data" << "\n";
+    data << "element image 0" << "\n";
+    data << "property list uint16 uint16 row" << "\n";
+    data << "end_header" << "\n";
+
+    OpenMesh::IO::Options options = OpenMesh::IO::Options::Binary;
+
+    bool ok = OpenMesh::IO::read_mesh(mesh_, data, ".ply", options);
+
+    EXPECT_TRUE(ok) << "This empty file should be readable without an error!";
+
+    EXPECT_EQ(0u, mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(0u, mesh_.n_edges()) << "The number of loaded edges is not correct!";
+    EXPECT_EQ(0u, mesh_.n_faces()) << "The number of loaded faces is not correct!";
+}
+
+
+/*
+* Ignore a file that does not contain vertices and faces
+*/
+TEST_F(OpenMeshReadWritePLY, FailOnUnknownPropertyTypeForLists) {
+
+    mesh_.clear();
+
+    std::stringstream data;
+    data << "ply" << "\n";
+    data << "format binary_little_endian 1.0" << "\n";
+    data << "comment Image data" << "\n";
+    data << "element image 0" << "\n";
+    data << "property list blibb blubb row" << "\n";
+    data << "end_header" << "\n";
+
+    OpenMesh::IO::Options options = OpenMesh::IO::Options::Binary;
+
+    bool ok = OpenMesh::IO::read_mesh(mesh_, data, ".ply", options);
+
+    EXPECT_FALSE(ok) << "This file should fail to read!";
+
+    EXPECT_EQ(0u, mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(0u, mesh_.n_edges()) << "The number of loaded edges is not correct!";
+    EXPECT_EQ(0u, mesh_.n_faces()) << "The number of loaded faces is not correct!";
+}
+
 }
