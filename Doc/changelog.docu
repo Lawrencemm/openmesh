@@ -12,6 +12,7 @@
 <b>IO</b>
 <ul>
 <li>PLY Reader: Allowing the PLY reader to read custom face ( Thanks to morgan Leborgne for the patch)</li>
+<li>PLY Reader: Fixed endless loop on unknown property list type</li>
 </ul>
 
 
