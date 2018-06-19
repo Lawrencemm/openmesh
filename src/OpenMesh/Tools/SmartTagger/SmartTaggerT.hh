@@ -47,8 +47,7 @@
 \*===========================================================================*/
 
 
-#ifndef ACG_SMARTTAGGERT_HH
-#define ACG_SMARTTAGGERT_HH
+#pragma once
 
 
 //== INCLUDES =================================================================
@@ -64,7 +63,7 @@
 
 //== NAMESPACES ===============================================================
 
-namespace ACG {
+namespace OpenMesh {
 
 //== FORWARD DECLARATIONS =====================================================
 
@@ -177,52 +176,49 @@ protected:
 
 //== SPECIALIZATION ===========================================================
 
-  // define standard Tagger  
-  template< class Mesh>
-  class SmartTaggerVT 
+// define standard Tagger
+template< class Mesh>
+class SmartTaggerVT
     : public SmartTaggerT< Mesh, typename Mesh::VertexHandle, OpenMesh::VPropHandleT<unsigned int> > 
-  {
-  public:
-    typedef SmartTaggerT< Mesh, typename Mesh::VertexHandle, OpenMesh::VPropHandleT<unsigned int> > BaseType;
-    SmartTaggerVT(Mesh& _mesh, unsigned int _tag_range = 1) : BaseType(_mesh, _tag_range) {}
-  };
+{
+public:
+  typedef SmartTaggerT< Mesh, typename Mesh::VertexHandle, OpenMesh::VPropHandleT<unsigned int> > BaseType;
+  SmartTaggerVT(Mesh& _mesh, unsigned int _tag_range = 1) : BaseType(_mesh, _tag_range) {}
+};
 
-  template< class Mesh>
-  class SmartTaggerET 
+template< class Mesh>
+class SmartTaggerET
     : public SmartTaggerT< Mesh, typename Mesh::EdgeHandle, OpenMesh::EPropHandleT<unsigned int> > 
-  {
-  public:
-    typedef SmartTaggerT< Mesh, typename Mesh::EdgeHandle, OpenMesh::EPropHandleT<unsigned int> > BaseType;
-    SmartTaggerET(Mesh& _mesh, unsigned int _tag_range = 1) : BaseType(_mesh, _tag_range) {}
-  };
+{
+public:
+  typedef SmartTaggerT< Mesh, typename Mesh::EdgeHandle, OpenMesh::EPropHandleT<unsigned int> > BaseType;
+  SmartTaggerET(Mesh& _mesh, unsigned int _tag_range = 1) : BaseType(_mesh, _tag_range) {}
+};
 
-  template< class Mesh>
-  class SmartTaggerFT 
+template< class Mesh>
+class SmartTaggerFT
     : public SmartTaggerT< Mesh, typename Mesh::FaceHandle, OpenMesh::FPropHandleT<unsigned int> > 
-  {
-  public:
-    typedef SmartTaggerT< Mesh, typename Mesh::FaceHandle, OpenMesh::FPropHandleT<unsigned int> > BaseType;
-    SmartTaggerFT(Mesh& _mesh, unsigned int _tag_range = 1): BaseType(_mesh, _tag_range) {}
-  };
+{
+public:
+  typedef SmartTaggerT< Mesh, typename Mesh::FaceHandle, OpenMesh::FPropHandleT<unsigned int> > BaseType;
+  SmartTaggerFT(Mesh& _mesh, unsigned int _tag_range = 1): BaseType(_mesh, _tag_range) {}
+};
 
-  template< class Mesh>
-  class SmartTaggerHT 
+template< class Mesh>
+class SmartTaggerHT
     : public SmartTaggerT< Mesh, typename Mesh::HalfedgeHandle, OpenMesh::HPropHandleT<unsigned int> >
-  {
-  public:
-    typedef SmartTaggerT< Mesh, typename Mesh::HalfedgeHandle, OpenMesh::HPropHandleT<unsigned int> > BaseType;
-    SmartTaggerHT(Mesh& _mesh, unsigned int _tag_range = 1): BaseType(_mesh, _tag_range){}
-  };
+{
+public:
+  typedef SmartTaggerT< Mesh, typename Mesh::HalfedgeHandle, OpenMesh::HPropHandleT<unsigned int> > BaseType;
+  SmartTaggerHT(Mesh& _mesh, unsigned int _tag_range = 1): BaseType(_mesh, _tag_range){}
+};
 
 
 //=============================================================================
-} // namespace ACG
+} // namespace OpenMesh
 //=============================================================================
-#if defined(INCLUDE_TEMPLATES) && !defined(ACG_SMARTTAGGERT_C)
-#define ACG_SMARTTAGGERT_TEMPLATES
+#if defined(OM_INCLUDE_TEMPLATES) && !defined(OPENMESH_SMARTTAGGERT_C)
+#define OPENMESH_SMARTTAGGERT_TEMPLATES
 #include "SmartTaggerT.cc"
 #endif
-//=============================================================================
-#endif // ACG_SMARTTAGGERT_HH defined
-//=============================================================================
 
