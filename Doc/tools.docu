@@ -6,6 +6,7 @@
 \li \subpage subdivider_docu
 \li \subpage vdpm_docu
 \li \subpage smoother_docu
+\li \subpage smarttagger_docu
 \li Miscellaneous
     OpenMesh::StripifierT
 
