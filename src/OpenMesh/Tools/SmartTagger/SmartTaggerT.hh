@@ -130,7 +130,7 @@ public:
    * @param _eh  Edge handle for the tag
    * @param _tag Tag value
    */
-  inline void         set_tag  ( const EHandle _eh, unsigned int _tag = 1);
+  inline void set_tag  ( const EHandle _eh, unsigned int _tag = 1);
 
   /** \brief get tag value in range [0..tag_range]
    *
@@ -144,7 +144,7 @@ public:
    * @param _eh Edge handle for the tag
    * @return Current tag value at that edge
    */
-  inline bool         is_tagged( const EHandle _eh) const;
+  inline bool is_tagged( const EHandle _eh) const;
 
   /** \brief set new tag range and untag_all
    *
@@ -152,7 +152,7 @@ public:
    *
    * @param _tag_range  New tag range of the tagger
    */
-  inline void         set_tag_range( const unsigned int _tag_range);
+  inline void set_tag_range( const unsigned int _tag_range);
   
 protected:
 
