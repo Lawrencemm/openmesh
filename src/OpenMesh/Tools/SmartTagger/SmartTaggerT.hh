@@ -1,13 +1,13 @@
-/*===========================================================================*\
+/* ========================================================================= *
  *                                                                           *
- *                              OpenFlipper                                  *
+ *                               OpenMesh                                    *
  *           Copyright (c) 2001-2015, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
- *                            www.openflipper.org                            *
+ *                            www.openmesh.org                               *
  *                                                                           *
  *---------------------------------------------------------------------------*
- * This file is part of OpenFlipper.                                         *
+ * This file is part of OpenMesh.                                            *
  *---------------------------------------------------------------------------*
  *                                                                           *
  * Redistribution and use in source and binary forms, with or without        *
@@ -37,19 +37,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
  *                                                                           *
-\*===========================================================================*/
+ * ========================================================================= */
 
-//=============================================================================
-//
-//  CLASS SmartTaggerVT
-//
-//
-//   original Author:  David Bommes <bommes@cs.rwth-aachen.de>
-//   $Revision$
-//   $Author$
-//   $Date$
-//
-//=============================================================================
+/*===========================================================================*\
+ *                                                                           *
+ *   $Revision$                                                         *
+ *   $Date$                   *
+ *                                                                           *
+\*===========================================================================*/
 
 
 #ifndef ACG_SMARTTAGGERT_HH
