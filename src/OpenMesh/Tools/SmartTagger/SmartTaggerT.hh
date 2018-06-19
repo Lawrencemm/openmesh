@@ -80,6 +80,31 @@ template< class Mesh> class SmartTaggerHT;
 //== CLASS DEFINITION =========================================================
 
 
+/** \page smarttagger_docu Smart Tagger
+
+The smart tagger can be used to tag vertices/halfedges/edges/faces on the mesh. It provides
+an O(1) reset function to untag all primitives at once.
+
+Usage:
+
+\code
+SmartTaggerVT< MeshType > tagger(mesh);
+
+// Reset tagged flag on all vertices
+tagger.untag_all();
+
+// Check if something is tagged
+bool tag = tagger.is_tagged(vh);
+
+// Set tagged:
+tagger.set_tag(vh);
+\endcode
+
+For details see OpenMesh::SmartTaggerT
+
+*/
+
+
 /** \brief Smart Tagger
  *
  * A tagger class to be used on OpenMesh. It provides an O(1) reset function for the property.
