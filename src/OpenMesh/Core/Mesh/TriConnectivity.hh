@@ -189,8 +189,9 @@ public:
    * The function will introduce two new faces ( non-boundary case) or
    * one additional face (if edge is boundary)
    *
-   * \note The properties of the new edges will be adjusted to the properties of the original edge
-   * \note The properties of the new faces and halfedges will be undefined
+   * \note The properties of the new edges and faces will be adjusted to the
+   *       properties of the original edge and face
+   * \note The properties of the new halfedges will be undefined
    *
    * @param _eh Edge handle that should be split
    * @param _vh Vertex handle that will be inserted at the edge
@@ -202,8 +203,9 @@ public:
    * The function will introduce two new faces ( non-boundary case) or
    * one additional face (if edge is boundary)
    *
-   * \note The properties of the new edges will be adjusted to the properties of the original edge
-   * \note The properties of the new faces and halfedges will be undefined
+   * \note The properties of the new edges and faces will be adjusted to the
+   *       properties of the original edge and face
+   * \note The properties of the new halfedges will be undefined
    *
    * \note This is an override to prevent a direct call to PolyConnectivity split_edge_copy,
    *       which would introduce a singular vertex with valence 2 which is not allowed
