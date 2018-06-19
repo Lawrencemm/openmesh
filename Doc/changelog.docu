@@ -20,6 +20,10 @@
 <li>PLY Reader: Fixed endless loop on unknown property list type</li>
 </ul>
 
+<b>Tools</b>
+<ul>
+<li>SmartTagger: Added the SmartTagger class to tag primitives (O(1) reset )</li>
+</ul>
 
 </tr>
 
