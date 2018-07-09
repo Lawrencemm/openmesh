@@ -99,7 +99,6 @@ endif() # project OpenMesh
 
 add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
-add_subdirectory (src/OpenMesh/Apps)
 
 set(OPENMESH_BENCHMARK_DIR CACHE PATH "Source path of benchmark (https://github.com/google/benchmark).")
 if (OPENMESH_BENCHMARK_DIR)
@@ -109,7 +108,6 @@ endif()
 
 # Do not build unit tests when build as external library
 if(${PROJECT_NAME} MATCHES "OpenMesh")
-    add_subdirectory (src/Unittests)
 else()
 	# If built as a dependent project simulate effects of
 	# successful finder run:
@@ -126,8 +124,6 @@ else()
 	get_target_property(_OPENMESH_LIBRARY_DIR OpenMeshCore LIBRARY_OUTPUT_DIRECTORY)
 	set (OPENMESH_LIBRARY_DIR "${_OPENMESH_LIBRARY_DIR}" CACHE PATH "The directory where the OpenMesh libraries can be found.")
 endif()
-
-add_subdirectory (Doc)
 
 # ========================================================================
 # Bundle generation (Targets exist, now configure them)
