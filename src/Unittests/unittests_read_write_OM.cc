@@ -464,11 +464,11 @@ TEST_F(OpenMeshReadWriteOM, WriteTriangleEdgeIntProperty) {
     Mesh::EdgeHandle e2 = Mesh::EdgeHandle(1);
     Mesh::EdgeHandle e3 = Mesh::EdgeHandle(2);
 
-    int va1ue1 = 10,
+    int value1 = 10,
         value2 = 21,
         value3 = 32;
 
-    mesh.property(prop,e1) = va1ue1;
+    mesh.property(prop,e1) = value1;
     mesh.property(prop,e2) = value2;
     mesh.property(prop,e3) = value3;
 
@@ -494,9 +494,108 @@ TEST_F(OpenMeshReadWriteOM, WriteTriangleEdgeIntProperty) {
     EXPECT_EQ(Mesh::Point(0.0,1.0,0.0) , cmpMesh.point(v2)) << "Wrong coordinates at vertex 1";
     EXPECT_EQ(Mesh::Point(0.0,0.0,1.0) , cmpMesh.point(v3)) << "Wrong coordinates at vertex 2";
 
-    EXPECT_EQ(va1ue1 , cmpMesh.property(prop,e1)) << "Wrong property at edge 0";
+    EXPECT_EQ(value1 , cmpMesh.property(prop,e1)) << "Wrong property at edge 0";
     EXPECT_EQ(value2 , cmpMesh.property(prop,e2)) << "Wrong property at edge 1";
     EXPECT_EQ(value3 , cmpMesh.property(prop,e3)) << "Wrong property at edge 2";
+
+    // cleanup
+    remove(filename.c_str());
+
+}
+
+/*
+ * Save and load simple mesh with custom property
+ */
+TEST_F(OpenMeshReadWriteOM, WriteSplitTriangleEdgeIntProperty) {
+
+    Mesh mesh;
+
+    const std::string propName = "EIProp";
+    const std::string filename = std::string("triangle-minimal-")+propName+".om";
+
+    // generate data
+    Mesh::VertexHandle v1 = mesh.add_vertex(Mesh::Point(1.0,0.0,0.0));
+    Mesh::VertexHandle v2 = mesh.add_vertex(Mesh::Point(0.0,1.0,0.0));
+    Mesh::VertexHandle v3 = mesh.add_vertex(Mesh::Point(0.0,0.0,1.0));
+    auto fh0 = mesh.add_face(v1,v2,v3);
+    auto c = mesh.calc_face_centroid(fh0);
+    Mesh::VertexHandle v4 = mesh.add_vertex(c);
+    mesh.split(fh0, v4);
+
+
+    OpenMesh::EPropHandleT<int> prop;
+    mesh.add_property(prop,propName);
+    mesh.property(prop).set_persistent(true);
+
+    Mesh::EdgeHandle e1 = Mesh::EdgeHandle(0);
+    Mesh::EdgeHandle e2 = Mesh::EdgeHandle(1);
+    Mesh::EdgeHandle e3 = Mesh::EdgeHandle(2);
+    Mesh::EdgeHandle e4 = Mesh::EdgeHandle(3);
+    Mesh::EdgeHandle e5 = Mesh::EdgeHandle(4);
+    Mesh::EdgeHandle e6 = Mesh::EdgeHandle(5);
+
+    int value1 = 10,
+        value2 = 21,
+        value3 = 32,
+        value4 = 43,
+        value5 = 54,
+        value6 = 65;
+
+    mesh.property(prop,e1) = value1;
+    mesh.property(prop,e2) = value2;
+    mesh.property(prop,e3) = value3;
+    mesh.property(prop,e4) = value4;
+    mesh.property(prop,e5) = value5;
+    mesh.property(prop,e6) = value6;
+
+    // save
+    OpenMesh::IO::Options options;
+    bool ok = OpenMesh::IO::write_mesh(mesh,filename);
+    EXPECT_TRUE(ok) << "Unable to write "<<filename;
+
+    // load
+    Mesh cmpMesh;
+
+    cmpMesh.add_property(prop,propName);
+    cmpMesh.property(prop).set_persistent(true);
+
+    ok = OpenMesh::IO::read_mesh(cmpMesh,filename);
+    EXPECT_TRUE(ok) << "Unable to read "<<filename;
+
+    // compare
+    EXPECT_EQ(4u  , cmpMesh.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(6u , cmpMesh.n_edges())    << "The number of loaded edges is not correct!";
+    EXPECT_EQ(3u , cmpMesh.n_faces())    << "The number of loaded faces is not correct!";
+
+    EXPECT_EQ(Mesh::Point(1.0,0.0,0.0) , cmpMesh.point(v1)) << "Wrong coordinates at vertex 0";
+    EXPECT_EQ(Mesh::Point(0.0,1.0,0.0) , cmpMesh.point(v2)) << "Wrong coordinates at vertex 1";
+    EXPECT_EQ(Mesh::Point(0.0,0.0,1.0) , cmpMesh.point(v3)) << "Wrong coordinates at vertex 2";
+    EXPECT_EQ(c , cmpMesh.point(v4)) << "Wrong coordinates at vertex 3";
+
+    EXPECT_EQ(value1 , cmpMesh.property(prop,e1)) << "Wrong property at edge 0";
+    EXPECT_EQ(value2 , cmpMesh.property(prop,e2)) << "Wrong property at edge 1";
+    EXPECT_EQ(value3 , cmpMesh.property(prop,e3)) << "Wrong property at edge 2";
+    EXPECT_EQ(value4 , cmpMesh.property(prop,e4)) << "Wrong property at edge 3";
+    EXPECT_EQ(value5 , cmpMesh.property(prop,e5)) << "Wrong property at edge 4";
+    EXPECT_EQ(value6 , cmpMesh.property(prop,e6)) << "Wrong property at edge 5";
+    // The above only shows that the edge properties are stored in the same order which is not what we want if the edges are different
+
+    // Check edge properties based on edges defined by from and to vertex
+    for (auto eh : mesh.edges())
+    {
+      auto heh = mesh.halfedge_handle(eh, 0);
+      auto from_vh = mesh.from_vertex_handle(heh);
+      auto to_vh = mesh.to_vertex_handle(heh);
+
+      // find corresponding halfedge in loaded mesh
+      auto cmpHeh = cmpMesh.find_halfedge(from_vh, to_vh);
+      auto cmpEh = cmpMesh.edge_handle(cmpHeh);
+
+      EXPECT_EQ(mesh.property(prop, eh), cmpMesh.property(prop, cmpEh)) << "Wrong property at input edge " << eh.idx()
+                                                                        << " corresponding to edge " << cmpEh.idx() << " in the loaded Mesh";
+    }
+
+
 
     // cleanup
     remove(filename.c_str());
