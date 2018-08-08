@@ -86,7 +86,7 @@ _OMWriter_& OMWriter() { return __OMWriterInstance; }
 
 
 const OMFormat::uchar _OMWriter_::magic_[3] = "OM";
-const OMFormat::uint8 _OMWriter_::version_  = OMFormat::mk_version(1,2);
+const OMFormat::uint8 _OMWriter_::version_  = OMFormat::mk_version(2,0);
 
 
 _OMWriter_::
