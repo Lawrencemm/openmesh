@@ -345,9 +345,13 @@ public:
   bool has_vertex_normals()   const { return mesh_.has_vertex_normals();   }
   bool has_vertex_colors()    const { return mesh_.has_vertex_colors();    }
   bool has_vertex_texcoords() const { return mesh_.has_vertex_texcoords2D(); }
+  bool has_vertex_status()    const { return mesh_.has_vertex_status();    }
   bool has_edge_colors()      const { return mesh_.has_edge_colors();      }
+  bool has_edge_status()      const { return mesh_.has_edge_status();      }
+  bool has_halfedge_status()  const { return mesh_.has_halfedge_status();  }
   bool has_face_normals()     const { return mesh_.has_face_normals();     }
   bool has_face_colors()      const { return mesh_.has_face_colors();      }
+  bool has_face_status()      const { return mesh_.has_face_status();      }
 
 private:
 

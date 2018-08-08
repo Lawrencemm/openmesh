@@ -417,6 +417,58 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 #endif
   }
 
+  // ---------- write vertex status
+  if (_be.n_vertices() && _be.has_vertex_status() && _opt.check(Options::Status))
+  {
+    //store status as costum property because that already works
+    auto prop = _be.kernel()->_get_vprop("v:status");
+    assert(prop != nullptr);
+    bool persistent = prop->persistent();
+    const_cast<BaseProperty*>(prop)->set_persistent(true);
+    bytes += store_binary_custom_chunk(_os, *prop,
+               OMFormat::Chunk::Entity_Vertex, swap );
+    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+  }
+
+  // ---------- write edge status
+  if (_be.n_edges() && _be.has_edge_status() && _opt.check(Options::Status))
+  {
+    //store status as costum property because that already works
+    auto prop = _be.kernel()->_get_eprop("e:status");
+    assert(prop != nullptr);
+    bool persistent = prop->persistent();
+    const_cast<BaseProperty*>(prop)->set_persistent(true);
+    bytes += store_binary_custom_chunk(_os, *prop,
+               OMFormat::Chunk::Entity_Edge, swap );
+    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+  }
+
+  // ---------- write halfedge status
+  if (_be.n_edges() && _be.has_halfedge_status() && _opt.check(Options::Status))
+  {
+    //store status as costum property because that already works
+    auto prop = _be.kernel()->_get_hprop("h:status");
+    assert(prop != nullptr);
+    bool persistent = prop->persistent();
+    const_cast<BaseProperty*>(prop)->set_persistent(true);
+    bytes += store_binary_custom_chunk(_os, *prop,
+               OMFormat::Chunk::Entity_Halfedge, swap );
+    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+  }
+
+  // ---------- write face status
+  if (_be.n_faces() && _be.has_face_status() && _opt.check(Options::Status))
+  {
+    //store status as costum property because that already works
+    auto prop = _be.kernel()->_get_fprop("f:status");
+    assert(prop != nullptr);
+    bool persistent = prop->persistent();
+    const_cast<BaseProperty*>(prop)->set_persistent(true);
+    bytes += store_binary_custom_chunk(_os, *prop,
+               OMFormat::Chunk::Entity_Face, swap );
+    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+  }
+
   // -------------------- write custom properties
 
 
@@ -426,7 +478,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->vprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "v:status")) continue;
+    if ( (*prop)->name()[1]==':') continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Vertex, swap );
   }
@@ -434,7 +486,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->fprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "f:status")) continue;
+    if ( (*prop)->name()[1]==':') continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Face, swap );
   }
@@ -442,7 +494,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->eprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "e:status")) continue;
+    if ( (*prop)->name()[1]==':') continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Edge, swap );
   }
@@ -450,7 +502,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->hprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "h:status")) continue;
+    if ( (*prop)->name()[1]==':') continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Halfedge, swap );
   }

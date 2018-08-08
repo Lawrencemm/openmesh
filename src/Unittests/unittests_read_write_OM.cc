@@ -723,8 +723,8 @@ TEST_F(OpenMeshReadWriteOM, WriteSplitTriangleStatusProperties) {
     }
 
     // save
-    OpenMesh::IO::Options options;
-    bool ok = OpenMesh::IO::write_mesh(mesh,filename);
+    OpenMesh::IO::Options options = OpenMesh::IO::Options::Status;
+    bool ok = OpenMesh::IO::write_mesh(mesh,filename, options);
     EXPECT_TRUE(ok) << "Unable to write "<<filename;
 
     // load

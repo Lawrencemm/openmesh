@@ -158,10 +158,14 @@ public:
   virtual bool is_triangle_mesh()     const { return false; }
   virtual bool has_vertex_normals()   const { return false; }
   virtual bool has_vertex_colors()    const { return false; }
+  virtual bool has_vertex_status()    const { return false; }
   virtual bool has_vertex_texcoords() const { return false; }
   virtual bool has_edge_colors()      const { return false; }
+  virtual bool has_edge_status()      const { return false; }
+  virtual bool has_halfedge_status()  const { return false; }
   virtual bool has_face_normals()     const { return false; }
   virtual bool has_face_colors()      const { return false; }
+  virtual bool has_face_status()      const { return false; }
 };
 
 
