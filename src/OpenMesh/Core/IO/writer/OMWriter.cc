@@ -184,7 +184,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   bool swap = _opt.check(Options::Swap) || (Endian::local() == Endian::MSB);
 
-  unsigned int i, nV, nF;
+  unsigned int i, nV, nE, nF;
   Vec3f v;
   Vec2f t;
   std::vector<VertexHandle> vhandles;
@@ -286,6 +286,49 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   }
 
+  // ---------- wirte halfedge data
+  if (_be.n_edges())
+  {
+    chunk_header.reserved_ = 0;
+    chunk_header.name_     = false;
+    chunk_header.entity_   = OMFormat::Chunk::Entity_Halfedge;
+    chunk_header.type_     = OMFormat::Chunk::Type_Topology;
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_3D;
+    chunk_header.bits_     = OMFormat::needed_bits(std::max(_be.n_edges()*2, std::max(_be.n_vertices(), _be.n_faces())));
+
+    bytes += store( _os, chunk_header, swap );
+    for (i=0, nE=header.n_edges_*2; i<nE; ++i)
+    {
+      auto next_id      = _be.get_next_halfedge_id(HalfedgeHandle(static_cast<int>(i)));
+      auto to_vertex_id = _be.get_to_vertex_id(HalfedgeHandle(static_cast<int>(i)));
+      auto face_id      = _be.get_face_id(HalfedgeHandle(static_cast<int>(i)));
+
+      bytes += store( _os, next_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, to_vertex_id, OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, face_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+    }
+  }
+
+  // ---------- write vertex topology (outgoing halfedge)
+  if (_be.n_vertices())
+  {
+    chunk_header.reserved_ = 0;
+    chunk_header.name_     = false;
+    chunk_header.entity_   = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_     = OMFormat::Chunk::Type_Topology;
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*2);
+
+    bytes += store( _os, chunk_header, swap );
+    for (i=0, nV=header.n_vertices_; i<nV; ++i)
+      bytes += store( _os, _be.get_halfedge_id(VertexHandle(i)), OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+  }
+
+
   // -------------------- write face data
 
   // ---------- write topology
@@ -293,27 +336,18 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.name_     = false;
     chunk_header.entity_   = OMFormat::Chunk::Entity_Face;
     chunk_header.type_     = OMFormat::Chunk::Type_Topology;
-    chunk_header.signed_   = 0;
-    chunk_header.float_    = 0;
-    chunk_header.dim_      = OMFormat::Chunk::Dim_1D; // ignored
-    chunk_header.bits_     = OMFormat::needed_bits(_be.n_vertices());
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*2);
 
     bytes += store( _os, chunk_header, swap );
 
     for (i=0, nF=header.n_faces_; i<nF; ++i)
     {
       //nV = _be.get_vhandles(FaceHandle(i), vhandles);
-      _be.get_vhandles(FaceHandle(i), vhandles);
-      if ( header.mesh_ == 'P' )
-        bytes += store( _os, vhandles.size(), OMFormat::Chunk::Integer_16, swap );
-
-      for (size_t j=0; j < vhandles.size(); ++j)
-      {
-        using namespace OMFormat;
-        using namespace GenProg;
-
-        bytes += store( _os, vhandles[j].idx(), Chunk::Integer_Size(chunk_header.bits_), swap );
-      }
+      auto size = OMFormat::Chunk::Integer_Size(chunk_header.bits_);
+      bytes += store( _os, _be.get_halfedge_id(FaceHandle(i)), size, swap);
     }
   }
 
