@@ -603,6 +603,193 @@ TEST_F(OpenMeshReadWriteOM, WriteSplitTriangleEdgeIntProperty) {
 }
 
 /*
+ * Save and load simple mesh with status property
+ */
+TEST_F(OpenMeshReadWriteOM, WriteSplitTriangleStatusProperties) {
+
+    Mesh mesh;
+
+    mesh.request_vertex_status();
+    mesh.request_edge_status();
+    mesh.request_halfedge_status();
+    mesh.request_face_status();
+
+    const std::string filename = std::string("triangle-minimal-status.om");
+
+    // generate data
+    Mesh::VertexHandle v0 = mesh.add_vertex(Mesh::Point(1.0,0.0,0.0));
+    Mesh::VertexHandle v1 = mesh.add_vertex(Mesh::Point(0.0,1.0,0.0));
+    Mesh::VertexHandle v2 = mesh.add_vertex(Mesh::Point(0.0,0.0,1.0));
+    auto fh0 = mesh.add_face(v0,v1,v2);
+    auto c = mesh.calc_face_centroid(fh0);
+    Mesh::VertexHandle v3 = mesh.add_vertex(c);
+    mesh.split(fh0, v3);
+
+    mesh.delete_vertex(v0);
+    mesh.status(v1).set_selected(true);
+    mesh.status(v2).set_feature(true);
+    mesh.status(v3).set_tagged(true);
+    mesh.status(v2).set_tagged2(true);
+
+    std::vector<bool> vertex_deleted;
+    std::vector<bool> vertex_selected;
+    std::vector<bool> vertex_feature;
+    std::vector<bool> vertex_tagged;
+    std::vector<bool> vertex_tagged2;
+
+    for (auto vh : mesh.all_vertices())
+    {
+      vertex_deleted.push_back(mesh.status(vh).deleted());
+      vertex_selected.push_back(mesh.status(vh).selected());
+      vertex_feature.push_back(mesh.status(vh).feature());
+      vertex_tagged.push_back(mesh.status(vh).tagged());
+      vertex_tagged2.push_back(mesh.status(vh).tagged2());
+    }
+
+    Mesh::EdgeHandle e1 = Mesh::EdgeHandle(0);
+    Mesh::EdgeHandle e2 = Mesh::EdgeHandle(1);
+    Mesh::EdgeHandle e3 = Mesh::EdgeHandle(2);
+    Mesh::EdgeHandle e4 = Mesh::EdgeHandle(3);
+
+    mesh.status(e1).set_selected(true);
+    mesh.status(e2).set_feature(true);
+    mesh.status(e3).set_tagged(true);
+    mesh.status(e4).set_tagged2(true);
+
+    std::vector<bool> edge_deleted;
+    std::vector<bool> edge_selected;
+    std::vector<bool> edge_feature;
+    std::vector<bool> edge_tagged;
+    std::vector<bool> edge_tagged2;
+
+    for (auto eh : mesh.all_edges())
+    {
+      edge_deleted.push_back(mesh.status(eh).deleted());
+      edge_selected.push_back(mesh.status(eh).selected());
+      edge_feature.push_back(mesh.status(eh).feature());
+      edge_tagged.push_back(mesh.status(eh).tagged());
+      edge_tagged2.push_back(mesh.status(eh).tagged2());
+    }
+
+
+    Mesh::HalfedgeHandle he1 = Mesh::HalfedgeHandle(0);
+    Mesh::HalfedgeHandle he2 = Mesh::HalfedgeHandle(3);
+    Mesh::HalfedgeHandle he3 = Mesh::HalfedgeHandle(5);
+    Mesh::HalfedgeHandle he4 = Mesh::HalfedgeHandle(1);
+
+    mesh.status(he1).set_selected(true);
+    mesh.status(he2).set_feature(true);
+    mesh.status(he3).set_tagged(true);
+    mesh.status(he4).set_tagged2(true);
+
+    std::vector<bool> halfedge_deleted;
+    std::vector<bool> halfedge_selected;
+    std::vector<bool> halfedge_feature;
+    std::vector<bool> halfedge_tagged;
+    std::vector<bool> halfedge_tagged2;
+
+    for (auto heh : mesh.all_halfedges())
+    {
+      halfedge_deleted.push_back(mesh.status(heh).deleted());
+      halfedge_selected.push_back(mesh.status(heh).selected());
+      halfedge_feature.push_back(mesh.status(heh).feature());
+      halfedge_tagged.push_back(mesh.status(heh).tagged());
+      halfedge_tagged2.push_back(mesh.status(heh).tagged2());
+    }
+
+    Mesh::FaceHandle f1 = Mesh::FaceHandle(0);
+    Mesh::FaceHandle f2 = Mesh::FaceHandle(2);
+    Mesh::FaceHandle f3 = Mesh::FaceHandle(1);
+    Mesh::FaceHandle f4 = Mesh::FaceHandle(2);
+
+    mesh.status(f1).set_selected(true);
+    mesh.status(f2).set_feature(true);
+    mesh.status(f3).set_tagged(true);
+    mesh.status(f4).set_tagged2(true);
+
+    std::vector<bool> face_deleted;
+    std::vector<bool> face_selected;
+    std::vector<bool> face_feature;
+    std::vector<bool> face_tagged;
+    std::vector<bool> face_tagged2;
+
+    for (auto fh : mesh.all_faces())
+    {
+      face_deleted.push_back(mesh.status(fh).deleted());
+      face_selected.push_back(mesh.status(fh).selected());
+      face_feature.push_back(mesh.status(fh).feature());
+      face_tagged.push_back(mesh.status(fh).tagged());
+      face_tagged2.push_back(mesh.status(fh).tagged2());
+    }
+
+    // save
+    OpenMesh::IO::Options options;
+    bool ok = OpenMesh::IO::write_mesh(mesh,filename);
+    EXPECT_TRUE(ok) << "Unable to write "<<filename;
+
+    // load
+    Mesh cmpMesh;
+
+    cmpMesh.request_vertex_status();
+    cmpMesh.request_edge_status();
+    cmpMesh.request_halfedge_status();
+    cmpMesh.request_face_status();
+
+    ok = OpenMesh::IO::read_mesh(cmpMesh,filename);
+    EXPECT_TRUE(ok) << "Unable to read "<<filename;
+
+    // compare
+    EXPECT_EQ(4u , cmpMesh.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(6u , cmpMesh.n_edges())    << "The number of loaded edges is not correct!";
+    EXPECT_EQ(3u , cmpMesh.n_faces())    << "The number of loaded faces is not correct!";
+
+    EXPECT_EQ(Mesh::Point(1.0,0.0,0.0) , cmpMesh.point(v0)) << "Wrong coordinates at vertex 0";
+    EXPECT_EQ(Mesh::Point(0.0,1.0,0.0) , cmpMesh.point(v1)) << "Wrong coordinates at vertex 1";
+    EXPECT_EQ(Mesh::Point(0.0,0.0,1.0) , cmpMesh.point(v2)) << "Wrong coordinates at vertex 2";
+    EXPECT_EQ(c , cmpMesh.point(v3)) << "Wrong coordinates at vertex 3";
+
+    for (auto vh : cmpMesh.all_vertices())
+    {
+      EXPECT_EQ(cmpMesh.status(vh).deleted(),  vertex_deleted [vh.idx()]) << "Wrong deleted status at vertex " << vh.idx();
+      EXPECT_EQ(cmpMesh.status(vh).selected(), vertex_selected[vh.idx()]) << "Wrong selected status at vertex " << vh.idx();
+      EXPECT_EQ(cmpMesh.status(vh).feature(),  vertex_feature [vh.idx()]) << "Wrong feature status at vertex " << vh.idx();
+      EXPECT_EQ(cmpMesh.status(vh).tagged(),   vertex_tagged  [vh.idx()]) << "Wrong tagged status at vertex " << vh.idx();
+      EXPECT_EQ(cmpMesh.status(vh).tagged2(),  vertex_tagged2 [vh.idx()]) << "Wrong tagged2 status at vertex " << vh.idx();
+    }
+
+    for (auto eh : cmpMesh.all_edges())
+    {
+      EXPECT_EQ(cmpMesh.status(eh).deleted(),  edge_deleted [eh.idx()]) << "Wrong deleted status at edge " << eh.idx();
+      EXPECT_EQ(cmpMesh.status(eh).selected(), edge_selected[eh.idx()]) << "Wrong selected status at edge " << eh.idx();
+      EXPECT_EQ(cmpMesh.status(eh).feature(),  edge_feature [eh.idx()]) << "Wrong feature status at edge " << eh.idx();
+      EXPECT_EQ(cmpMesh.status(eh).tagged(),   edge_tagged  [eh.idx()]) << "Wrong tagged status at edge " << eh.idx();
+      EXPECT_EQ(cmpMesh.status(eh).tagged2(),  edge_tagged2 [eh.idx()]) << "Wrong tagged2 status at edge " << eh.idx();
+    }
+
+    for (auto heh : cmpMesh.all_halfedges())
+    {
+      EXPECT_EQ(cmpMesh.status(heh).deleted(),  halfedge_deleted [heh.idx()]) << "Wrong deleted status at halfedge " << heh.idx();
+      EXPECT_EQ(cmpMesh.status(heh).selected(), halfedge_selected[heh.idx()]) << "Wrong selected status at halfedge " << heh.idx();
+      EXPECT_EQ(cmpMesh.status(heh).feature(),  halfedge_feature [heh.idx()]) << "Wrong feature status at halfedge " << heh.idx();
+      EXPECT_EQ(cmpMesh.status(heh).tagged(),   halfedge_tagged  [heh.idx()]) << "Wrong tagged status at halfedge " << heh.idx();
+      EXPECT_EQ(cmpMesh.status(heh).tagged2(),  halfedge_tagged2 [heh.idx()]) << "Wrong tagged2 status at halfedge " << heh.idx();
+    }
+
+    for (auto fh : cmpMesh.all_faces())
+    {
+      EXPECT_EQ(cmpMesh.status(fh).deleted(),  face_deleted [fh.idx()]) << "Wrong deleted status at face " << fh.idx();
+      EXPECT_EQ(cmpMesh.status(fh).selected(), face_selected[fh.idx()]) << "Wrong selected status at face " << fh.idx();
+      EXPECT_EQ(cmpMesh.status(fh).feature(),  face_feature [fh.idx()]) << "Wrong feature status at face " << fh.idx();
+      EXPECT_EQ(cmpMesh.status(fh).tagged(),   face_tagged  [fh.idx()]) << "Wrong tagged status at face " << fh.idx();
+      EXPECT_EQ(cmpMesh.status(fh).tagged2(),  face_tagged2 [fh.idx()]) << "Wrong tagged2 status at face " << fh.idx();
+    }
+
+
+    // cleanup
+    remove(filename.c_str());
+}
+
+/*
  * Save and load simple mesh with custom property
  */
 TEST_F(OpenMeshReadWriteOM, WriteTriangleFaceDoubleProperty) {
