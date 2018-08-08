@@ -426,7 +426,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->vprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( (*prop)->name()[1]==':') continue;
+    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "v:status")) continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Vertex, swap );
   }
@@ -434,7 +434,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->fprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( (*prop)->name()[1]==':') continue;
+    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "f:status")) continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Face, swap );
   }
@@ -442,7 +442,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->eprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( (*prop)->name()[1]==':') continue;
+    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "e:status")) continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Edge, swap );
   }
@@ -450,7 +450,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
        prop != _be.kernel()->hprops_end(); ++prop)
   {
     if ( !*prop ) continue;
-    if ( (*prop)->name()[1]==':') continue;
+    if ( ((*prop)->name()[1]==':') && ((*prop)->name() != "h:status")) continue;
     bytes += store_binary_custom_chunk(_os, **prop,
 				       OMFormat::Chunk::Entity_Halfedge, swap );
   }
