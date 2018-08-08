@@ -425,7 +425,7 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
       }
       else
       {
-        // add faces by simple setting an incident face
+        // add faces by simply setting an incident halfedge
         for (; fidx < header_.n_faces_; ++fidx)
         {
           int halfedge_id;
