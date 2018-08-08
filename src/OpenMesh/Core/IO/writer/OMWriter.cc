@@ -184,11 +184,9 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   bool swap = _opt.check(Options::Swap) || (Endian::local() == Endian::MSB);
 
-  unsigned int i, nV, nE, nF;
+  unsigned int i, nV, nF;
   Vec3f v;
   Vec2f t;
-  std::vector<VertexHandle> vhandles;
-
 
   // -------------------- write header
   OMFormat::Header header;
@@ -299,7 +297,8 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.bits_     = OMFormat::needed_bits(std::max(_be.n_edges()*2, std::max(_be.n_vertices(), _be.n_faces())));
 
     bytes += store( _os, chunk_header, swap );
-    for (i=0, nE=header.n_edges_*2; i<nE; ++i)
+    auto nE=header.n_edges_*2;
+    for (i=0; i<nE; ++i)
     {
       auto next_id      = _be.get_next_halfedge_id(HalfedgeHandle(static_cast<int>(i)));
       auto to_vertex_id = _be.get_to_vertex_id(HalfedgeHandle(static_cast<int>(i)));
@@ -345,7 +344,6 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
     for (i=0, nF=header.n_faces_; i<nF; ++i)
     {
-      //nV = _be.get_vhandles(FaceHandle(i), vhandles);
       auto size = OMFormat::Chunk::Integer_Size(chunk_header.bits_);
       bytes += store( _os, _be.get_halfedge_id(FaceHandle(i)), size, swap);
     }
