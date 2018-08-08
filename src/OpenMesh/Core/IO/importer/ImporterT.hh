@@ -107,6 +107,11 @@ public:
     return mesh_.new_vertex();
   }
 
+  virtual HalfedgeHandle add_edge(VertexHandle _vh0, VertexHandle _vh1) override
+  {
+    return mesh_.new_edge(_vh0, _vh1);
+  }
+
   virtual FaceHandle add_face(const VHandles& _indices)
   {
     FaceHandle fh;
@@ -192,11 +197,23 @@ public:
     return fh;
   }
 
+  virtual FaceHandle add_face(HalfedgeHandle _heh) override
+  {
+    auto fh = mesh_.new_face();
+    mesh_.set_halfedge_handle(fh, _heh);
+    return fh;
+  }
+
   // vertex attributes
 
   virtual void set_point(VertexHandle _vh, const Vec3f& _point)
   {
     mesh_.set_point(_vh,vector_cast<Point>(_point));
+  }
+
+  virtual void set_halfedge(VertexHandle _vh, HalfedgeHandle _heh) override
+  {
+    mesh_.set_halfedge_handle(_vh, _heh);
   }
 
   virtual void set_normal(VertexHandle _vh, const Vec3f& _normal)
@@ -239,6 +256,17 @@ public:
     if (mesh_.has_vertex_texcoords2D())
       mesh_.set_texcoord2D(_vh, vector_cast<TexCoord2D>(_texcoord));
   }
+
+  virtual void set_next(HalfedgeHandle _heh, HalfedgeHandle _next) override
+  {
+    mesh_.set_next_halfedge_handle(_heh, _next);
+  }
+
+  virtual void set_face(HalfedgeHandle _heh, FaceHandle _fh) override
+  {
+    mesh_.set_face_handle(_heh, _fh);
+  }
+
 
   virtual void set_texcoord(HalfedgeHandle _heh, const Vec2f& _texcoord)
   {

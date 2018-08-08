@@ -99,9 +99,15 @@ public:
   // add a vertex without coordinate. Use set_point to set the position deferred
   virtual VertexHandle add_vertex() = 0;
 
+  // add an edge. Use set_next, set_vertex and set_face to set corresponding entities for halfedges
+  virtual HalfedgeHandle add_edge(VertexHandle _vh0, VertexHandle _vh1) = 0;
+
   // add a face with indices _indices refering to vertices
   typedef std::vector<VertexHandle> VHandles;
   virtual FaceHandle add_face(const VHandles& _indices) = 0;
+
+  // add a face with incident halfedge
+  virtual FaceHandle add_face(HalfedgeHandle _heh) = 0;
 
   // add texture coordinates per face, _vh references the first texcoord
   virtual void add_face_texcoords( FaceHandle _fh, VertexHandle _vh, const std::vector<Vec2f>& _face_texcoords) = 0;
@@ -114,6 +120,9 @@ public:
 
   // Set coordinate of the given vertex. Use this function, if you created a vertex without coordinate
   virtual void set_point(VertexHandle _vh, const Vec3f& _point) = 0;
+
+  // Set outgoing halfedge for the given vertex.
+  virtual void set_halfedge(VertexHandle _vh, HalfedgeHandle _heh) = 0;
 
   // set vertex normal
   virtual void set_normal(VertexHandle _vh, const Vec3f& _normal) = 0;
@@ -132,6 +141,12 @@ public:
 
   // set vertex texture coordinate
   virtual void set_texcoord(VertexHandle _vh, const Vec2f& _texcoord) = 0;
+
+  // set next halfedge handle
+  virtual void set_next(HalfedgeHandle _heh, HalfedgeHandle _next) = 0;
+
+  // set incident face handle for given halfedge
+  virtual void set_face(HalfedgeHandle _heh, FaceHandle _fh) = 0;
 
   // set vertex texture coordinate
   virtual void set_texcoord(HalfedgeHandle _heh, const Vec2f& _texcoord) = 0;
