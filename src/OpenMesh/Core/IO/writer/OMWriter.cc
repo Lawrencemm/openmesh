@@ -294,7 +294,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.signed_   = true;
     chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
     chunk_header.dim_      = OMFormat::Chunk::Dim_3D;
-    chunk_header.bits_     = OMFormat::needed_bits(std::max(_be.n_edges()*2, std::max(_be.n_vertices(), _be.n_faces())));
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
     bytes += store( _os, chunk_header, swap );
     auto nE=header.n_edges_*2;
@@ -320,7 +320,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.signed_   = true;
     chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
     chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
-    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*2);
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
     bytes += store( _os, chunk_header, swap );
     for (i=0, nV=header.n_vertices_; i<nV; ++i)
@@ -338,7 +338,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.signed_   = true;
     chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
     chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
-    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*2);
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
     bytes += store( _os, chunk_header, swap );
 
