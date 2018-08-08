@@ -230,6 +230,31 @@ public:
     return count;
   }
 
+  int get_halfedge_id(VertexHandle _vh) override
+  {
+    return mesh_.halfedge_handle(_vh).idx();
+  }
+
+  int get_halfedge_id(FaceHandle _fh) override
+  {
+    return mesh_.halfedge_handle(_fh).idx();
+  }
+
+  int get_next_halfedge_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.next_halfedge_handle(_heh).idx();
+  }
+
+  int get_to_vertex_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.to_vertex_handle(_heh).idx();
+  }
+
+  int get_face_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.face_handle(_heh).idx();
+  }
+
   unsigned int get_face_texcoords(std::vector<Vec2f>& _hehandles) const
   {
     unsigned int count(0);

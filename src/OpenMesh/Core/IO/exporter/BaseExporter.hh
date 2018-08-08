@@ -110,6 +110,14 @@ public:
   virtual unsigned int
   get_vhandles(FaceHandle _fh,
 	       std::vector<VertexHandle>& _vhandles) const=0;
+
+  // information needed for a halfedge based data structure such as OpenMesh
+  virtual int get_halfedge_id(VertexHandle _vh) = 0;
+  virtual int get_halfedge_id(FaceHandle _vh) = 0;
+  virtual int get_next_halfedge_id(HalfedgeHandle _heh) = 0;
+  virtual int get_to_vertex_id(HalfedgeHandle _heh) = 0;
+  virtual int get_face_id(HalfedgeHandle _heh) = 0;
+
   ///
   /// \brief getHeh returns the HalfEdgeHandle that belongs to the face
   ///  specified by _fh and has a toVertexHandle that corresponds to _vh.
