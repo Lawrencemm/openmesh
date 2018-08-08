@@ -351,6 +351,19 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
 
       break;
 
+    case Chunk::Type_Topology:
+    {
+      for (; vidx < header_.n_vertices_; ++vidx)
+      {
+        int halfedge_id;
+        bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        _bi.set_halfedge(VertexHandle(static_cast<int>(vidx)), HalfedgeHandle(halfedge_id));
+      }
+    }
+
+      break;
+
     default: // skip unknown chunks
     {
       omerr() << "Unknown chunk type ignored!\n";
@@ -378,32 +391,48 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
   OpenMesh::Vec3uc v3uc; // rgb
 
   switch (chunk_header_.type_) {
-    case Chunk::Type_Topology: {
-      BaseImporter::VHandles vhandles;
-      size_t nV = 0;
-      size_t vidx = 0;
+    case Chunk::Type_Topology:
+    {
+      if (header_.version_ < OMFormat::mk_version(2,0))
+      {
+        // add faces based on vertex indices
+        BaseImporter::VHandles vhandles;
+        size_t nV = 0;
+        size_t vidx = 0;
 
-      switch (header_.mesh_) {
-        case 'T':
-          nV = 3;
-          break;
-        case 'Q':
-          nV = 4;
-          break;
-      }
-
-      for (; fidx < header_.n_faces_; ++fidx) {
-        if (header_.mesh_ == 'P')
-          bytes_ += restore(_is, nV, Chunk::Integer_16, _swap);
-
-        vhandles.clear();
-        for (size_t j = 0; j < nV; ++j) {
-          bytes_ += restore(_is, vidx, Chunk::Integer_Size(chunk_header_.bits_), _swap);
-
-          vhandles.push_back(VertexHandle(int(vidx)));
+        switch (header_.mesh_) {
+          case 'T':
+            nV = 3;
+            break;
+          case 'Q':
+            nV = 4;
+            break;
         }
 
-        _bi.add_face(vhandles);
+        for (; fidx < header_.n_faces_; ++fidx) {
+          if (header_.mesh_ == 'P')
+            bytes_ += restore(_is, nV, Chunk::Integer_16, _swap);
+
+          vhandles.clear();
+          for (size_t j = 0; j < nV; ++j) {
+            bytes_ += restore(_is, vidx, Chunk::Integer_Size(chunk_header_.bits_), _swap);
+
+            vhandles.push_back(VertexHandle(int(vidx)));
+          }
+
+          _bi.add_face(vhandles);
+        }
+      }
+      else
+      {
+        // add faces by simple setting an incident face
+        for (; fidx < header_.n_faces_; ++fidx)
+        {
+          int halfedge_id;
+          bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+          _bi.add_face(HalfedgeHandle(halfedge_id));
+        }
       }
     }
       break;
@@ -493,6 +522,41 @@ bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_hprop(property_name_), 2 * header_.n_edges_, _swap);
+      break;
+
+    case Chunk::Type_Topology:
+    {
+      std::vector<HalfedgeHandle> next_halfedges;
+      for (size_t e_idx = 0; e_idx < header_.n_edges_; ++e_idx)
+      {
+        int next_id_0;
+        int to_vertex_id_0;
+        int face_id_0;
+        bytes_ += restore( _is, next_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, to_vertex_id_0, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, face_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        int next_id_1;
+        int to_vertex_id_1;
+        int face_id_1;
+        bytes_ += restore( _is, next_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, to_vertex_id_1, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, face_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        auto heh0 = _bi.add_edge(VertexHandle(to_vertex_id_1), VertexHandle(to_vertex_id_0));
+        auto heh1 = HalfedgeHandle(heh0.idx() + 1);
+
+        next_halfedges.push_back(HalfedgeHandle(next_id_0));
+        next_halfedges.push_back(HalfedgeHandle(next_id_1));
+
+        _bi.set_face(heh0, FaceHandle(face_id_0));
+        _bi.set_face(heh1, FaceHandle(face_id_1));
+      }
+
+      for (size_t i = 0; i < next_halfedges.size(); ++i)
+        _bi.set_next(HalfedgeHandle(static_cast<int>(i)), next_halfedges[i]);
+    }
+
       break;
 
     default:
