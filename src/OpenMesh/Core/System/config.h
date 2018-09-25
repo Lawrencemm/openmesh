@@ -83,17 +83,17 @@
 #endif
 
 #if defined(_MSC_VER)
-#  define DEPRECATED(msg) __declspec(deprecated(msg))
+#  define OM_DEPRECATED(msg) __declspec(deprecated(msg))
 #elif defined(__GNUC__)
 #  if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) >= 40500 /* Test for GCC >= 4.5.0 */
-#    define DEPRECATED(msg) __attribute__ ((deprecated(msg)))
+#    define OM_DEPRECATED(msg) __attribute__ ((deprecated(msg)))
 #  else
-#    define DEPRECATED(msg) __attribute__ ((deprecated))
+#    define OM_DEPRECATED(msg) __attribute__ ((deprecated))
 #  endif
 #elif defined(__clang__)
-#  define DEPRECATED(msg) __attribute__ ((deprecated(msg)))
+#  define OM_DEPRECATED(msg) __attribute__ ((deprecated(msg)))
 #else
-#  define DEPRECATED(msg)
+#  define OM_DEPRECATED(msg)
 #endif
 
 typedef unsigned int uint;

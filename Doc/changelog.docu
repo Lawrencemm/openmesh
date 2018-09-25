@@ -25,6 +25,12 @@
 <li>SmartTagger: Added the SmartTagger class to tag primitives (O(1) reset )</li>
 </ul>
 
+<b>Build System</b>
+<ul>
+<li>Rename the DEPRECATED macro into OM_DEPRECATED to prevent a macro clash with Intel MKL (Thanks to Morgan Leborgne for the patch)</li>
+</ul>
+
+
 </tr>
 
 
