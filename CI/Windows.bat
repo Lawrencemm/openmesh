@@ -98,6 +98,7 @@ IF "%APPS%" == "ON" (
 ECHO "============================================================="
 ECHO "============================================================="
 ECHO "Building with :"
+whoami
 ECHO "ARCHITECTURE        : %ARCHITECTURE%"
 ECHO "BUILD_PLATFORM      : %BUILD_PLATFORM%"
 ECHO "GTESTVERSION        : %GTESTVERSION%"
