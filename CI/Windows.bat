@@ -44,7 +44,7 @@ IF "%BUILD_PLATFORM%" == "VS2013" (
 
     IF "%ARCHITECTURE%" == "x32" (
       set QT_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013
-      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013_64
+      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013
     )
 ) 
 
