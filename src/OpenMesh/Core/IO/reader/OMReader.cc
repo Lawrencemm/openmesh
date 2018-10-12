@@ -511,7 +511,7 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Options &/*_opt */, bool _swap) const
+bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Options &_opt, bool _swap) const
 {
   using OMFormat::Chunk;
 
@@ -519,12 +519,29 @@ bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Op
 
   size_t b = bytes_;
 
+  size_t eidx = 0;
+  OpenMesh::Attributes::StatusInfo status;
+
   switch (chunk_header_.type_) {
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_eprop(property_name_), header_.n_edges_, _swap);
 
       break;
+
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; eidx < header_.n_edges_ && !_is.eof(); ++eidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.edge_has_status() && _opt.edge_has_status())
+          _bi.set_status(EdgeHandle(int(eidx)), status);
+      }
+      break;
+    }
 
     default:
       // skip unknown type
@@ -539,13 +556,15 @@ bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Op
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi, Options &/* _opt */, bool _swap) const
+bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi, Options & _opt, bool _swap) const
 {
   using OMFormat::Chunk;
 
   assert( chunk_header_.entity_ == Chunk::Entity_Halfedge);
 
   size_t b = bytes_;
+  size_t hidx = 0;
+  OpenMesh::Attributes::StatusInfo status;
 
   switch (chunk_header_.type_) {
     case Chunk::Type_Custom:
@@ -587,6 +606,20 @@ bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi
     }
 
       break;
+
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; hidx < header_.n_edges_ * 2 && !_is.eof(); ++hidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.halfedge_has_status() && _opt.halfedge_has_status())
+          _bi.set_status(HalfedgeHandle(int(hidx)), status);
+      }
+      break;
+    }
 
     default:
       // skip unknown chunk
