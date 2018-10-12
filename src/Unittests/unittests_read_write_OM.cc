@@ -735,7 +735,7 @@ TEST_F(OpenMeshReadWriteOM, WriteSplitTriangleStatusProperties) {
     cmpMesh.request_halfedge_status();
     cmpMesh.request_face_status();
 
-    ok = OpenMesh::IO::read_mesh(cmpMesh,filename);
+    ok = OpenMesh::IO::read_mesh(cmpMesh,filename, options);
     EXPECT_TRUE(ok) << "Unable to read "<<filename;
 
     // compare
@@ -1059,7 +1059,7 @@ TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyHalfedgeOnly) {
   auto vh2 = mesh.add_vertex(Mesh::Point(0,1,0));
   mesh.add_face(vh0, vh1, vh2);
 
-  mesh.request_edge_status();
+  mesh.request_halfedge_status();
 
   auto heh0 = OpenMesh::HalfedgeHandle(0);
   auto heh1 = OpenMesh::HalfedgeHandle(1);
