@@ -956,4 +956,374 @@ TEST_F(OpenMeshReadWriteOM, ReadBigMeshWithCustomProperty) {
   EXPECT_FALSE(wrong) << "min one vertex has worng vertex property";
 }
 
+
+/*
+ * Save and load simple mesh with vertex status
+ */
+TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyVertexOnly) {
+
+  //read file
+  Mesh mesh;
+  auto vh0 = mesh.add_vertex(Mesh::Point(0,0,0));
+  auto vh1 = mesh.add_vertex(Mesh::Point(1,0,0));
+  auto vh2 = mesh.add_vertex(Mesh::Point(0,1,0));
+  mesh.add_face(vh0, vh1, vh2);
+
+  mesh.request_vertex_status();
+
+  mesh.status(vh0).set_selected(true);
+  mesh.status(vh1).set_feature(true);
+  mesh.status(vh2).set_tagged(true);
+  mesh.status(vh0).set_locked(true);
+  mesh.status(vh1).set_deleted(true);
+  mesh.status(vh2).set_hidden(true);
+  mesh.status(vh0).set_fixed_nonmanifold(true);
+
+
+  std::string filename_without_status = "no_vertex_status_test.om";
+  std::string filename_with_status = "vertex_status_test.om";
+
+  OpenMesh::IO::Options opt_with_status = OpenMesh::IO::Options::Status;
+  OpenMesh::IO::write_mesh(mesh, filename_without_status);
+  OpenMesh::IO::write_mesh(mesh, filename_with_status, opt_with_status);
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should not have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+  }
+
+  // Load status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status, opt_with_status);
+
+    EXPECT_TRUE (loaded_mesh.has_vertex_status())   << "Mesh has no vertex status even though they should have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    if (loaded_mesh.has_vertex_status())
+    {
+      for (auto vh : mesh.vertices())
+      {
+        EXPECT_EQ(mesh.status(vh).bits(), loaded_mesh.status(vh).bits());
+      }
+    }
+  }
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    loaded_mesh.request_vertex_status();
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_TRUE (loaded_mesh.has_vertex_status())   << "Mesh vertex status was removed by reading";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    for (auto vh : loaded_mesh.vertices())
+    {
+      EXPECT_EQ(loaded_mesh.status(vh).bits(), 0u) << "Vertex status was modified even though it should not have been loaded";
+    }
+  }
+
+  // Try to load status from file without status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_without_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though they file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though they file should not have a stored status";
+  }
+}
+
+
+/*
+ * Save and load simple mesh with halfedge status
+ */
+TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyHalfedgeOnly) {
+
+  //read file
+  Mesh mesh;
+  auto vh0 = mesh.add_vertex(Mesh::Point(0,0,0));
+  auto vh1 = mesh.add_vertex(Mesh::Point(1,0,0));
+  auto vh2 = mesh.add_vertex(Mesh::Point(0,1,0));
+  mesh.add_face(vh0, vh1, vh2);
+
+  mesh.request_edge_status();
+
+  auto heh0 = OpenMesh::HalfedgeHandle(0);
+  auto heh1 = OpenMesh::HalfedgeHandle(1);
+  auto heh2 = OpenMesh::HalfedgeHandle(2);
+  auto heh3 = OpenMesh::HalfedgeHandle(3);
+  auto heh4 = OpenMesh::HalfedgeHandle(4);
+  auto heh5 = OpenMesh::HalfedgeHandle(5);
+
+  mesh.status(heh0).set_selected(true);
+  mesh.status(heh1).set_feature(true);
+  mesh.status(heh2).set_tagged(true);
+  mesh.status(heh3).set_locked(true);
+  mesh.status(heh4).set_deleted(true);
+  mesh.status(heh5).set_hidden(true);
+  mesh.status(heh0).set_fixed_nonmanifold(true);
+
+  std::string filename_without_status = "no_halfedge_status_test.om";
+  std::string filename_with_status = "edge_halfstatus_test.om";
+
+  OpenMesh::IO::Options opt_with_status = OpenMesh::IO::Options::Status;
+  OpenMesh::IO::write_mesh(mesh, filename_without_status);
+  OpenMesh::IO::write_mesh(mesh, filename_with_status, opt_with_status);
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should not have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+  }
+
+  // Load status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should have been loaded";
+    EXPECT_TRUE(loaded_mesh.has_halfedge_status())  << "Mesh has no halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    if (loaded_mesh.has_halfedge_status())
+    {
+      for (auto heh : mesh.halfedges())
+      {
+        EXPECT_EQ(mesh.status(heh).bits(), loaded_mesh.status(heh).bits());
+      }
+    }
+  }
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    loaded_mesh.request_halfedge_status();
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_TRUE (loaded_mesh.has_halfedge_status()) << "Mesh halfedge status was removed by reading";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    for (auto heh : loaded_mesh.halfedges())
+    {
+      EXPECT_EQ(loaded_mesh.status(heh).bits(), 0u) << "Edge status was modified even though it should not have been loaded";
+    }
+  }
+
+  // Try to load status from file without status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_without_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though they file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though they file should not have a stored status";
+  }
+}
+
+
+/*
+ * Save and load simple mesh with edge status
+ */
+TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyEdgeOnly) {
+
+  //read file
+  Mesh mesh;
+  auto vh0 = mesh.add_vertex(Mesh::Point(0,0,0));
+  auto vh1 = mesh.add_vertex(Mesh::Point(1,0,0));
+  auto vh2 = mesh.add_vertex(Mesh::Point(0,1,0));
+  mesh.add_face(vh0, vh1, vh2);
+
+  mesh.request_edge_status();
+
+  auto eh0 = OpenMesh::EdgeHandle(0);
+  auto eh1 = OpenMesh::EdgeHandle(1);
+  auto eh2 = OpenMesh::EdgeHandle(2);
+
+  mesh.status(eh0).set_selected(true);
+  mesh.status(eh1).set_feature(true);
+  mesh.status(eh2).set_tagged(true);
+  mesh.status(eh0).set_locked(true);
+  mesh.status(eh1).set_deleted(true);
+  mesh.status(eh2).set_hidden(true);
+  mesh.status(eh0).set_fixed_nonmanifold(true);
+
+  std::string filename_without_status = "no_edge_status_test.om";
+  std::string filename_with_status = "edge_status_test.om";
+
+  OpenMesh::IO::Options opt_with_status = OpenMesh::IO::Options::Status;
+  OpenMesh::IO::write_mesh(mesh, filename_without_status);
+  OpenMesh::IO::write_mesh(mesh, filename_with_status, opt_with_status);
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should not have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+  }
+
+  // Load status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_TRUE(loaded_mesh.has_edge_status())      << "Mesh has no edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    if (loaded_mesh.has_edge_status())
+    {
+      for (auto eh : mesh.edges())
+      {
+        EXPECT_EQ(mesh.status(eh).bits(), loaded_mesh.status(eh).bits());
+      }
+    }
+  }
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    loaded_mesh.request_edge_status();
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_TRUE (loaded_mesh.has_edge_status())     << "Mesh edge status was removed by reading";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+
+    for (auto eh : loaded_mesh.edges())
+    {
+      EXPECT_EQ(loaded_mesh.status(eh).bits(), 0u) << "Edge status was modified even though it should not have been loaded";
+    }
+  }
+
+  // Try to load status from file without status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_without_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though they file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though they file should not have a stored status";
+  }
+}
+
+
+/*
+ * Save and load simple mesh with face status
+ */
+TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyFaceOnly) {
+
+  //read file
+  Mesh mesh;
+  auto vh0 = mesh.add_vertex(Mesh::Point(0,0,0));
+  auto vh1 = mesh.add_vertex(Mesh::Point(1,0,0));
+  auto vh2 = mesh.add_vertex(Mesh::Point(0,1,0));
+  auto vh3 = mesh.add_vertex(Mesh::Point(1,1,0));
+  auto fh0 = mesh.add_face(vh0, vh1, vh2);
+  auto fh1 = mesh.add_face(vh2, vh1, vh3);
+
+  mesh.request_face_status();
+
+  mesh.status(fh0).set_selected(true);
+  mesh.status(fh1).set_feature(true);
+  mesh.status(fh0).set_tagged(true);
+  mesh.status(fh1).set_locked(true);
+  mesh.status(fh0).set_deleted(true);
+  mesh.status(fh1).set_hidden(true);
+  mesh.status(fh0).set_fixed_nonmanifold(true);
+
+  std::string filename_without_status = "no_face_status_test.om";
+  std::string filename_with_status = "face_status_test.om";
+
+  OpenMesh::IO::Options opt_with_status = OpenMesh::IO::Options::Status;
+  OpenMesh::IO::write_mesh(mesh, filename_without_status);
+  OpenMesh::IO::write_mesh(mesh, filename_with_status, opt_with_status);
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should not have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though file should not have a stored status";
+  }
+
+  // Load status from file with status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though they should have been loaded";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though file should not have a stored status";
+    EXPECT_TRUE(loaded_mesh.has_face_status())      << "Mesh has no face status even though file should not have a stored status";
+
+    if (loaded_mesh.has_face_status())
+    {
+      for (auto fh : mesh.faces())
+      {
+        EXPECT_EQ(mesh.status(fh).bits(), loaded_mesh.status(fh).bits());
+      }
+    }
+  }
+
+  // Load no status from file with status
+  {
+    Mesh loaded_mesh;
+    loaded_mesh.request_face_status();
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edgestatus even though file should not have a stored status";
+    EXPECT_TRUE (loaded_mesh.has_face_status())     << "Mesh face status was removed by reading";
+
+    for (auto fh : loaded_mesh.faces())
+    {
+      EXPECT_EQ(loaded_mesh.status(fh).bits(), 0u) << "Edge status was modified even though it should not have been loaded";
+    }
+  }
+
+  // Try to load status from file without status
+  {
+    Mesh loaded_mesh;
+    OpenMesh::IO::read_mesh(loaded_mesh, filename_without_status, opt_with_status);
+
+    EXPECT_FALSE(loaded_mesh.has_vertex_status())   << "Mesh has vertex status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_halfedge_status()) << "Mesh has halfedge status even though file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_edge_status())     << "Mesh has edge status even though they file should not have a stored status";
+    EXPECT_FALSE(loaded_mesh.has_face_status())     << "Mesh has face status even though they file should not have a stored status";
+  }
+}
+
 }
