@@ -441,7 +441,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   {
     auto s = _be.status(EdgeHandle(0));
     chunk_header.name_ = false;
-    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Edge;
     chunk_header.type_ = OMFormat::Chunk::Type_Status;
     chunk_header.signed_ = false;
     chunk_header.float_ = false;
@@ -460,7 +460,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   {
     auto s = _be.status(HalfedgeHandle(0));
     chunk_header.name_ = false;
-    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Halfedge;
     chunk_header.type_ = OMFormat::Chunk::Type_Status;
     chunk_header.signed_ = false;
     chunk_header.float_ = false;
@@ -479,7 +479,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   {
     auto s = _be.status(FaceHandle(0));
     chunk_header.name_ = false;
-    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Face;
     chunk_header.type_ = OMFormat::Chunk::Type_Status;
     chunk_header.signed_ = false;
     chunk_header.float_ = false;
