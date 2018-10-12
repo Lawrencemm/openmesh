@@ -470,7 +470,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
     To be save, you can use the CW/CCW circulator definitions, which behave\
     the same as the original ones, without the previously mentioned issues."
 
-        DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
+        OM_DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
 #endif // NO_DECREMENT_DEPRECATED_WARNINGS
         GenericCirculatorT_DEPRECATED& operator--() {
             assert(this->mesh_);
@@ -488,7 +488,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
 
         /// Post-decrement
 #ifndef NO_DECREMENT_DEPRECATED_WARNINGS
-        DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
+        OM_DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
 #undef DECREMENT_DEPRECATED_WARNINGS_TEXT
 #endif //NO_DECREMENT_DEPRECATED_WARNINGS
         GenericCirculatorT_DEPRECATED operator--(int) {
@@ -542,7 +542,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
             return GenericCirculator_ValueHandleFns::is_valid(this->heh_,this->start_, this->lap_counter_);
         }
 
-        DEPRECATED("current_halfedge_handle() is an implementation detail and should not be accessed from outside the iterator class.")
+        OM_DEPRECATED("current_halfedge_handle() is an implementation detail and should not be accessed from outside the iterator class.")
         /**
          * \deprecated
          * current_halfedge_handle() is an implementation detail and should not
@@ -552,7 +552,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
             return this->heh_;
         }
 
-        DEPRECATED("Do not use this error prone implicit cast. Compare to end-iterator or use is_valid(), instead.")
+        OM_DEPRECATED("Do not use this error prone implicit cast. Compare to end-iterator or use is_valid(), instead.")
         /**
          * \deprecated
          * Do not use this error prone implicit cast. Compare to the
@@ -567,7 +567,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
          * \deprecated
          * This function clutters your code. Use dereferencing operators -> and * instead.
          */
-        DEPRECATED("This function clutters your code. Use dereferencing operators -> and * instead.")
+        OM_DEPRECATED("This function clutters your code. Use dereferencing operators -> and * instead.")
         value_type handle() const {
           return **this;
         }
@@ -578,7 +578,7 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
          * Implicit casts of iterators are unsafe. Use dereferencing operators
          * -> and * instead.
          */
-        DEPRECATED("Implicit casts of iterators are unsafe. Use dereferencing operators -> and * instead.")
+        OM_DEPRECATED("Implicit casts of iterators are unsafe. Use dereferencing operators -> and * instead.")
         operator value_type() const {
           return **this;
         }
