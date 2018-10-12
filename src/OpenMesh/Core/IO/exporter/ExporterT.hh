@@ -171,6 +171,13 @@ public:
         : Vec2f(0.0f, 0.0f));
   }
 
+  OpenMesh::Attributes::StatusInfo  status(VertexHandle _vh) const
+  {
+    if (mesh_.has_vertex_status())
+      return mesh_.status(_vh);
+    return OpenMesh::Attributes::StatusInfo();
+  }
+
   // get edge data
 
   Vec3uc color(EdgeHandle _eh)    const
@@ -215,20 +222,14 @@ public:
       : Vec4f(0, 0, 0, 0));
   }
 
-  // get face data
-
-  unsigned int get_vhandles(FaceHandle _fh,
-			    std::vector<VertexHandle>& _vhandles) const
+  OpenMesh::Attributes::StatusInfo  status(EdgeHandle _eh) const
   {
-    unsigned int count(0);
-    _vhandles.clear();
-    for (typename Mesh::CFVIter fv_it=mesh_.cfv_iter(_fh); fv_it.is_valid(); ++fv_it)
-    {
-      _vhandles.push_back(*fv_it);
-      ++count;
-    }
-    return count;
+    if (mesh_.has_edge_status())
+      return mesh_.status(_eh);
+    return OpenMesh::Attributes::StatusInfo();
   }
+
+  // get halfedge data
 
   int get_halfedge_id(VertexHandle _vh) override
   {
@@ -253,6 +254,28 @@ public:
   int get_face_id(HalfedgeHandle _heh) override
   {
     return mesh_.face_handle(_heh).idx();
+  }
+
+  OpenMesh::Attributes::StatusInfo  status(HalfedgeHandle _heh) const
+  {
+    if (mesh_.has_halfedge_status())
+      return mesh_.status(_heh);
+    return OpenMesh::Attributes::StatusInfo();
+  }
+
+  // get face data
+
+  unsigned int get_vhandles(FaceHandle _fh,
+			    std::vector<VertexHandle>& _vhandles) const
+  {
+    unsigned int count(0);
+    _vhandles.clear();
+    for (typename Mesh::CFVIter fv_it=mesh_.cfv_iter(_fh); fv_it.is_valid(); ++fv_it)
+    {
+      _vhandles.push_back(*fv_it);
+      ++count;
+    }
+    return count;
   }
 
   unsigned int get_face_texcoords(std::vector<Vec2f>& _hehandles) const
@@ -327,6 +350,13 @@ public:
     return (mesh_.has_vertex_colors()
       ? color_cast<Vec4f>(mesh_.color(_fh))
       : Vec4f(0, 0, 0, 0));
+  }
+
+  OpenMesh::Attributes::StatusInfo  status(FaceHandle _fh) const
+  {
+    if (mesh_.has_face_status())
+      return mesh_.status(_fh);
+    return OpenMesh::Attributes::StatusInfo();
   }
 
   virtual const BaseKernel* kernel() { return &mesh_; }

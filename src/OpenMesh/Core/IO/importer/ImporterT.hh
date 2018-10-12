@@ -257,6 +257,13 @@ public:
       mesh_.set_texcoord2D(_vh, vector_cast<TexCoord2D>(_texcoord));
   }
 
+  virtual void set_status(VertexHandle _vh, const OpenMesh::Attributes::StatusInfo& _status)
+  {
+    if (!mesh_.has_vertex_status())
+      mesh_.request_vertex_status();
+    mesh_.status(_vh) = _status;
+  }
+
   virtual void set_next(HalfedgeHandle _heh, HalfedgeHandle _next) override
   {
     mesh_.set_next_halfedge_handle(_heh, _next);
@@ -286,6 +293,12 @@ public:
       mesh_.set_texcoord3D(_heh, vector_cast<TexCoord3D>(_texcoord));
   }
 
+  virtual void set_status(HalfedgeHandle _heh, const OpenMesh::Attributes::StatusInfo& _status)
+  {
+    if (!mesh_.has_halfedge_status())
+      mesh_.request_halfedge_status();
+    mesh_.status(_heh) = _status;
+  }
 
   // edge attributes
 
@@ -311,6 +324,13 @@ public:
   {
       if (mesh_.has_edge_colors())
           mesh_.set_color(_eh, color_cast<Color>(_color));
+  }
+
+  virtual void set_status(EdgeHandle _eh, const OpenMesh::Attributes::StatusInfo& _status)
+  {
+    if (!mesh_.has_edge_status())
+      mesh_.request_edge_status();
+    mesh_.status(_eh) = _status;
   }
 
   // face attributes
@@ -343,6 +363,13 @@ public:
   {
     if (mesh_.has_face_colors())
       mesh_.set_color(_fh, color_cast<Color>(_color));
+  }
+
+  virtual void set_status(FaceHandle _fh, const OpenMesh::Attributes::StatusInfo& _status)
+  {
+    if (!mesh_.has_face_status())
+      mesh_.request_face_status();
+    mesh_.status(_fh) = _status;
   }
 
   virtual void add_face_texcoords( FaceHandle _fh, VertexHandle _vh, const std::vector<Vec2f>& _face_texcoords)

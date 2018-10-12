@@ -294,6 +294,7 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
   OpenMesh::Vec3f v3f;
   OpenMesh::Vec2f v2f;
   OpenMesh::Vec3uc v3uc; // rgb
+  OpenMesh::Attributes::StatusInfo status;
 
   OMFormat::Chunk::PropertyName custom_prop;
 
@@ -343,6 +344,20 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
       }
       break;
 
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.vertex_has_status() && _opt.vertex_has_status())
+          _bi.set_status(VertexHandle(int(vidx)), status);
+      }
+      break;
+    }
+
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_vprop(property_name_), header_.n_vertices_, _swap);
@@ -389,6 +404,7 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
   size_t fidx = 0;
   OpenMesh::Vec3f v3f;  // normal
   OpenMesh::Vec3uc v3uc; // rgb
+  OpenMesh::Attributes::StatusInfo status;
 
   switch (chunk_header_.type_) {
     case Chunk::Type_Topology:
@@ -459,6 +475,19 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
           _bi.set_color(FaceHandle(int(fidx)), v3uc);
       }
       break;
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; fidx < header_.n_faces_ && !_is.eof(); ++fidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.face_has_status() && _opt.face_has_status())
+          _bi.set_status(FaceHandle(int(fidx)), status);
+      }
+      break;
+    }
 
     case Chunk::Type_Custom:
 

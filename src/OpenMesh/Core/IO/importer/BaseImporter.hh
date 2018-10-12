@@ -142,6 +142,9 @@ public:
   // set vertex texture coordinate
   virtual void set_texcoord(VertexHandle _vh, const Vec2f& _texcoord) = 0;
 
+  // set vertex status
+  virtual void set_status(VertexHandle _vh, const OpenMesh::Attributes::StatusInfo& _status) = 0;
+
   // set next halfedge handle
   virtual void set_next(HalfedgeHandle _heh, HalfedgeHandle _next) = 0;
 
@@ -157,6 +160,9 @@ public:
   // set 3d vertex texture coordinate
   virtual void set_texcoord(HalfedgeHandle _heh, const Vec3f& _texcoord) = 0;
 
+  // set halfedge status
+  virtual void set_status(HalfedgeHandle _heh, const OpenMesh::Attributes::StatusInfo& _status) = 0;
+
   // set edge color
   virtual void set_color(EdgeHandle _eh, const Vec3uc& _color) = 0;
 
@@ -168,6 +174,9 @@ public:
 
   // set edge color
   virtual void set_color(EdgeHandle _eh, const Vec4f& _color) = 0;
+
+  // set edge status
+  virtual void set_status(EdgeHandle _eh, const OpenMesh::Attributes::StatusInfo& _status) = 0;
 
   // set face normal
   virtual void set_normal(FaceHandle _fh, const Vec3f& _normal) = 0;
@@ -183,6 +192,9 @@ public:
 
   // set face color
   virtual void set_color(FaceHandle _fh, const Vec4f& _color) = 0;
+
+  // set face status
+  virtual void set_status(FaceHandle _fh, const OpenMesh::Attributes::StatusInfo& _status) = 0;
 
   // Store a property in the mesh mapping from an int to a texture file
   // Use set_face_texindex to set the index for each face

@@ -420,53 +420,77 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   // ---------- write vertex status
   if (_be.n_vertices() && _be.has_vertex_status() && _opt.check(Options::Status))
   {
-    //store status as costum property because that already works
-    auto prop = _be.kernel()->_get_vprop("v:status");
-    assert(prop != nullptr);
-    bool persistent = prop->persistent();
-    const_cast<BaseProperty*>(prop)->set_persistent(true);
-    bytes += store_binary_custom_chunk(_os, *prop,
-               OMFormat::Chunk::Entity_Vertex, swap );
-    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+    auto s = _be.status(VertexHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_vertices_; i < nV; ++i)
+      bytes += store(_os, _be.status(VertexHandle(i)), swap);
   }
 
   // ---------- write edge status
   if (_be.n_edges() && _be.has_edge_status() && _opt.check(Options::Status))
   {
-    //store status as costum property because that already works
-    auto prop = _be.kernel()->_get_eprop("e:status");
-    assert(prop != nullptr);
-    bool persistent = prop->persistent();
-    const_cast<BaseProperty*>(prop)->set_persistent(true);
-    bytes += store_binary_custom_chunk(_os, *prop,
-               OMFormat::Chunk::Entity_Edge, swap );
-    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+    auto s = _be.status(EdgeHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_edges_; i < nV; ++i)
+      bytes += store(_os, _be.status(EdgeHandle(i)), swap);
   }
 
   // ---------- write halfedge status
   if (_be.n_edges() && _be.has_halfedge_status() && _opt.check(Options::Status))
   {
-    //store status as costum property because that already works
-    auto prop = _be.kernel()->_get_hprop("h:status");
-    assert(prop != nullptr);
-    bool persistent = prop->persistent();
-    const_cast<BaseProperty*>(prop)->set_persistent(true);
-    bytes += store_binary_custom_chunk(_os, *prop,
-               OMFormat::Chunk::Entity_Halfedge, swap );
-    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+    auto s = _be.status(HalfedgeHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_edges_ * 2; i < nV; ++i)
+      bytes += store(_os, _be.status(HalfedgeHandle(i)), swap);
   }
 
   // ---------- write face status
   if (_be.n_faces() && _be.has_face_status() && _opt.check(Options::Status))
   {
-    //store status as costum property because that already works
-    auto prop = _be.kernel()->_get_fprop("f:status");
-    assert(prop != nullptr);
-    bool persistent = prop->persistent();
-    const_cast<BaseProperty*>(prop)->set_persistent(true);
-    bytes += store_binary_custom_chunk(_os, *prop,
-               OMFormat::Chunk::Entity_Face, swap );
-    const_cast<BaseProperty*>(prop)->set_persistent(persistent);
+    auto s = _be.status(FaceHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_faces_; i < nV; ++i)
+      bytes += store(_os, _be.status(FaceHandle(i)), swap);
   }
 
   // -------------------- write custom properties
