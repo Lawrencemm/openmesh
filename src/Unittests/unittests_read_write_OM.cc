@@ -1326,4 +1326,99 @@ TEST_F(OpenMeshReadWriteOM, WriteReadStatusPropertyFaceOnly) {
   }
 }
 
+
+/*
+ * Just load a triangle mesh from an om file of version 1.2
+ */
+TEST_F(OpenMeshReadWriteOM, LoadTriangleMeshVersion_1_2) {
+
+  mesh_.clear();
+
+  std::string file_name = "cube_tri_version_1_2.om";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh_, file_name);
+
+  EXPECT_TRUE(ok) << file_name;
+
+  EXPECT_EQ(8u  , mesh_.n_vertices())  << "The number of loaded vertices is not correct!";
+  EXPECT_EQ(18u , mesh_.n_edges())     << "The number of loaded edges is not correct!";
+  EXPECT_EQ(12u , mesh_.n_faces())     << "The number of loaded faces is not correct!";
+  EXPECT_EQ(36u , mesh_.n_halfedges()) << "The number of loaded halfedges is not correct!";
+}
+
+
+/*
+ * Just load a polyhedral mesh from an om file of version 1.2
+ */
+TEST_F(OpenMeshReadWriteOM, LoadPolyMeshVersion_1_2) {
+
+  PolyMesh mesh;
+
+  std::string file_name = "cube_poly_version_1_2.om";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh, file_name);
+
+  EXPECT_TRUE(ok) << file_name;
+
+  EXPECT_EQ(8u  , mesh.n_vertices())  << "The number of loaded vertices is not correct!";
+  EXPECT_EQ(12u , mesh.n_edges())      << "The number of loaded edges is not correct!";
+  EXPECT_EQ(6u  , mesh.n_faces())      << "The number of loaded faces is not correct!";
+  EXPECT_EQ(24u , mesh.n_halfedges())  << "The number of loaded halfedges is not correct!";
+}
+
+
+/*
+ * Just load a triangle mesh from an om file of version 2.0
+ */
+TEST_F(OpenMeshReadWriteOM, LoadTriangleMeshVersion_2_0) {
+
+  mesh_.clear();
+
+  std::string file_name = "cube_tri_version_2_0.om";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh_, file_name);
+
+  EXPECT_TRUE(ok) << file_name;
+
+  EXPECT_EQ(8u  , mesh_.n_vertices())  << "The number of loaded vertices is not correct!";
+  EXPECT_EQ(18u , mesh_.n_edges())     << "The number of loaded edges is not correct!";
+  EXPECT_EQ(12u , mesh_.n_faces())     << "The number of loaded faces is not correct!";
+  EXPECT_EQ(36u , mesh_.n_halfedges()) << "The number of loaded halfedges is not correct!";
+}
+
+
+/*
+ * Just load a polyhedral mesh from an om file of version 2.0
+ */
+TEST_F(OpenMeshReadWriteOM, LoadPolyMeshVersion_2_0) {
+
+  PolyMesh mesh;
+
+  std::string file_name = "cube_poly_version_2_0.om";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh, file_name);
+
+  EXPECT_TRUE(ok) << file_name;
+
+  EXPECT_EQ(8u  , mesh.n_vertices())  << "The number of loaded vertices is not correct!";
+  EXPECT_EQ(12u , mesh.n_edges())      << "The number of loaded edges is not correct!";
+  EXPECT_EQ(6u  , mesh.n_faces())      << "The number of loaded faces is not correct!";
+  EXPECT_EQ(24u , mesh.n_halfedges())  << "The number of loaded halfedges is not correct!";
+}
+
+
+/*
+ * Just load a triangles mesh from an om file of version 10.5
+ */
+TEST_F(OpenMeshReadWriteOM, LoadTriMeshVersion_10_5) {
+
+  PolyMesh mesh;
+
+  std::string file_name = "cube_tri_version_10_.om";
+
+  bool ok = OpenMesh::IO::read_mesh(mesh, file_name);
+
+  EXPECT_FALSE(ok) << file_name;
+}
+
 }
