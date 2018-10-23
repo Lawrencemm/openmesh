@@ -115,6 +115,19 @@ namespace OMFormat {
 
 //-----------------------------------------------------------------------------
 
+
+  std::string as_string(uint8 version)
+  {
+    std::stringstream ss;
+    ss << major_version(version);
+    ss << ".";
+    ss << minor_version(version);
+    return ss.str();
+  }
+
+
+//-----------------------------------------------------------------------------
+
   const char *as_string(Chunk::Entity e)
   {
     switch(e)
