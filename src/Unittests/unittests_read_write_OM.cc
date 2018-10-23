@@ -72,7 +72,7 @@ TEST_F(OpenMeshReadWriteOM, LoadSimpleOMWithTexCoords) {
 
     bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-texCoords.om",options);
 
-    EXPECT_TRUE(ok) << "Unable to load cube-minimal-texCoords.om";
+    ASSERT_TRUE(ok) << "Unable to load cube-minimal-texCoords.om";
 
     EXPECT_EQ(8u  , mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
     EXPECT_EQ(18u , mesh_.n_edges())    << "The number of loaded edges is not correct!";
@@ -1408,13 +1408,13 @@ TEST_F(OpenMeshReadWriteOM, LoadPolyMeshVersion_2_0) {
 
 
 /*
- * Just load a triangles mesh from an om file of version 10.5
+ * Try to load mesh from om file with a version that is not yet supported
  */
-TEST_F(OpenMeshReadWriteOM, LoadTriMeshVersion_10_5) {
+TEST_F(OpenMeshReadWriteOM, LoadTriMeshVersion_7_5) {
 
   PolyMesh mesh;
 
-  std::string file_name = "cube_tri_version_10_.om";
+  std::string file_name = "cube_tri_version_7_5.om";
 
   bool ok = OpenMesh::IO::read_mesh(mesh, file_name);
 
