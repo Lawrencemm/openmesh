@@ -61,6 +61,7 @@
 #include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/OMFormat.hh>
 #include <OpenMesh/Core/IO/reader/OMReader.hh>
+#include <OpenMesh/Core/IO/writer/OMWriter.hh>
 
 
 //=== NAMESPACES ==============================================================
@@ -174,6 +175,15 @@ bool _OMReader_::read_binary(std::istream& _is, BaseImporter& _bi, Options& _opt
   bytes_ = 0;
 
   bytes_ += restore(_is, header_, swap);
+
+
+  if (header_.version_ > _OMWriter_::get_version())
+  {
+    omerr() << "File uses .om version " << OMFormat::as_string(header_.version_) << " but reader only "
+            << "supports up to version " << OMFormat::as_string(_OMWriter_::get_version()) << ".\n"
+            << "Please update your OpenMesh." << std::endl;
+    return false;
+  }
 
 
   while (!_is.eof()) {
