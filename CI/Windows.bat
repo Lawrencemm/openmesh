@@ -76,14 +76,6 @@ IF "%APPS%" == "ON" (
   mkdir Build\plugins
   mkdir Build\plugins\platforms
   
-  dir 
-  
-  dir %QT_INSTALL_PATH%
-  
-  dir %QT_INSTALL_PATH%\plugins
-  
-  dir %QT_INSTALL_PATH%\plugins\platforms
-
   REM Copy the platform plugins subdirectory for the qt plugins required to run the gui apps
   xcopy /Y %QT_INSTALL_PATH%\plugins\platforms Build\plugins\platforms 
   set CMAKE_CONFIGURATION=%QT_BASE_CONFIG%
