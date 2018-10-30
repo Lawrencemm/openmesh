@@ -10,12 +10,15 @@ OPTIONS=""
 MAKE_OPTIONS=""
 BUILDPATH=""
 
+# set GTEST path
+OPTIONS="-DGTEST_ROOT=~/sw/gtest-1.8.0/"
+
 if [ "$COMPILER" == "gcc" ]; then
   echo "Building with GCC";
   BUILDPATH="gcc"
 
   # without icecc: no options required
-  OPTIONS="-DCMAKE_CXX_COMPILER=/usr/lib/icecc/bin/g++ -DCMAKE_C_COMPILER=/usr/lib/icecc/bin/gcc"
+  OPTIONS="$OPTIONS -DCMAKE_CXX_COMPILER=/usr/lib/icecc/bin/g++ -DCMAKE_C_COMPILER=/usr/lib/icecc/bin/gcc"
   MAKE_OPTIONS="-j16"
   export ICECC_CXX=/usr/bin/g++ ; export ICECC_CC=/usr/bin/gcc
 
