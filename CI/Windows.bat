@@ -67,6 +67,8 @@ IF "%BUILD_PLATFORM%" == "VS2017" (
 IF "%APPS%" == "ON" (
   set STRING_APPS=
 
+  ECHO "Copying Platform plugins from %QT_INSTALL_PATH%\plugins\platforms to Build\plugins\platforms"
+  
   REM Create the platform plugins subdirectory for the qt plugins required to run the gui apps
   mkdir Build\plugins
   mkdir Build\plugins\platforms
@@ -112,7 +114,7 @@ IF EXIST %LIBPATH%\ (
 IF EXIST %QT_INSTALL_PATH%\ (
   ECHO "QT_INSTALL_PATH ... Ok"
 ) ELSE (
-  ECHO "QT_INSTALL_PATH not found!"
+  ECHO "QT_INSTALL_PATH: %QT_INSTALL_PATH%\ not found!"
   exit 10;
 )
 
