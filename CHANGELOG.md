@@ -1,4 +1,4 @@
-Please look into the doxygen configuration (Generated from Doc/history.docu) 
+The changelog can be found in the html Documentation.
 
 The latest changelog for the master can be found here:
-http://openmesh.org/Daily-Builds/Doc/a00002.html
+http://openmesh.org/Daily-Builds/Doc/
