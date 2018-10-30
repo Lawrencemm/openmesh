@@ -38,13 +38,13 @@ IF "%BUILD_PLATFORM%" == "VS2013" (
     set GENERATOR=Visual Studio 12%ARCH_VS%
     set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.com"
     IF "%ARCHITECTURE%" == "x64" (
-      set QT_INSTALL_PATH=E:\Qt\Qt5.3.1-vs2013-%STRING_ARCH%\5.3\msvc2013_64_opengl
-      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.3.1-vs2013-%STRING_ARCH%\5.3\msvc2013_64_opengl
+      set QT_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013_64
+      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013_64
     )
 
     IF "%ARCHITECTURE%" == "x32" (
-      set QT_INSTALL_PATH=E:\Qt\Qt5.3.1-vs2013-%STRING_ARCH%\5.3\msvc2013_opengl
-      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.3.1-vs2013-%STRING_ARCH%\5.3\msvc2013_opengl
+      set QT_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013
+      set QT_BASE_CONFIG=-DQT5_INSTALL_PATH=E:\Qt\Qt5.7.0\5.7\msvc2013
     )
 ) 
 
@@ -98,6 +98,7 @@ IF "%APPS%" == "ON" (
 ECHO "============================================================="
 ECHO "============================================================="
 ECHO "Building with :"
+whoami
 ECHO "ARCHITECTURE        : %ARCHITECTURE%"
 ECHO "BUILD_PLATFORM      : %BUILD_PLATFORM%"
 ECHO "GTESTVERSION        : %GTESTVERSION%"

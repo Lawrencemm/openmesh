@@ -9,9 +9,25 @@
 
 <tr valign=top><td><b>7.2</b> (?/?/?)</td><td>
 
+<b>Core</b>
+<ul>
+<li>TriConnectivity: Added two functions split_edge and split_edge_copy to mask the PolyConnectivity functions of the same name (Prevents creation of valence 2 vertices on trimeshes)</li>
+</ul>
+
 <b>IO</b>
 <ul>
 <li>PLY Reader: Allowing the PLY reader to read custom face ( Thanks to morgan Leborgne for the patch)</li>
+<li>PLY Reader: Fixed endless loop on unknown property list type</li>
+</ul>
+
+<b>Tools</b>
+<ul>
+<li>SmartTagger: Added the SmartTagger class to tag primitives (O(1) reset )</li>
+</ul>
+
+<b>Build System</b>
+<ul>
+<li>Rename the DEPRECATED macro into OM_DEPRECATED to prevent a macro clash with Intel MKL (Thanks to Morgan Leborgne for the patch)</li>
 </ul>
 
 

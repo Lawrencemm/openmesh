@@ -1201,185 +1201,187 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
     _is >> keyword;
     while (keyword != "end_header") {
 
-        if (keyword == "comment") {
-            std::getline(_is, line);
-        } else if (keyword == "element") {
-            _is >> elementName;
-			_is >> elementCount;
+      if (keyword == "comment") {
+        std::getline(_is, line);
+      } else if (keyword == "element") {
+        _is >> elementName;
+        _is >> elementCount;
 
-			ElementInfo element;
-			element.name_ = elementName;
-			element.count_ = elementCount;
+        ElementInfo element;
+        element.name_ = elementName;
+        element.count_ = elementCount;
 
-            if (elementName == "vertex") {
-				vertexCount_ = elementCount;
-				element.element_ = VERTEX;
-            } else if (elementName == "face") {
-				faceCount_ = elementCount;
-				element.element_ = FACE;
-            } else {
-                omerr() << "PLY header unsupported element type: " << elementName << std::endl;
-				element.element_ = UNKNOWN;
-            }
+        if (elementName == "vertex") {
+          vertexCount_ = elementCount;
+          element.element_ = VERTEX;
+        } else if (elementName == "face") {
+          faceCount_ = elementCount;
+          element.element_ = FACE;
+        } else {
+          omerr() << "PLY header unsupported element type: " << elementName << std::endl;
+          element.element_ = UNKNOWN;
+        }
 
-			elements_.push_back(element);
-        } else if (keyword == "property") {
-            std::string tmp1;
-            std::string tmp2;
+        elements_.push_back(element);
+      } else if (keyword == "property") {
+        std::string tmp1;
+        std::string tmp2;
 
-            // Read first keyword, as it might be a list
-            _is >> tmp1;
+        // Read first keyword, as it might be a list
+        _is >> tmp1;
 
-            if (tmp1 == "list") {
-              _is >> listIndexType;
-              _is >> listEntryType;
-              _is >> propertyName;
+        if (tmp1 == "list") {
+          _is >> listIndexType;
+          _is >> listEntryType;
+          _is >> propertyName;
 
-              ValueType indexType = Unsupported;
-              ValueType entryType = Unsupported;
+          ValueType indexType = Unsupported;
+          ValueType entryType = Unsupported;
 
-              if (listIndexType == "uint8") {
-                indexType = ValueTypeUINT8;
-              } else if (listIndexType == "uchar") {
-                indexType = ValueTypeUCHAR;
-              } else if (listIndexType == "int") {
-                indexType = ValueTypeINT;
-              } else {
-                omerr() << "Unsupported Index type for property list: " << listIndexType << std::endl;
-                continue;
-              }
+          if (listIndexType == "uint8") {
+            indexType = ValueTypeUINT8;
+          } else if (listIndexType == "uint16") {
+            indexType = ValueTypeUINT16;
+          } else if (listIndexType == "uchar") {
+            indexType = ValueTypeUCHAR;
+          } else if (listIndexType == "int") {
+            indexType = ValueTypeINT;
+          } else {
+            omerr() << "Unsupported Index type for property list: " << listIndexType << std::endl;
+            return false;
+          }
 
-              entryType = get_property_type(listEntryType, listEntryType);
+          entryType = get_property_type(listEntryType, listEntryType);
 
-              if (entryType == Unsupported) {
-                omerr() << "Unsupported Entry type for property list: " << listEntryType << std::endl;
-              }
+          if (entryType == Unsupported) {
+            omerr() << "Unsupported Entry type for property list: " << listEntryType << std::endl;
+          }
 
-                PropertyInfo property(CUSTOM_PROP, entryType, propertyName);
-                property.listIndexType = indexType;
+          PropertyInfo property(CUSTOM_PROP, entryType, propertyName);
+          property.listIndexType = indexType;
 
-				if (elementName == "face")
-                {
-                  // special case for vertex indices
-                  if (propertyName == "vertex_index" || propertyName == "vertex_indices")
-                  {
-                    property.property = VERTEX_INDICES;
-                   
-					if (!elements_.back().properties_.empty())
-					{
-						omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
-						elements_.back().properties_.clear();
-					}
-                  } else {
-                      options_ += Options::Custom;
-                  }
+          if (elementName == "face")
+          {
+            // special case for vertex indices
+            if (propertyName == "vertex_index" || propertyName == "vertex_indices")
+            {
+              property.property = VERTEX_INDICES;
 
-                }
-                else
-                  omerr() << "property " << propertyName << " belongs to unsupported element " << elementName << std::endl;
-
-				elements_.back().properties_.push_back(property);
-
-            } else {
-              // as this is not a list property, read second value of property
-              _is >> tmp2;
-
-
-              // Extract name and type of property
-              // As the order seems to be different in some files, autodetect it.
-              ValueType valueType = get_property_type(tmp1, tmp2);
-              propertyName = get_property_name(tmp1, tmp2);
-
-              PropertyInfo entry;
-
-              //special treatment for some vertex properties.
-              if (elementName == "vertex") {
-                if (propertyName == "x") {
-                  entry = PropertyInfo(XCOORD, valueType);
-                  vertexDimension_++;
-                } else if (propertyName == "y") {
-                  entry = PropertyInfo(YCOORD, valueType);
-                  vertexDimension_++;
-                } else if (propertyName == "z") {
-                  entry = PropertyInfo(ZCOORD, valueType);
-                  vertexDimension_++;
-                } else if (propertyName == "nx") {
-                  entry = PropertyInfo(XNORM, valueType);
-                  options_ += Options::VertexNormal;
-                } else if (propertyName == "ny") {
-                  entry = PropertyInfo(YNORM, valueType);
-                  options_ += Options::VertexNormal;
-                } else if (propertyName == "nz") {
-                  entry = PropertyInfo(ZNORM, valueType);
-                  options_ += Options::VertexNormal;
-                } else if (propertyName == "u" || propertyName == "s") {
-                  entry = PropertyInfo(TEXX, valueType);
-                  options_ += Options::VertexTexCoord;
-                } else if (propertyName == "v" || propertyName == "t") {
-                  entry = PropertyInfo(TEXY, valueType);
-                  options_ += Options::VertexTexCoord;
-                } else if (propertyName == "red") {
-                  entry = PropertyInfo(COLORRED, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "green") {
-                  entry = PropertyInfo(COLORGREEN, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "blue") {
-                  entry = PropertyInfo(COLORBLUE, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "diffuse_red") {
-                  entry = PropertyInfo(COLORRED, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "diffuse_green") {
-                  entry = PropertyInfo(COLORGREEN, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "diffuse_blue") {
-                  entry = PropertyInfo(COLORBLUE, valueType);
-                  options_ += Options::VertexColor;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                } else if (propertyName == "alpha") {
-                  entry = PropertyInfo(COLORALPHA, valueType);
-                  options_ += Options::VertexColor;
-                  options_ += Options::ColorAlpha;
-                  if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
-                    options_ += Options::ColorFloat;
-                }
-              }
-
-              //not a special property, load as custom
-              if (entry.value == Unsupported){
-                Property prop =  CUSTOM_PROP;
-                options_ += Options::Custom;
-                entry  = PropertyInfo(prop, valueType, propertyName);
-              }
-
-              if (entry.property != UNSUPPORTED)
+              if (!elements_.back().properties_.empty())
               {
-				elements_.back().properties_.push_back(entry);
+                omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
+                elements_.back().properties_.clear();
               }
+            } else {
+              options_ += Options::Custom;
             }
+
+          }
+          else
+            omerr() << "property " << propertyName << " belongs to unsupported element " << elementName << std::endl;
+
+          elements_.back().properties_.push_back(property);
 
         } else {
-            omlog() << "Unsupported keyword : " << keyword << std::endl;
+          // as this is not a list property, read second value of property
+          _is >> tmp2;
+
+
+          // Extract name and type of property
+          // As the order seems to be different in some files, autodetect it.
+          ValueType valueType = get_property_type(tmp1, tmp2);
+          propertyName = get_property_name(tmp1, tmp2);
+
+          PropertyInfo entry;
+
+          //special treatment for some vertex properties.
+          if (elementName == "vertex") {
+            if (propertyName == "x") {
+              entry = PropertyInfo(XCOORD, valueType);
+              vertexDimension_++;
+            } else if (propertyName == "y") {
+              entry = PropertyInfo(YCOORD, valueType);
+              vertexDimension_++;
+            } else if (propertyName == "z") {
+              entry = PropertyInfo(ZCOORD, valueType);
+              vertexDimension_++;
+            } else if (propertyName == "nx") {
+              entry = PropertyInfo(XNORM, valueType);
+              options_ += Options::VertexNormal;
+            } else if (propertyName == "ny") {
+              entry = PropertyInfo(YNORM, valueType);
+              options_ += Options::VertexNormal;
+            } else if (propertyName == "nz") {
+              entry = PropertyInfo(ZNORM, valueType);
+              options_ += Options::VertexNormal;
+            } else if (propertyName == "u" || propertyName == "s") {
+              entry = PropertyInfo(TEXX, valueType);
+              options_ += Options::VertexTexCoord;
+            } else if (propertyName == "v" || propertyName == "t") {
+              entry = PropertyInfo(TEXY, valueType);
+              options_ += Options::VertexTexCoord;
+            } else if (propertyName == "red") {
+              entry = PropertyInfo(COLORRED, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "green") {
+              entry = PropertyInfo(COLORGREEN, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "blue") {
+              entry = PropertyInfo(COLORBLUE, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "diffuse_red") {
+              entry = PropertyInfo(COLORRED, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "diffuse_green") {
+              entry = PropertyInfo(COLORGREEN, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "diffuse_blue") {
+              entry = PropertyInfo(COLORBLUE, valueType);
+              options_ += Options::VertexColor;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            } else if (propertyName == "alpha") {
+              entry = PropertyInfo(COLORALPHA, valueType);
+              options_ += Options::VertexColor;
+              options_ += Options::ColorAlpha;
+              if (valueType == ValueTypeFLOAT || valueType == ValueTypeFLOAT32)
+                options_ += Options::ColorFloat;
+            }
+          }
+
+          //not a special property, load as custom
+          if (entry.value == Unsupported){
+            Property prop =  CUSTOM_PROP;
+            options_ += Options::Custom;
+            entry  = PropertyInfo(prop, valueType, propertyName);
+          }
+
+          if (entry.property != UNSUPPORTED)
+          {
+            elements_.back().properties_.push_back(entry);
+          }
         }
 
-        streamPos = _is.tellg();
-        _is >> keyword;
-        if (_is.bad()) {
-            omerr() << "Error while reading PLY file header" << std::endl;
-            return false;
-        }
+      } else {
+        omlog() << "Unsupported keyword : " << keyword << std::endl;
+      }
+
+      streamPos = _is.tellg();
+      _is >> keyword;
+      if (_is.bad()) {
+        omerr() << "Error while reading PLY file header" << std::endl;
+        return false;
+      }
     }
 
     // As the binary data is directy after the end_header keyword
