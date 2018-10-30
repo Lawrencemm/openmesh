@@ -72,6 +72,7 @@ IF "%APPS%" == "ON" (
   dir 
   
   REM Create the platform plugins subdirectory for the qt plugins required to run the gui apps
+  mkdir Build
   mkdir Build\plugins
   mkdir Build\plugins\platforms
 
