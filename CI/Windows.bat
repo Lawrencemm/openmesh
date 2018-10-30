@@ -69,12 +69,20 @@ IF "%APPS%" == "ON" (
 
   ECHO "Copying Platform plugins from %QT_INSTALL_PATH%\plugins\platforms to Build\plugins\platforms"
   
-  dir 
+
   
   REM Create the platform plugins subdirectory for the qt plugins required to run the gui apps
   mkdir Build
   mkdir Build\plugins
   mkdir Build\plugins\platforms
+  
+  dir 
+  
+  dir %QT_INSTALL_PATH%
+  
+  dir %QT_INSTALL_PATH%\plugins
+  
+  dir %QT_INSTALL_PATH%\plugins\platforms
 
   REM Copy the platform plugins subdirectory for the qt plugins required to run the gui apps
   xcopy /Y %QT_INSTALL_PATH%\plugins\platforms Build\plugins\platforms 
