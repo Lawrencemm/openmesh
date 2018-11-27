@@ -541,6 +541,7 @@ TEST_F(OpenMeshReadWriteOBJ, FaceTexCoordTest) {
     u += 1.0;
   }
 
+
   u = 0.0f;
 
   for ( auto fh : mesh_.fh_range(fh) )
