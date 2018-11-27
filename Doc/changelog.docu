@@ -18,6 +18,7 @@
 <ul>
 <li>PLY Reader: Allowing the PLY reader to read custom face ( Thanks to morgan Leborgne for the patch)</li>
 <li>PLY Reader: Fixed endless loop on unknown property list type</li>
+<li>PLY Reader: Fix hang when reading directly from istream (Thanks to Paul Loré for the patch)</li>
 <li>OM Writer/Reader: Update file format version to 2.0. Older files can still be read, but older OpenMesh versions cannot read new format.</li>
 <li>OM Writer/Reader: Fixed inconsistent writing/reading of edge properties</li>
 <li>OM Writer/Reader: Add option to store status</li>

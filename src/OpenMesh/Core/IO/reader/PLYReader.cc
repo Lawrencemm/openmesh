@@ -135,6 +135,14 @@ bool _PLYReader_::read(std::istream& _in, BaseImporter& _bi, Options& _opt) {
         return false;
     }
 
+    // Reparse the header
+    if (!can_u_read(_in)) {
+        omerr() << "[PLYReader] : Unable to parse header\n";
+        return false;
+    }
+
+
+
     // filter relevant options for reading
     bool swap = _opt.check(Options::Swap);
 
@@ -280,12 +288,6 @@ void _PLYReader_::readCustomProperty(std::istream& _in, BaseImporter& _bi, Handl
 //-----------------------------------------------------------------------------
 
 bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options& _opt) const {
-
-    // Reparse the header
-    if (!can_u_read(_in)) {
-        omerr() << "[PLYReader] : Unable to parse header\n";
-        return false;
-    }
 
     unsigned int i, j, k, l, idx;
     unsigned int nV;
@@ -506,12 +508,6 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 //-----------------------------------------------------------------------------
 
 bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap*/, const Options& _opt) const {
-
-    // Reparse the header
-    if (!can_u_read(_in)) {
-        omerr() << "[PLYReader] : Unable to parse header\n";
-        return false;
-    }
 
     OpenMesh::Vec3f        v, n;  // Vertex
     OpenMesh::Vec2f        t;  // TexCoords
