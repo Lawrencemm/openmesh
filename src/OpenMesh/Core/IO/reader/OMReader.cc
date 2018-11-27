@@ -61,6 +61,7 @@
 #include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/OMFormat.hh>
 #include <OpenMesh/Core/IO/reader/OMReader.hh>
+#include <OpenMesh/Core/IO/writer/OMWriter.hh>
 
 
 //=== NAMESPACES ==============================================================
@@ -174,6 +175,15 @@ bool _OMReader_::read_binary(std::istream& _is, BaseImporter& _bi, Options& _opt
   bytes_ = 0;
 
   bytes_ += restore(_is, header_, swap);
+
+
+  if (header_.version_ > _OMWriter_::get_version())
+  {
+    omerr() << "File uses .om version " << OMFormat::as_string(header_.version_) << " but reader only "
+            << "supports up to version " << OMFormat::as_string(_OMWriter_::get_version()) << ".\n"
+            << "Please update your OpenMesh." << std::endl;
+    return false;
+  }
 
 
   while (!_is.eof()) {
@@ -294,6 +304,7 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
   OpenMesh::Vec3f v3f;
   OpenMesh::Vec2f v2f;
   OpenMesh::Vec3uc v3uc; // rgb
+  OpenMesh::Attributes::StatusInfo status;
 
   OMFormat::Chunk::PropertyName custom_prop;
 
@@ -343,11 +354,38 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
       }
       break;
 
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; vidx < header_.n_vertices_ && !_is.eof(); ++vidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.vertex_has_status() && _opt.vertex_has_status())
+          _bi.set_status(VertexHandle(int(vidx)), status);
+      }
+      break;
+    }
+
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_vprop(property_name_), header_.n_vertices_, _swap);
 
       vidx = header_.n_vertices_;
+
+      break;
+
+    case Chunk::Type_Topology:
+    {
+      for (; vidx < header_.n_vertices_; ++vidx)
+      {
+        int halfedge_id;
+        bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        _bi.set_halfedge(VertexHandle(static_cast<int>(vidx)), HalfedgeHandle(halfedge_id));
+      }
+    }
 
       break;
 
@@ -376,34 +414,51 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
   size_t fidx = 0;
   OpenMesh::Vec3f v3f;  // normal
   OpenMesh::Vec3uc v3uc; // rgb
+  OpenMesh::Attributes::StatusInfo status;
 
   switch (chunk_header_.type_) {
-    case Chunk::Type_Topology: {
-      BaseImporter::VHandles vhandles;
-      size_t nV = 0;
-      size_t vidx = 0;
+    case Chunk::Type_Topology:
+    {
+      if (header_.version_ < OMFormat::mk_version(2,0))
+      {
+        // add faces based on vertex indices
+        BaseImporter::VHandles vhandles;
+        size_t nV = 0;
+        size_t vidx = 0;
 
-      switch (header_.mesh_) {
-        case 'T':
-          nV = 3;
-          break;
-        case 'Q':
-          nV = 4;
-          break;
-      }
-
-      for (; fidx < header_.n_faces_; ++fidx) {
-        if (header_.mesh_ == 'P')
-          bytes_ += restore(_is, nV, Chunk::Integer_16, _swap);
-
-        vhandles.clear();
-        for (size_t j = 0; j < nV; ++j) {
-          bytes_ += restore(_is, vidx, Chunk::Integer_Size(chunk_header_.bits_), _swap);
-
-          vhandles.push_back(VertexHandle(int(vidx)));
+        switch (header_.mesh_) {
+          case 'T':
+            nV = 3;
+            break;
+          case 'Q':
+            nV = 4;
+            break;
         }
 
-        _bi.add_face(vhandles);
+        for (; fidx < header_.n_faces_; ++fidx) {
+          if (header_.mesh_ == 'P')
+            bytes_ += restore(_is, nV, Chunk::Integer_16, _swap);
+
+          vhandles.clear();
+          for (size_t j = 0; j < nV; ++j) {
+            bytes_ += restore(_is, vidx, Chunk::Integer_Size(chunk_header_.bits_), _swap);
+
+            vhandles.push_back(VertexHandle(int(vidx)));
+          }
+
+          _bi.add_face(vhandles);
+        }
+      }
+      else
+      {
+        // add faces by simply setting an incident halfedge
+        for (; fidx < header_.n_faces_; ++fidx)
+        {
+          int halfedge_id;
+          bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+          _bi.add_face(HalfedgeHandle(halfedge_id));
+        }
       }
     }
       break;
@@ -430,6 +485,19 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
           _bi.set_color(FaceHandle(int(fidx)), v3uc);
       }
       break;
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (; fidx < header_.n_faces_ && !_is.eof(); ++fidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.face_has_status() && _opt.face_has_status())
+          _bi.set_status(FaceHandle(int(fidx)), status);
+      }
+      break;
+    }
 
     case Chunk::Type_Custom:
 
@@ -453,7 +521,7 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Options &/*_opt */, bool _swap) const
+bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Options &_opt, bool _swap) const
 {
   using OMFormat::Chunk;
 
@@ -461,12 +529,28 @@ bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Op
 
   size_t b = bytes_;
 
+  OpenMesh::Attributes::StatusInfo status;
+
   switch (chunk_header_.type_) {
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_eprop(property_name_), header_.n_edges_, _swap);
 
       break;
+
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (size_t eidx = 0; eidx < header_.n_edges_ && !_is.eof(); ++eidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.edge_has_status() && _opt.edge_has_status())
+          _bi.set_status(EdgeHandle(int(eidx)), status);
+      }
+      break;
+    }
 
     default:
       // skip unknown type
@@ -481,19 +565,69 @@ bool _OMReader_::read_binary_edge_chunk(std::istream &_is, BaseImporter &_bi, Op
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi, Options &/* _opt */, bool _swap) const
+bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi, Options & _opt, bool _swap) const
 {
   using OMFormat::Chunk;
 
   assert( chunk_header_.entity_ == Chunk::Entity_Halfedge);
 
   size_t b = bytes_;
+  OpenMesh::Attributes::StatusInfo status;
 
   switch (chunk_header_.type_) {
     case Chunk::Type_Custom:
 
       bytes_ += restore_binary_custom_data(_is, _bi.kernel()->_get_hprop(property_name_), 2 * header_.n_edges_, _swap);
       break;
+
+    case Chunk::Type_Topology:
+    {
+      std::vector<HalfedgeHandle> next_halfedges;
+      for (size_t e_idx = 0; e_idx < header_.n_edges_; ++e_idx)
+      {
+        int next_id_0;
+        int to_vertex_id_0;
+        int face_id_0;
+        bytes_ += restore( _is, next_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, to_vertex_id_0, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, face_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        int next_id_1;
+        int to_vertex_id_1;
+        int face_id_1;
+        bytes_ += restore( _is, next_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, to_vertex_id_1, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+        bytes_ += restore( _is, face_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
+
+        auto heh0 = _bi.add_edge(VertexHandle(to_vertex_id_1), VertexHandle(to_vertex_id_0));
+        auto heh1 = HalfedgeHandle(heh0.idx() + 1);
+
+        next_halfedges.push_back(HalfedgeHandle(next_id_0));
+        next_halfedges.push_back(HalfedgeHandle(next_id_1));
+
+        _bi.set_face(heh0, FaceHandle(face_id_0));
+        _bi.set_face(heh1, FaceHandle(face_id_1));
+      }
+
+      for (size_t i = 0; i < next_halfedges.size(); ++i)
+        _bi.set_next(HalfedgeHandle(static_cast<int>(i)), next_halfedges[i]);
+    }
+
+      break;
+
+    case Chunk::Type_Status:
+    {
+      assert( OMFormat::dimensions(chunk_header_) == 1);
+
+      fileOptions_ += Options::Status;
+
+      for (size_t hidx = 0; hidx < header_.n_edges_ * 2 && !_is.eof(); ++hidx) {
+        bytes_ += restore(_is, status, _swap);
+        if (fileOptions_.halfedge_has_status() && _opt.halfedge_has_status())
+          _bi.set_status(HalfedgeHandle(int(hidx)), status);
+      }
+      break;
+    }
 
     default:
       // skip unknown chunk

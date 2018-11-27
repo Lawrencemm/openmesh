@@ -171,6 +171,13 @@ public:
         : Vec2f(0.0f, 0.0f));
   }
 
+  OpenMesh::Attributes::StatusInfo  status(VertexHandle _vh) const
+  {
+    if (mesh_.has_vertex_status())
+      return mesh_.status(_vh);
+    return OpenMesh::Attributes::StatusInfo();
+  }
+
   // get edge data
 
   Vec3uc color(EdgeHandle _eh)    const
@@ -213,6 +220,47 @@ public:
     return (mesh_.has_vertex_colors()
       ? color_cast<Vec4f>(mesh_.color(_eh))
       : Vec4f(0, 0, 0, 0));
+  }
+
+  OpenMesh::Attributes::StatusInfo  status(EdgeHandle _eh) const
+  {
+    if (mesh_.has_edge_status())
+      return mesh_.status(_eh);
+    return OpenMesh::Attributes::StatusInfo();
+  }
+
+  // get halfedge data
+
+  int get_halfedge_id(VertexHandle _vh) override
+  {
+    return mesh_.halfedge_handle(_vh).idx();
+  }
+
+  int get_halfedge_id(FaceHandle _fh) override
+  {
+    return mesh_.halfedge_handle(_fh).idx();
+  }
+
+  int get_next_halfedge_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.next_halfedge_handle(_heh).idx();
+  }
+
+  int get_to_vertex_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.to_vertex_handle(_heh).idx();
+  }
+
+  int get_face_id(HalfedgeHandle _heh) override
+  {
+    return mesh_.face_handle(_heh).idx();
+  }
+
+  OpenMesh::Attributes::StatusInfo  status(HalfedgeHandle _heh) const
+  {
+    if (mesh_.has_halfedge_status())
+      return mesh_.status(_heh);
+    return OpenMesh::Attributes::StatusInfo();
   }
 
   // get face data
@@ -304,6 +352,13 @@ public:
       : Vec4f(0, 0, 0, 0));
   }
 
+  OpenMesh::Attributes::StatusInfo  status(FaceHandle _fh) const
+  {
+    if (mesh_.has_face_status())
+      return mesh_.status(_fh);
+    return OpenMesh::Attributes::StatusInfo();
+  }
+
   virtual const BaseKernel* kernel() { return &mesh_; }
 
 
@@ -320,9 +375,13 @@ public:
   bool has_vertex_normals()   const { return mesh_.has_vertex_normals();   }
   bool has_vertex_colors()    const { return mesh_.has_vertex_colors();    }
   bool has_vertex_texcoords() const { return mesh_.has_vertex_texcoords2D(); }
+  bool has_vertex_status()    const { return mesh_.has_vertex_status();    }
   bool has_edge_colors()      const { return mesh_.has_edge_colors();      }
+  bool has_edge_status()      const { return mesh_.has_edge_status();      }
+  bool has_halfedge_status()  const { return mesh_.has_halfedge_status();  }
   bool has_face_normals()     const { return mesh_.has_face_normals();     }
   bool has_face_colors()      const { return mesh_.has_face_colors();      }
+  bool has_face_status()      const { return mesh_.has_face_status();      }
 
 private:
 
