@@ -86,7 +86,7 @@ _OMWriter_& OMWriter() { return __OMWriterInstance; }
 
 
 const OMFormat::uchar _OMWriter_::magic_[3] = "OM";
-const OMFormat::uint8 _OMWriter_::version_  = OMFormat::mk_version(1,2);
+const OMFormat::uint8 _OMWriter_::version_  = OMFormat::mk_version(2,0);
 
 
 _OMWriter_::
@@ -187,8 +187,6 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   unsigned int i, nV, nF;
   Vec3f v;
   Vec2f t;
-  std::vector<VertexHandle> vhandles;
-
 
   // -------------------- write header
   OMFormat::Header header;
@@ -286,6 +284,50 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   }
 
+  // ---------- wirte halfedge data
+  if (_be.n_edges())
+  {
+    chunk_header.reserved_ = 0;
+    chunk_header.name_     = false;
+    chunk_header.entity_   = OMFormat::Chunk::Entity_Halfedge;
+    chunk_header.type_     = OMFormat::Chunk::Type_Topology;
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_3D;
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
+
+    bytes += store( _os, chunk_header, swap );
+    auto nE=header.n_edges_*2;
+    for (i=0; i<nE; ++i)
+    {
+      auto next_id      = _be.get_next_halfedge_id(HalfedgeHandle(static_cast<int>(i)));
+      auto to_vertex_id = _be.get_to_vertex_id(HalfedgeHandle(static_cast<int>(i)));
+      auto face_id      = _be.get_face_id(HalfedgeHandle(static_cast<int>(i)));
+
+      bytes += store( _os, next_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, to_vertex_id, OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, face_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+    }
+  }
+
+  // ---------- write vertex topology (outgoing halfedge)
+  if (_be.n_vertices())
+  {
+    chunk_header.reserved_ = 0;
+    chunk_header.name_     = false;
+    chunk_header.entity_   = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_     = OMFormat::Chunk::Type_Topology;
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
+
+    bytes += store( _os, chunk_header, swap );
+    for (i=0, nV=header.n_vertices_; i<nV; ++i)
+      bytes += store( _os, _be.get_halfedge_id(VertexHandle(i)), OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+  }
+
+
   // -------------------- write face data
 
   // ---------- write topology
@@ -293,27 +335,17 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.name_     = false;
     chunk_header.entity_   = OMFormat::Chunk::Entity_Face;
     chunk_header.type_     = OMFormat::Chunk::Type_Topology;
-    chunk_header.signed_   = 0;
-    chunk_header.float_    = 0;
-    chunk_header.dim_      = OMFormat::Chunk::Dim_1D; // ignored
-    chunk_header.bits_     = OMFormat::needed_bits(_be.n_vertices());
+    chunk_header.signed_   = true;
+    chunk_header.float_    = true; // TODO: is this correct? This causes a scalar size of 1 in OMFormat.hh scalar_size which we need I think?
+    chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
     bytes += store( _os, chunk_header, swap );
 
     for (i=0, nF=header.n_faces_; i<nF; ++i)
     {
-      //nV = _be.get_vhandles(FaceHandle(i), vhandles);
-      _be.get_vhandles(FaceHandle(i), vhandles);
-      if ( header.mesh_ == 'P' )
-        bytes += store( _os, vhandles.size(), OMFormat::Chunk::Integer_16, swap );
-
-      for (size_t j=0; j < vhandles.size(); ++j)
-      {
-        using namespace OMFormat;
-        using namespace GenProg;
-
-        bytes += store( _os, vhandles[j].idx(), Chunk::Integer_Size(chunk_header.bits_), swap );
-      }
+      auto size = OMFormat::Chunk::Integer_Size(chunk_header.bits_);
+      bytes += store( _os, _be.get_halfedge_id(FaceHandle(i)), size, swap);
     }
   }
 
@@ -383,6 +415,82 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     else
       return false;
 #endif
+  }
+
+  // ---------- write vertex status
+  if (_be.n_vertices() && _be.has_vertex_status() && _opt.check(Options::Status))
+  {
+    auto s = _be.status(VertexHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Vertex;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_vertices_; i < nV; ++i)
+      bytes += store(_os, _be.status(VertexHandle(i)), swap);
+  }
+
+  // ---------- write edge status
+  if (_be.n_edges() && _be.has_edge_status() && _opt.check(Options::Status))
+  {
+    auto s = _be.status(EdgeHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Edge;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_edges_; i < nV; ++i)
+      bytes += store(_os, _be.status(EdgeHandle(i)), swap);
+  }
+
+  // ---------- write halfedge status
+  if (_be.n_edges() && _be.has_halfedge_status() && _opt.check(Options::Status))
+  {
+    auto s = _be.status(HalfedgeHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Halfedge;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_edges_ * 2; i < nV; ++i)
+      bytes += store(_os, _be.status(HalfedgeHandle(i)), swap);
+  }
+
+  // ---------- write face status
+  if (_be.n_faces() && _be.has_face_status() && _opt.check(Options::Status))
+  {
+    auto s = _be.status(FaceHandle(0));
+    chunk_header.name_ = false;
+    chunk_header.entity_ = OMFormat::Chunk::Entity_Face;
+    chunk_header.type_ = OMFormat::Chunk::Type_Status;
+    chunk_header.signed_ = false;
+    chunk_header.float_ = false;
+    chunk_header.dim_ = OMFormat::Chunk::Dim_1D;
+    chunk_header.bits_ = OMFormat::bits(s);
+
+    // std::clog << chunk_header << std::endl;
+    bytes += store(_os, chunk_header, swap);
+
+    for (i = 0, nV = header.n_faces_; i < nV; ++i)
+      bytes += store(_os, _be.status(FaceHandle(i)), swap);
   }
 
   // -------------------- write custom properties

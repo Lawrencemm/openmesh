@@ -469,6 +469,8 @@ namespace OMFormat {
 
   // ---------------------------------------- convenience functions
 
+  std::string as_string(uint8 version);
+
   const char *as_string(Chunk::Type t);
   const char *as_string(Chunk::Entity e);
   const char *as_string(Chunk::Dim d);

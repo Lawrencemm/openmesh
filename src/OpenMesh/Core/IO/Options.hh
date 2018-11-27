@@ -115,7 +115,8 @@ public:
       FaceTexCoord   = 0x0400, ///< Has (r) / store (w) face texture coordinates
       ColorAlpha     = 0x0800, ///< Has (r) / store (w) alpha values for colors
       ColorFloat     = 0x1000, ///< Has (r) / store (w) float values for colors (currently only implemented for PLY and OFF files)
-      Custom         = 0x2000  ///< Has (r)             custom properties (currently only implemented in PLY Reader ASCII version)
+      Custom         = 0x2000, ///< Has (r)             custom properties (currently only implemented in PLY Reader ASCII version)
+      Status         = 0x4000  ///< Has (r) / store (w) status properties
   };
 
 public:
@@ -206,10 +207,14 @@ public:
   bool vertex_has_normal()   const { return check(VertexNormal); }
   bool vertex_has_color()    const { return check(VertexColor); }
   bool vertex_has_texcoord() const { return check(VertexTexCoord); }
+  bool vertex_has_status()   const { return check(Status); }
   bool edge_has_color()      const { return check(EdgeColor); }
+  bool edge_has_status()     const { return check(Status); }
+  bool halfedge_has_status() const { return check(Status); }
   bool face_has_normal()     const { return check(FaceNormal); }
   bool face_has_color()      const { return check(FaceColor); }
   bool face_has_texcoord()   const { return check(FaceTexCoord); }
+  bool face_has_status()     const { return check(Status); }
   bool color_has_alpha()     const { return check(ColorAlpha); }
   bool color_is_float()      const { return check(ColorFloat); }
 
