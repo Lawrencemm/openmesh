@@ -1,7 +1,7 @@
 /** \page tutorial_03 Using (custom) properties
 
 This examples shows:
-- How to add and remove custom properties,
+- How to add and remove custom properties
 - How to get and set the value of a custom property
 
 In the last example we computed the barycenter of each vertex'
@@ -11,43 +11,68 @@ let %OpenMesh manage the data.
 It would be even more helpful if we could attach such properties
 dynamically to the mesh.
 
-%OpenMesh provides dynamic properties, which can be attached to each
-mesh entity (vertex, face, edge, halfedge, and the mesh itself). We
-distinguish between custom and standard properties. A custom property
-is any user-defined property and is accessed via the member function
-\c property(..) via a handle and an entity handle
-(e.g. VertexHandle). Whereas the standard properties are accessed via
-special member functions, e.g. the vertex position is accessed with \c
-point(..) and a vertex handle.
+Custom properties can be conveniently created and attached to meshes with the following functions:
+- makeTemporaryProperty() creates a property that is temporary to the current scope.
+- getOrMakeProperty() is used for creating and accessing permanent named properties on a mesh.
+- getProperty() is used for accessing an existing permanent named property on a mesh.
 
-In this example we will store the \c cog-value (see previous example)
-in an additional vertex property instead of keeping it in a separate
-array. To do so we define first a so-called property handle with the desired
-type (\c MyMesh::Point) and register the handle at the mesh:
+All three functions take two template arguments:
+- First, the type of the mesh element that the property is attached to (i.e. OpenMesh::VertexHandle, OpenMesh::HalfedgeHandle, OpenMesh::EdgeHandle, or OpenMesh::FaceHandle).
+- Second, the type of the property value that is attached to each element (e.g., \p int, \p double, etc.).
 
-\dontinclude 03-properties/smooth.cc
-\skipline vertex property stores
-\until mesh.add
+All three functions return a handle object (of type PropertyManager) that manages the lifetime of the property and provides read / write access to its values.
 
-<br>The \c mesh allocates enough memory to hold as many elements of type
-\c MyMesh::Point as number of vertices exist, and of course the mesh
-synchronizes all insert and delete operations on the vertices with the
-vertex properties.
-
-Once the wanted property is registered we can use the property to
-calculate the barycenter of the neighborhood of each vertex \c v_it
+In this example, we will store the \c cog value (see previous example) in a vertex property instead of keeping it in a separate array.
+To do so, we first add a (temporary) property of the desired element type (OpenMesh::VertexHandle) and value type (\c %MyMesh::Point) to the mesh:
 
 \dontinclude 03-properties/smooth.cc
-\skipline vv_it=
+\skipline makeTemporaryProperty
+
+Enough memory is allocated to hold as many values of \c %MyMesh::Point as there are vertices.
+All insert and delete operations on the mesh are synchronized with the attached properties.
+
+Once the property is created, we can use it to compute the centers of the neighborhood of each vertex:
+
+\skipline mesh.vertices
+\until cog[vv] /= valence
 \until }
-\until mesh.prop
 
-<br>and finally set the new position for each vertex \c v_it
+Finally, we set the new position for each vertex:
 
-\dontinclude 03-properties/smooth.cc
-\skipline mesh.set_point
+\skipline mesh.vertices
+\until mesh.point
+\until }
 
-<br>Below is the complete source code:
+---
+
+Since we chose to use makeTemporaryProperty(), the created property is automatically removed from the mesh as soon as we leave the scope of the associated handle variable \c cog.
+
+If, instead, a property is desired to survive its local scope, it should be created with using getOrMakeProperty(). In that case, the property must be given a name that can later be used to retrieve the property. For example:
+
+\code
+    auto face_area = OpenMesh::makeTemporaryProperty<OpenMesh::FaceHandle, double>(mesh, 'face_area');
+\endcode
+
+At a later time, we can use the getProperty() function to obtain a handle to a property that was previously created by refering to its name:
+\code
+    try {
+        auto face_area = OpenMesh::getProperty<OpenMesh::FaceHandle, double>(mesh, 'face_area');
+        // Use the face_area property.
+    }
+    catch (const std::runtime_error& e) {
+        // Property not found. Handle the error here.
+    }
+\endcode
+
+---
+
+The functions makeTemporaryProperty(), getOrMakeProperty(), and getProperty() are the convenient high-level interface for creating and accessing mesh properties.
+
+Beneath these convenience functions, there is also a low-level property interface where handle and property lifetime must be managed manually. This interface is accessed through a mesh's add_property(), remove_property(), and property() functions and several property handle classes (OpenMesh::VPropHandleT, OpenMesh::HPropHandleT, OpenMesh::EPropHandleT, OpenMesh::FPropHandleT, OpenMesh::MPropHandleT).
+
+---
+
+Below is the complete source code:
 
 \include 03-properties/smooth.cc
 
