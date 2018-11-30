@@ -49,6 +49,8 @@
 #ifndef PROPERTYMANAGER_HH_
 #define PROPERTYMANAGER_HH_
 
+#include <OpenMesh/Core/System/config.h>
+#include <OpenMesh/Core/Utils/HandleToPropHandle.hh>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -60,35 +62,23 @@ namespace OpenMesh {
  * It also defines convenience operators to access the encapsulated
  * property's value.
  *
- * For C++11, it is recommended to use the factory functions
- * makePropertyManagerFromNew, makePropertyManagerFromExisting,
- * makePropertyManagerFromExistingOrNew to construct a PropertyManager, e.g.
+ * It is recommended to use the factory functions
+ * makeTemporaryProperty(), getProperty(), and getOrMakeProperty()
+ * to construct a PropertyManager, e.g.
  *
  * \code
- * TriMesh mesh;
- * auto visited = makePropertyManagerFromNew<VPropHandleT<bool>>(mesh, "visited.plugin-example.i8.informatik.rwth-aachen.de");
+ * {
+ *     TriMesh mesh;
+ *     auto visited = makeTemporaryProperty<VertexHandle, bool>(mesh);
  *
- * for (auto vh : mesh.vertices()) {
- *     if (!visited[vh]) {
- *         visitComponent(mesh, vh, visited);
+ *     for (auto vh : mesh.vertices()) {
+ *         if (!visited[vh]) {
+ *             visitComponent(mesh, vh, visited);
+ *         }
  *     }
+ *     // The property is automatically removed at the end of the scope
  * }
  * \endcode
- *
- * For C++98, it is usually more convenient to use the constructor explicitly,
- * i.e.
- *
- * \code
- * TriMesh mesh;
- * PropertyManager<VPropHandleT<bool>, TriMesh> visited(mesh, "visited.plugin-example.i8.informatik.rwth-aachen.de");
- *
- * for (TriMesh::VertexIter vh_it = mesh.begin(); ... ; ...) {
- *     if (!visited[*vh_it]) {
- *         visitComponent(mesh, *vh_it, visited);
- *     }
- * }
- * \endcode
- *
  */
 template<typename PROPTYPE, typename MeshT>
 class PropertyManager {
@@ -493,19 +483,127 @@ class PropertyManager {
         std::string name_;
 };
 
-/** \relates PropertyManager
+/** @relates PropertyManager
+ *
+ * Creates a new property whose lifetime is limited to the current scope.
+ *
+ * Used for temporary properties. Shadows any existing properties of
+ * matching name and type.
+ *
+ * Example:
+ * @code
+ * PolyMesh m;
+ * {
+ *     auto is_quad = makeTemporaryProperty<FaceHandle, bool>(m);
+ *     for (auto& fh : m.faces()) {
+ *         is_quad[fh] = (m.valence(fh) == 4);
+ *     }
+ *     // The property is automatically removed from the mesh at the end of the scope.
+ * }
+ * @endcode
+ *
+ * @param mesh The mesh on which the property is created
+ * @param propname (optional) The name of the created property
+ * @tparam ElementT Element type of the created property, e.g. VertexHandle, HalfedgeHandle, etc.
+ * @tparam T Value type of the created property, e.g., \p double, \p int, etc.
+ * @tparam MeshT Type of the mesh. Can often be inferred from \p mesh
+ * @returns A PropertyManager handling the lifecycle of the property
+ */
+template<typename ElementT, typename T, typename MeshT>
+PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>
+makeTemporaryProperty(MeshT &mesh, const char *propname = "") {
+    return PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>(mesh, propname, false);
+}
+
+/** @relates PropertyManager
+ *
+ * Obtains a handle to a named property.
+ *
+ * Example:
+ * @code
+ * PolyMesh m;
+ * {
+ *     try {
+ *         auto is_quad = getProperty<FaceHandle, bool>(m, "is_quad");
+ *         // Use is_quad here.
+ *     }
+ *     catch (const std::runtime_error& e) {
+ *         // There is no is_quad face property on the mesh.
+ *     }
+ * }
+ * @endcode
+ *
+ * @pre Property with the name \p propname of matching type exists.
+ * @throws std::runtime_error if no property with the name \p propname of
+ * matching type exists.
+ * @param mesh The mesh on which the property is created
+ * @param propname The name of the created property
+ * @tparam ElementT Element type of the created property, e.g. VertexHandle, HalfedgeHandle, etc.
+ * @tparam T Value type of the created property, e.g., \p double, \p int, etc.
+ * @tparam MeshT Type of the mesh. Can often be inferred from \p mesh
+ * @returns A PropertyManager wrapping the property
+ */
+template<typename ElementT, typename T, typename MeshT>
+PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>
+getProperty(MeshT &mesh, const char *propname) {
+    return PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>(mesh, propname, true);
+}
+
+/** @relates PropertyManager
+ *
+ * Obtains a handle to a named property if it exists or creates a new one otherwise.
+ *
+ * Used for creating or accessing permanent properties.
+ *
+ * Example:
+ * @code
+ * PolyMesh m;
+ * {
+ *     auto is_quad = getOrMakeProperty<FaceHandle, bool>(m, "is_quad");
+ *     for (auto& fh : m.faces()) {
+ *         is_quad[fh] = (m.valence(fh) == 4);
+ *     }
+ *     // The property remains on the mesh after the end of the scope.
+ * }
+ * {
+ *     // Retrieve the property from the previous scope.
+ *     auto is_quad = getOrMakeProperty<FaceHandle, bool>(m, "is_quad");
+ *     // Use is_quad here.
+ * }
+ * @endcode
+ *
+ * @param mesh The mesh on which the property is created
+ * @param propname The name of the created property
+ * @tparam ElementT Element type of the created property, e.g. VertexHandle, HalfedgeHandle, etc.
+ * @tparam T Value type of the created property, e.g., \p double, \p int, etc.
+ * @tparam MeshT Type of the mesh. Can often be inferred from \p mesh
+ * @returns A PropertyManager wrapping the property
+ */
+template<typename ElementT, typename T, typename MeshT>
+PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>
+getOrMakeProperty(MeshT &mesh, const char *propname) {
+    return PropertyManager<typename HandleToPropHandle<ElementT, T>::type, MeshT>::createIfNotExists(mesh, propname);
+}
+
+/** @relates PropertyManager
+ * @deprecated Use makeTemporaryProperty() instead.
+ *
  * Creates a new property whose lifecycle is managed by the returned
  * PropertyManager.
  *
- * Intended for temporary properties. Shadows any existsing properties of
+ * Intended for temporary properties. Shadows any existing properties of
  * matching name and type.
  */
 template<typename PROPTYPE, typename MeshT>
-PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromNew(MeshT &mesh, const char *propname) {
+OM_DEPRECATED("Use makeTemporaryProperty instead.")
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromNew(MeshT &mesh, const char *propname)
+{
     return PropertyManager<PROPTYPE, MeshT>(mesh, propname, false);
 }
 
 /** \relates PropertyManager
+ * @deprecated Use getProperty() instead.
+ *
  * Creates a non-owning wrapper for an existing mesh property (no lifecycle
  * management).
  *
@@ -516,22 +614,28 @@ PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromNew(MeshT &mesh, const c
  * matching type exists.
  */
 template<typename PROPTYPE, typename MeshT>
-PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExisting(MeshT &mesh, const char *propname) {
+OM_DEPRECATED("Use getProperty instead.")
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExisting(MeshT &mesh, const char *propname)
+{
     return PropertyManager<PROPTYPE, MeshT>(mesh, propname, true);
 }
 
-/** \relates PropertyManager
+/** @relates PropertyManager
+ * @deprecated Use getOrMakeProperty() instead.
+ *
  * Creates a non-owning wrapper for a mesh property (no lifecycle management).
  * If the given property does not exist, it is created.
  *
  * Intended for creating or accessing persistent properties.
  */
 template<typename PROPTYPE, typename MeshT>
-PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(MeshT &mesh, const char *propname) {
+OM_DEPRECATED("Use getOrMakeProperty instead.")
+PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(MeshT &mesh, const char *propname)
+{
     return PropertyManager<PROPTYPE, MeshT>::createIfNotExists(mesh, propname);
 }
 
-/** \relates PropertyManager
+/** @relates PropertyManager
  * Like the two parameter version of makePropertyManagerFromExistingOrNew()
  * except it initializes the property with the specified value over the
  * specified range if it needs to be created. If the property already exists,
@@ -552,7 +656,7 @@ PropertyManager<PROPTYPE, MeshT> makePropertyManagerFromExistingOrNew(
             mesh, propname, begin, end, init_value);
 }
 
-/** \relates PropertyManager
+/** @relates PropertyManager
  * Like the two parameter version of makePropertyManagerFromExistingOrNew()
  * except it initializes the property with the specified value over the
  * specified range if it needs to be created. If the property already exists,
