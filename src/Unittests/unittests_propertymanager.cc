@@ -93,7 +93,6 @@ TEST_F(OpenMeshPropertyManager, set_range_bool) {
           ASSERT_TRUE(pm_f_bool[*f_it]);
   }
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   /*
    * Same thing again, this time with C++11 ranges.
    */
@@ -129,15 +128,13 @@ TEST_F(OpenMeshPropertyManager, set_range_bool) {
               f_it != f_end; ++f_it)
           ASSERT_TRUE(pm_f_bool[*f_it]);
   }
-#endif
 }
 
 /*
  * ====================================================================
- * C++11 Specific Tests
+ * Factory Functions
  * ====================================================================
  */
-#if (defined(_MSC_VER) && (_MSC_VER >= 1800)) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 
 template<typename PropHandle, typename Mesh>
 bool has_property(const Mesh& _mesh, const std::string& _name) {
@@ -154,7 +151,7 @@ TEST_F(OpenMeshPropertyManager, cpp11_temp_property) {
     ASSERT_FALSE(has_property<handle_type>(mesh_, prop_name));
 
     {
-        auto vprop = OpenMesh::makePropertyManagerFromNew<handle_type>(mesh_, prop_name);
+        auto vprop = OpenMesh::makeTemporaryProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
         static_cast<void>(vprop); // Unused variable
         ASSERT_TRUE(has_property<handle_type>(mesh_, prop_name));
     }
@@ -172,13 +169,13 @@ TEST_F(OpenMeshPropertyManager, cpp11_temp_property_shadowing) {
     using handle_type = OpenMesh::VPropHandleT<int>;
     const auto prop_name = "pm_v_test_property";
 
-    auto outer_prop = OpenMesh::makePropertyManagerFromNew<handle_type>(mesh_, prop_name);
+    auto outer_prop = OpenMesh::makeTemporaryProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
     outer_prop[vh] = 100;
     ASSERT_EQ(100, outer_prop[vh]);
 
     {
         // inner_prop uses same type and name as outer_prop
-        auto inner_prop = OpenMesh::makePropertyManagerFromNew<handle_type>(mesh_, prop_name);
+        auto inner_prop = OpenMesh::makeTemporaryProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
         inner_prop[vh] = 200;
         ASSERT_EQ(200, inner_prop[vh]);
         // End of scope: inner_prop is removed from mesh_
@@ -205,7 +202,7 @@ TEST_F(OpenMeshPropertyManager, cpp11_persistent_and_non_owning_properties) {
     ASSERT_FALSE(has_property<handle_type>(mesh_, prop_name));
 
     {
-        auto prop = OpenMesh::makePropertyManagerFromExistingOrNew<handle_type>(mesh_, prop_name);
+        auto prop = OpenMesh::getOrMakeProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
         prop[vh] = 100;
         // End of scope, property persists
     }
@@ -214,7 +211,7 @@ TEST_F(OpenMeshPropertyManager, cpp11_persistent_and_non_owning_properties) {
 
     {
         // Since a property of the same name and type already exists, this refers to the existing property.
-        auto prop = OpenMesh::makePropertyManagerFromExistingOrNew<handle_type>(mesh_, prop_name);
+        auto prop = OpenMesh::getOrMakeProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
         ASSERT_EQ(100, prop[vh]);
         prop[vh] = 200;
         // End of scope, property persists
@@ -224,7 +221,7 @@ TEST_F(OpenMeshPropertyManager, cpp11_persistent_and_non_owning_properties) {
 
     {
         // Acquire non-owning handle to the property, knowing it exists
-        auto prop = OpenMesh::makePropertyManagerFromExisting<handle_type>(mesh_, prop_name);
+        auto prop = OpenMesh::getProperty<OpenMesh::VertexHandle, int>(mesh_, prop_name);
         ASSERT_EQ(200, prop[vh]);
     }
 
@@ -232,12 +229,13 @@ TEST_F(OpenMeshPropertyManager, cpp11_persistent_and_non_owning_properties) {
 
     {
         // Attempt to acquire non-owning handle for a non-existing property
-        ASSERT_THROW(OpenMesh::makePropertyManagerFromExisting<handle_type>(mesh_, "wrong_property_name"), std::runtime_error);
+        auto code_that_throws = [&](){
+            OpenMesh::getProperty<OpenMesh::VertexHandle, int>(mesh_, "wrong_prop_name");
+        };
+        ASSERT_THROW(code_that_throws(), std::runtime_error);
     }
 
     ASSERT_TRUE(has_property<handle_type>(mesh_, prop_name));
 }
-
-#endif
 
 }
