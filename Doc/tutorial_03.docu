@@ -20,7 +20,7 @@ All three functions take two template arguments:
 - First, the type of the mesh element that the property is attached to (i.e. OpenMesh::VertexHandle, OpenMesh::HalfedgeHandle, OpenMesh::EdgeHandle, or OpenMesh::FaceHandle).
 - Second, the type of the property value that is attached to each element (e.g., \p int, \p double, etc.).
 
-All three functions return a handle object (of type PropertyManager) that manages the lifetime of the property and provides read / write access to its values.
+All three functions return a handle object (of type OpenMesh::PropertyManager) that manages the lifetime of the property and provides read / write access to its values.
 
 In this example, we will store the \c cog value (see previous example) in a vertex property instead of keeping it in a separate array.
 To do so, we first add a (temporary) property of the desired element type (OpenMesh::VertexHandle) and value type (\c %MyMesh::Point) to the mesh:
