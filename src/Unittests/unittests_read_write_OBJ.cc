@@ -544,10 +544,10 @@ TEST_F(OpenMeshReadWriteOBJ, FaceTexCoordTest) {
 
   u = 0.0f;
 
-  for ( auto fh : mesh_.fh_range(fh) )
+  for ( auto he : mesh_.fh_range(fh) )
   {
 
-    mesh_.set_texcoord2D(fh,Mesh::TexCoord2D(u,u));
+    mesh_.set_texcoord2D(he,Mesh::TexCoord2D(u,u));
     u += 1.0f;
   }
 
