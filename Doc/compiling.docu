@@ -12,12 +12,11 @@ supports at least C++11
 <table>
 
 <tr><td> Linux </td><td>
-gcc   >= 4.8.x<br>
+gcc   >= 6.3<br>
 clang >= 3.3<br>
 </td></tr>
 
 <tr><td> Windows </td><td> 
-Microsoft Visual Studio 2013<br>
 Microsoft Visual Studio 2015<br>
 Microsoft Visual Studio 2017<br>
 </td></tr>

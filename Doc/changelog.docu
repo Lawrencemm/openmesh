@@ -9,6 +9,11 @@
 
 <tr valign=top><td><b>8.0</b> (?/?/?)</td><td>
 
+<b>Breaking changes:</b>
+<ul>
+<li>Don't run and test on VS2013 anymore. As VS2013 still lacks some C++11 features, we remove it from our list of supported platforms</li>
+</ul>
+
 <b>Core</b>
 <ul>
 <li>TriConnectivity: Added two functions split_edge and split_edge_copy to mask the PolyConnectivity functions of the same name (Prevents creation of valence 2 vertices on trimeshes)</li>
