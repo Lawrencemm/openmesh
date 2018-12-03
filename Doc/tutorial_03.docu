@@ -34,7 +34,7 @@ All insert and delete operations on the mesh are synchronized with the attached 
 Once the property is created, we can use it to compute the centers of the neighborhood of each vertex:
 
 \skipline mesh.vertices
-\until cog[vv] /= valence
+\until cog[vh] /= valence
 \until }
 
 Finally, we set the new position for each vertex:
