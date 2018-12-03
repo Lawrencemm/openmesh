@@ -1,5 +1,6 @@
 
 #include <gtest/gtest.h>
+#include <OpenMesh/Core/Utils/PropertyManager.hh>
 #include <Unittests/unittests_common.hh>
 #include <string>
 #include <map>
@@ -448,36 +449,31 @@ TEST_F(OpenMeshTutorials, using_custom_properties) {
   bool ok = OpenMesh::IO::read_mesh(mesh, "output.off");
   EXPECT_TRUE(ok) << "Cannot read mesh from file 'output.off'";
 
-  // this vertex property stores the computed centers of gravity
-  OpenMesh::VPropHandleT<MyMesh::Point> cogs;
-  mesh.add_property(cogs);
+  const int iterations = 100;
 
-  // smoothing mesh N times
-  MyMesh::VertexIter          v_it, v_end(mesh.vertices_end());
-  MyMesh::VertexVertexIter    vv_it;
-  MyMesh::Point               cog;
-  MyMesh::Scalar              valence;
-  unsigned int                i, N(100);
-
-  for (i=0; i < N; ++i)
   {
-    for (v_it = mesh.vertices_begin(); v_it != v_end; ++v_it)
-    {
-      mesh.property(cogs,*v_it).vectorize(0.0f);
-      valence = 0.0;
+    // Add a vertex property storing the computed centers of gravity
+    auto cog = OpenMesh::makeTemporaryProperty<OpenMesh::VertexHandle, MyMesh::Point>(mesh);
 
-      for (vv_it = mesh.vv_iter( *v_it ); vv_it.is_valid(); ++vv_it)
-      {
-        mesh.property(cogs,*v_it) += mesh.point( *vv_it );
-        ++valence;
+    // Smooth the mesh several times
+    for (int i = 0; i < iterations; ++i) {
+      // Iterate over all vertices to compute centers of gravity
+      for (const auto& vh : mesh.vertices()) {
+        cog[vh] = {0,0,0};
+        int valence = 0;
+        // Iterate over all 1-ring vertices around vh
+        for (const auto& vvh : mesh.vv_range(vh)) {
+          cog[vh] += mesh.point(vvh);
+          ++valence;
+        }
+        cog[vh] /= valence;
       }
-      mesh.property(cogs,*v_it) /= valence;
+      // Move all vertices to the previously computed positions
+      for (const auto& vh : mesh.vertices()) {
+        mesh.point(vh) = cog[vh];
+      }
     }
-
-    for (v_it = mesh.vertices_begin(); v_it != v_end; ++v_it)
-      if ( !mesh.is_boundary( *v_it ) )
-        mesh.set_point( *v_it, mesh.property(cogs,*v_it) );
-  }
+  } // The cog vertex property is removed from the mesh at the end of this scope
 
   // write mesh
   ok = OpenMesh::IO::write_mesh(mesh, "smoothed_custom_properties_output.off");

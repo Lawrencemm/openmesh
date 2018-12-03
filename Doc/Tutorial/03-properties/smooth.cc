@@ -1,74 +1,57 @@
-#include <iostream>
-#include <vector>
-// --------------------
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include <OpenMesh/Core/Utils/PropertyManager.hh>
 
-typedef OpenMesh::TriMesh_ArrayKernelT<>  MyMesh;
+#include <iostream>
+#include <vector>
 
+using MyMesh = OpenMesh::TriMesh_ArrayKernelT<>;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  MyMesh  mesh;
-
-
-  // check command line options
-  if (argc != 4) 
-  {
-    std::cerr << "Usage:  " << argv[0] << " #iterations infile outfile\n";
-    return 1;
-  }
-
-
-
-  // read mesh from stdin
-  if ( ! OpenMesh::IO::read_mesh(mesh, argv[2]) )
-  {
-     std::cerr << "Error: Cannot read mesh from " << argv[2] << std::endl;
-     return 1;
-  }
-
-
-
-  // this vertex property stores the computed centers of gravity
-  OpenMesh::VPropHandleT<MyMesh::Point> cogs;
-  mesh.add_property(cogs);
-
-  // smoothing mesh argv[1] times
-  MyMesh::VertexIter          v_it, v_end(mesh.vertices_end());
-  MyMesh::VertexVertexIter    vv_it;
-  MyMesh::Point               cog;
-  MyMesh::Scalar              valence;
-  unsigned int                i, N(atoi(argv[1]));
-
-  
-  for (i=0; i < N; ++i)
-  {
-    for (v_it=mesh.vertices_begin(); v_it!=v_end; ++v_it)
-    {      
-      mesh.property(cogs,*v_it).vectorize(0.0f);
-      valence = 0.0;
-      
-      for (vv_it=mesh.vv_iter( *v_it ); vv_it; ++vv_it)
-      {
-	mesh.property(cogs,*v_it) += mesh.point( *vv_it );
-	++valence;
-      }
-      mesh.property(cogs,*v_it) /= valence;
+    // Read command line options
+    MyMesh mesh;
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " #iterations infile outfile" << std::endl;
+        return 1;
     }
+    const int iterations = argv[1];
+    const std::string infile = argv[2];
+    const std::string outfile = argv[3];
     
-    for (v_it=mesh.vertices_begin(); v_it!=v_end; ++v_it)
-      if ( !mesh.is_boundary( *v_it ) )
-	mesh.set_point( *v_it, mesh.property(cogs,*v_it) );
-  }
+    // Read mesh file
+    if (!OpenMesh::IO::read_mesh(mesh, infile)) {
+        std::cerr << "Error: Cannot read mesh from " << infile << std::endl;
+        return 1;
+    }
 
+    {
+      // Add a vertex property storing the computed centers of gravity
+      auto cog = OpenMesh::makeTemporaryProperty<OpenMesh::VertexHandle, MyMesh::Point>(mesh);
 
-  // write mesh to stdout
-  if ( ! OpenMesh::IO::write_mesh(mesh, argv[3]) )
-  {
-    std::cerr << "Error: cannot write mesh to " << argv[3] << std::endl;
-    return 1;
-  }
-
-  return 0;
+      // Smooth the mesh several times
+      for (int i = 0; i < iterations; ++i) {
+          // Iterate over all vertices to compute centers of gravity
+          for (const auto& vh : mesh.vertices()) {
+              cog[vh] = {0,0,0};
+              int valence = 0;
+              // Iterate over all 1-ring vertices around vh
+              for (const auto& vvh : mesh.vv_range(vh)) {
+                  cog[vh] += mesh.point(vvh);
+                  ++valence;
+              }
+              cog[vh] /= valence;
+          }
+          // Move all vertices to the previously computed positions
+          for (const auto& vh : mesh.vertices()) {
+              mesh.point(vh) = cog[vh];
+          }
+      }
+    } // The cog vertex property is removed from the mesh at the end of this scope
+    
+    // Write mesh file
+    if (!OpenMesh::IO::read_mesh(mesh, outfile)) {
+        std::cerr << "Error: Cannot write mesh to " << outfile << std::endl;
+        return 1;
+    }
 }
