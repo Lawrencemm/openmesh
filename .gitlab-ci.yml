@@ -259,21 +259,6 @@ VS2015-32-bit-static-no-apps:
       - build-release/*.exe
       
       
-      
-VS2013-64-bit-shared-apps:
-  stage: build
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "TRUE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-
 VS2013-64-bit-shared-no-apps:
   stage: build
   variables:
@@ -281,20 +266,6 @@ VS2013-64-bit-shared-no-apps:
     ARCHITECTURE:   "x64"
     SHARED:         "TRUE"
     APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-
-VS2013-32-bit-shared-apps:
-  stage: build
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "TRUE"
-    APPS:           "ON"
   script: "CI\\Windows.bat"
   tags:
     - VS2013
@@ -316,20 +287,6 @@ VS2013-32-bit-shared-no-apps:
     paths:
       - build-release/*.exe
       
-VS2013-64-bit-static-apps:
-  stage: build
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x64"
-    SHARED:         "FALSE"
-    APPS:           "ON"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-
 VS2013-64-bit-static-no-apps:
   stage: build
   variables:
@@ -337,20 +294,6 @@ VS2013-64-bit-static-no-apps:
     ARCHITECTURE:   "x64"
     SHARED:         "FALSE"
     APPS:           "OFF"
-  script: "CI\\Windows.bat"
-  tags:
-    - VS2013
-  artifacts:
-    paths:
-      - build-release/*.exe
-
-VS2013-32-bit-static-apps:
-  stage: build
-  variables:
-    BUILD_PLATFORM: "VS2013"
-    ARCHITECTURE:   "x32"
-    SHARED:         "FALSE"
-    APPS:           "ON"
   script: "CI\\Windows.bat"
   tags:
     - VS2013
