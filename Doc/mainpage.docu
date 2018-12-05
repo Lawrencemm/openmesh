@@ -24,6 +24,10 @@ Here you can find information on how to build projects using the %OpenMesh libra
 as well as further information on mesh handling in %OpenMesh.
 The tutorials explain how to use %OpenMesh by demonstrating real code examples.
 
+\section openmesh-python OpenMesh Python Bindings
+We also provide python bindings for %OpenMesh. You can find them here:<br/>
+<tt>https://www.graphics.rwth-aachen.de:9000/OpenMesh/openmesh-python</tt>
+
 \section iov Building OpenMesh
 In this section all necessary information on how to build projects using %OpenMesh
 is given.
