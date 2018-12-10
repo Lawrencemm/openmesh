@@ -97,7 +97,11 @@ write(const std::string& _filename, BaseExporter& _be, Options _opt, std::stream
     return false;
   }
 
+  // Set precision on output stream. The default is set via IOManager and passed through to all writers.
   out.precision(_precision);
+
+  // Set fixed output to avoid problems with programs not reading scientific notation correctly
+  out << std::fixed;
 
   {
 #if defined(WIN32)
