@@ -741,5 +741,4 @@ TEST_F(OpenMeshCollapse, DeletedStatus) {
   EXPECT_FALSE(mesh_.status(mesh_.opposite_halfedge_handle(bottom_right)).deleted()) << "Halfedge from vertex 5 to vertex 3 is deleted";
 }
 
-
 }
