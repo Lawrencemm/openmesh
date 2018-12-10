@@ -28,6 +28,7 @@
 <li>OM Writer/Reader: Update file format version to 2.0. Older files can still be read, but older OpenMesh versions cannot read new format.</li>
 <li>OM Writer/Reader: Fixed inconsistent writing/reading of edge properties</li>
 <li>OM Writer/Reader: Add option to store status</li>
+<li>OBJ Writer: Use Fixed as stream option in OBJ writer to avoid problems with other programs reading scientific notation</li>
 </ul>
 
 <b>Tools</b>
