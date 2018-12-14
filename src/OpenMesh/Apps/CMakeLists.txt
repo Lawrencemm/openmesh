@@ -41,27 +41,17 @@ if ( BUILD_APPS )
     find_package (OpenGL)
     find_package (GLUT)
 
-    # try to use QT5 if possible otherwise stick to QT4
-    set (FORCE_QT4 OFF CACHE BOOL "Use Qt4 even if Qt5 was found")
-
     # For the apps, we need qt and opengl to build them
-    if (NOT QT5_FOUND AND NOT FORCE_QT4)
+    if (NOT QT5_FOUND)
       acg_qt5 ()
     endif()
-    if (NOT QT5_FOUND AND NOT QT4_FOUND)
-      find_package (Qt4 COMPONENTS QtCore QtGui )
-
-      set (QT_USE_QTOPENGL 1)
-
-      include (${QT_USE_FILE})
-    endif ()
 
     if ("${CMAKE_GENERATOR}" MATCHES "MinGW Makefiles")
       message(WARNING "GUI Apps are not build with mingw. (TODO)")
     endif()
 
     # check for OpenGL and GLUT as our required dependencies
-    if ((QT5_FOUND OR QT4_FOUND) AND OPENGL_FOUND AND GLUT_FOUND AND NOT "${CMAKE_GENERATOR}" MATCHES "MinGW Makefiles" )
+    if (( QT5_FOUND ) AND OPENGL_FOUND AND GLUT_FOUND AND NOT "${CMAKE_GENERATOR}" MATCHES "MinGW Makefiles" )
 
       add_subdirectory (Decimating/DecimaterGui)
       add_subdirectory (QtViewer)
@@ -99,8 +89,8 @@ if ( BUILD_APPS )
 
     else () # QT ,Opengl or glut not found
       
-      if (NOT QT4_FOUND AND NOT QT5_FOUND)
-	    message ("QT 4 and 5 not found! Skipping some apps.")
+      if (NOT QT5_FOUND)
+	    message ("QT5 not found! Skipping some apps.")
       endif ()
 
       if (NOT OPENGL_FOUND)
