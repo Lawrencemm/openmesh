@@ -1,10 +1,5 @@
 macro (acg_qt5)
 
-   if(POLICY CMP0020)
-     # Automatically link Qt executables to qtmain target on Windows
-     cmake_policy(SET CMP0020 NEW)
-   endif(POLICY CMP0020)
-
   #try to find qt5 automatically
   #for custom installation of qt5, dont use any of these variables
   set (QT5_INSTALL_PATH "" CACHE PATH "Path to Qt5 directory which contains lib and include folder")
@@ -38,13 +33,12 @@ macro (acg_qt5)
     find_package (Qt5Widgets QUIET PATHS ${QT_DEFAULT_PATH} ${QT5_FINDER_FLAGS})
     find_package (Qt5Gui QUIET PATHS ${QT_DEFAULT_PATH} ${QT5_FINDER_FLAGS})
     find_package (Qt5OpenGL QUIET PATHS ${QT_DEFAULT_PATH} ${QT5_FINDER_FLAGS})
-    find_package (Qt5Network QUIET PATHS ${QT_DEFAULT_PATH} ${QT5_FINDER_FLAGS})
 
     if (NOT WIN32 AND NOT APPLE)
        find_package (Qt5X11Extras QUIET PATHS ${QT_DEFAULT_PATH} ${QT5_FINDER_FLAGS})
     endif ()
 
-    if (Qt5Core_FOUND AND Qt5Widgets_FOUND AND Qt5Gui_FOUND AND Qt5OpenGL_FOUND AND Qt5Network_FOUND )
+    if (Qt5Core_FOUND AND Qt5Widgets_FOUND AND Qt5Gui_FOUND AND Qt5OpenGL_FOUND )
           set (QT5_FOUND TRUE)
     endif()
 
@@ -77,17 +71,6 @@ macro (acg_qt5)
     
     set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
   
-    include_directories(${Qt5Core_INCLUDE_DIRS})
-    include_directories(${Qt5Widgets_INCLUDE_DIRS})
-    include_directories(${Qt5Gui_INCLUDE_DIRS})
-    include_directories(${Qt5OpenGL_INCLUDE_DIRS})
-    include_directories(${Qt5Network_INCLUDE_DIRS})
-    add_definitions(${Qt5Core_DEFINITIONS})
-    add_definitions(${Qt5Widgets_DEFINITIONS})
-    add_definitions(${Qt5Gui_DEFINITIONS})
-    add_definitions(${Qt5OpenGL_DEFINITIONS})
-    add_definitions(${Qt5Network_DEFINITIONS})
-    
     if (Qt5X11Extras_FOUND)
             include_directories(${Qt5X11Extras_INCLUDE_DIRS})
             add_definitions(${Qt5X11Extras_DEFINITIONS})
@@ -97,39 +80,26 @@ macro (acg_qt5)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
     endif()
 
-    set (QT_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Widgets_LIBRARIES}
-      ${Qt5Gui_LIBRARIES} ${Qt5OpenGL_LIBRARIES} ${Qt5Network_LIBRARIES} )
-      
-    if (Qt5X11Extras_FOUND)
-            list (APPEND QT_LIBRARIES ${Qt5X11Extras_LIBRARIES})
-        endif ()
-     
-    if (MSVC)
-      set (QT_LIBRARIES ${QT_LIBRARIES} ${Qt5Core_QTMAIN_LIBRARIES})
-      endif()
+    #adding QT_NO_DEBUG to all release modes. 
+    #  Note: for multi generators like msvc you cannot set this definition depending of
+    #  the current build type, because it may change in the future inside the ide and not via cmake
+    if (MSVC_IDE)
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+        
+        set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+        set(CMAKE_CXX_FLAGS_MINSITEREL "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+        
+        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
+    else(MSVC_IDE)
+        if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+            add_definitions(-DQT_NO_DEBUG)
+        endif()
+    endif(MSVC_IDE)
 
-	  #add_definitions(-DQT_NO_OPENGL)
+    # Enable automoc
+    set(CMAKE_AUTOMOC ON)
 
-	  #adding QT_NO_DEBUG to all release modes. 
-	  #  Note: for multi generators like msvc you cannot set this definition depending of
-	  #  the current build type, because it may change in the future inside the ide and not via cmake
-	  if (MSVC_IDE)
-	    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-	    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-		
-		set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-	    set(CMAKE_CXX_FLAGS_MINSITEREL "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-		
-		set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-	    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} /DQT_NO_DEBUG")
-	  else(MSVC_IDE)
-	    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-	      add_definitions(-DQT_NO_DEBUG)
-	    endif()
-      endif(MSVC_IDE)
-
-      # Enable automoc
-      set(CMAKE_AUTOMOC ON)
-
-    endif (QT5_FOUND)
+  endif (QT5_FOUND)
 endmacro ()

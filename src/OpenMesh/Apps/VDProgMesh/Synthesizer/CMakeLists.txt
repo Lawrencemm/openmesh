@@ -4,7 +4,6 @@ include_directories (
   ../../../..
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${GLUT_INCLUDE_DIR}
-  ${QT_INCLUDE_DIR}
 )
 
 # collect all header and source files
@@ -22,8 +21,6 @@ acg_drop_templates (sources)
 
 if (WIN32)
   acg_add_executable (Synthesizer WIN32 ${sources} ${headers})
-  # link to qtmain library to get WinMain function for a non terminal app
-  target_link_libraries (Synthesizer ${QT_QTMAIN_LIBRARY})
 else ()
   acg_add_executable (Synthesizer ${sources} ${headers})
 endif ()
@@ -31,7 +28,7 @@ endif ()
 target_link_libraries (Synthesizer
   OpenMeshCore
   OpenMeshTools
-  ${QT_LIBRARIES}
+  Qt5::OpenGL
   ${OPENGL_LIBRARIES}
   ${GLUT_LIBRARIES}
 )
