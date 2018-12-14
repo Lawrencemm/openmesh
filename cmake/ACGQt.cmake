@@ -32,7 +32,7 @@ macro (acg_qt5)
   set(QT5_FINDER_FLAGS "" CACHE STRING "Flags for the Qt finder e.g.
                                                        NO_DEFAULT_PATH if no system installed Qt shall be found")
   # compute default search paths
-  set(SUPPORTED_QT_VERSIONS 5.9 5.8 5.7 5.6)
+  set(SUPPORTED_QT_VERSIONS 5.11 5.10 5.9 5.8 5.7 5.6)
   foreach (suffix gcc_64 clang_64)
      foreach(version ${SUPPORTED_QT_VERSIONS})
          list(APPEND QT_DEFAULT_PATH "~/sw/Qt/${version}/${suffix}")
