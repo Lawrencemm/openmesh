@@ -380,7 +380,7 @@ bool _OMReader_::read_binary_vertex_chunk(std::istream &_is, BaseImporter &_bi, 
     {
       for (; vidx < header_.n_vertices_; ++vidx)
       {
-        int halfedge_id;
+        int halfedge_id = 0;
         bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
 
         _bi.set_halfedge(VertexHandle(static_cast<int>(vidx)), HalfedgeHandle(halfedge_id));
@@ -454,7 +454,7 @@ bool _OMReader_::read_binary_face_chunk(std::istream &_is, BaseImporter &_bi, Op
         // add faces by simply setting an incident halfedge
         for (; fidx < header_.n_faces_; ++fidx)
         {
-          int halfedge_id;
+          int halfedge_id = 0;
           bytes_ += restore( _is, halfedge_id, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
 
           _bi.add_face(HalfedgeHandle(halfedge_id));
@@ -585,16 +585,16 @@ bool _OMReader_::read_binary_halfedge_chunk(std::istream &_is, BaseImporter &_bi
       std::vector<HalfedgeHandle> next_halfedges;
       for (size_t e_idx = 0; e_idx < header_.n_edges_; ++e_idx)
       {
-        int next_id_0;
-        int to_vertex_id_0;
-        int face_id_0;
+        int next_id_0      = -1;
+        int to_vertex_id_0 = -1;
+        int face_id_0      = -1; 
         bytes_ += restore( _is, next_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
         bytes_ += restore( _is, to_vertex_id_0, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
         bytes_ += restore( _is, face_id_0,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
 
-        int next_id_1;
-        int to_vertex_id_1;
-        int face_id_1;
+        int next_id_1      = -1;
+        int to_vertex_id_1 = -1;
+        int face_id_1      = -1;
         bytes_ += restore( _is, next_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
         bytes_ += restore( _is, to_vertex_id_1, OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
         bytes_ += restore( _is, face_id_1,      OMFormat::Chunk::Integer_Size(chunk_header_.bits_), _swap );
