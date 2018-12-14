@@ -17,17 +17,14 @@ set (directories
 # collect all header and source files
 acg_append_files (headers "*.hh" ${directories})
 acg_append_files (sources "*.cc" ${directories})
-acg_append_files (ui "*.ui" ${directories})
 
 # remove template cc files from source file list
 acg_drop_templates (sources)
 
 # genereate uic and moc targets
 if(QT5_FOUND)
-  acg_qt5_autouic (uic_targets ${ui})
   acg_qt5_automoc (moc_targets ${headers})
 else()
-  acg_qt4_autouic (uic_targets ${ui})
   acg_qt4_automoc (moc_targets ${headers})
 endif()
 
