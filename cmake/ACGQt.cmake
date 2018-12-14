@@ -16,9 +16,6 @@ macro (acg_qt5)
      # Automatically link Qt executables to qtmain target on Windows
      cmake_policy(SET CMP0020 NEW)
    endif(POLICY CMP0020)
-  #if (NOT QT5_FOUND)
-
-    #set (QT_MIN_VERSION ${ARGN})
 
   #try to find qt5 automatically
   #for custom installation of qt5, dont use any of these variables

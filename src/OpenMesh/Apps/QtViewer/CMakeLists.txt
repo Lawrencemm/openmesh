@@ -22,7 +22,7 @@ acg_drop_templates (sources)
 if (WIN32)
   acg_add_executable (QtViewer WIN32 ${sources} ${headers})
   # link to qtmain library to get WinMain function for a non terminal app
-  target_link_libraries (${targetName} ${QT_QTMAIN_LIBRARY})
+  target_link_libraries (QtViewer ${QT_QTMAIN_LIBRARY})
 else ()
   acg_add_executable (QtViewer ${sources} ${headers})
 endif ()
