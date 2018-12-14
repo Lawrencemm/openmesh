@@ -1,15 +1,3 @@
-#unset cached qt variables which are set by all qt versions. version is the major number of the qt version (e.g. 4 or 5, not 4.8)
-macro (acg_unset_qt_shared_variables version)
-  if (ACG_INTERNAL_QT_LAST_VERSION)
-    if (NOT ${ACG_INTERNAL_QT_LAST_VERSION} EQUAL ${version})
-      unset(QT_BINARY_DIR)
-      unset(QT_PLUGINS_DIR)
-      unset(ACG_INTERNAL_QT_LAST_VERSION)
-    endif()
-  endif()
-  set (ACG_INTERNAL_QT_LAST_VERSION "${version}" CACHE INTERNAL "Qt Version, which was used on the last time")
-endmacro()
-
 macro (acg_qt5)
 
    if(POLICY CMP0020)
@@ -63,8 +51,7 @@ macro (acg_qt5)
   endif(Qt5Core_FOUND)
   
   if (QT5_FOUND)   
-    acg_unset_qt_shared_variables(5)
-  
+    
     #set plugin dir
     list(GET Qt5Gui_PLUGINS 0 _plugin)
     if (_plugin)
