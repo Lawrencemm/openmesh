@@ -16,9 +16,6 @@ macro (acg_qt5)
      # Automatically link Qt executables to qtmain target on Windows
      cmake_policy(SET CMP0020 NEW)
    endif(POLICY CMP0020)
-  #if (NOT QT5_FOUND)
-
-    #set (QT_MIN_VERSION ${ARGN})
 
   #try to find qt5 automatically
   #for custom installation of qt5, dont use any of these variables
@@ -144,50 +141,8 @@ macro (acg_qt5)
 	    endif()
       endif(MSVC_IDE)
 
-    endif ()
-endmacro ()
+      # Enable automoc
+      set(CMAKE_AUTOMOC ON)
 
-# generate moc targets for sources in list
-macro (acg_qt5_automoc moc_SRCS)
-  qt5_get_moc_flags (_moc_INCS)
-  
-  list(REMOVE_DUPLICATES _moc_INCS)
-
-  set (_matching_FILES )
-  foreach (_current_FILE ${ARGN})
-
-     get_filename_component (_abs_FILE ${_current_FILE} ABSOLUTE)
-     # if "SKIP_AUTOMOC" is set to true, we will not handle this file here.
-     # here. this is required to make bouic work correctly:
-     # we need to add generated .cpp files to the sources (to compile them),
-     # but we cannot let automoc handle them, as the .cpp files don't exist yet when
-     # cmake is run for the very first time on them -> however the .cpp files might
-     # exist at a later run. at that time we need to skip them, so that we don't add two
-     # different rules for the same moc file
-     get_source_file_property (_skip ${_abs_FILE} SKIP_AUTOMOC)
-
-     if ( NOT _skip AND EXISTS ${_abs_FILE} )
-
-        file (READ ${_abs_FILE} _contents)
-
-        get_filename_component (_abs_PATH ${_abs_FILE} PATH)
-
-        string (REGEX MATCHALL "Q_OBJECT" _match "${_contents}")
-        if (_match)
-            get_filename_component (_basename ${_current_FILE} NAME_WE)
-            set (_header ${_abs_FILE})
-            set (_moc    ${CMAKE_CURRENT_BINARY_DIR}/moc_${_basename}.cpp)
-
-            add_custom_command (OUTPUT ${_moc}
-                COMMAND ${QT_MOC_EXECUTABLE}
-                ARGS ${_moc_INCS} ${_header} -o ${_moc}
-                DEPENDS ${_header}
-            )
-
-            add_file_dependencies (${_abs_FILE} ${_moc})
-            set (${moc_SRCS} ${${moc_SRCS}} ${_moc})
-
-        endif ()
-     endif ()
-  endforeach ()
+    endif (QT5_FOUND)
 endmacro ()

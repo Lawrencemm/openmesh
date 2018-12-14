@@ -46,58 +46,74 @@
  *                                                                           *
 \*===========================================================================*/
 
-#pragma once
+#define OPENMESHAPPS_MESHVIEWERWIDGET_CC
 
 //== INCLUDES =================================================================
 
-#include <QWidget>
-#include <QString>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <iostream>
-#include <OpenMesh/Tools/Utils/getopt.h>
-#include <OpenMesh/Tools/Utils/Timer.hh>
-#include <OpenMesh/Apps/QtViewer/MeshViewerWidgetT.hh>
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include <OpenMesh/Apps/QtViewer/MeshViewerWidget.hh>
 
 
-//== CLASS DEFINITION =========================================================
+//== IMPLEMENTATION ========================================================== 
 
-using namespace OpenMesh;  
-using namespace OpenMesh::Attributes;
+/// default constructor
+MeshViewerWidget::MeshViewerWidget(QWidget* parent)  : MeshViewerWidgetT<MyMesh>(parent)
+{}
 
-struct MyTraits : public OpenMesh::DefaultTraits
+ void MeshViewerWidget::open_mesh_gui(QString fname)
 {
-  HalfedgeAttributes(OpenMesh::Attributes::PrevHalfedge);
-};
+    OpenMesh::Utils::Timer t;
+    t.start();
+    if ( fname.isEmpty() || !open_mesh(fname.toLocal8Bit(), _options) )
+    {
+        QString msg = "Cannot read mesh from file:\n '";
+        msg += fname;
+        msg += "'";
+        QMessageBox::critical( NULL, windowTitle(), msg);
+    }
+    t.stop();
+    std::cout << "Loaded mesh in ~" << t.as_string() << std::endl;
+    
+}
 
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits>  MyMesh;
-
-
-
-//== CLASS DEFINITION =========================================================
-
-class MeshViewerWidget : public MeshViewerWidgetT<MyMesh>
+void MeshViewerWidget::open_texture_gui(QString fname)
 {
-    Q_OBJECT
+    if ( fname.isEmpty() || !open_texture( fname.toLocal8Bit() ) )
+    {
+        QString msg = "Cannot load texture image from file:\n '";
+        msg += fname;
+        msg += "'\n\nPossible reasons:\n";
+        msg += "- Mesh file didn't provide texture coordinates\n";
+        msg += "- Texture file does not exist\n";
+        msg += "- Texture file is not accessible.\n";
+        QMessageBox::warning( NULL, windowTitle(), msg );
+    }
+}
 
-public:
-    /// default constructor
-    explicit MeshViewerWidget(QWidget* parent=0);
+void MeshViewerWidget::query_open_mesh_file() {
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open mesh file"),
+        tr(""),
+        tr("OBJ Files (*.obj);;"
+        "OFF Files (*.off);;"
+        "STL Files (*.stl);;"
+        "All Files (*)"));
+    if (!fileName.isEmpty())
+        open_mesh_gui(fileName);
+}
 
-    OpenMesh::IO::Options& options() { return _options; }
-    const OpenMesh::IO::Options& options() const { return _options; }
-    void setOptions(const OpenMesh::IO::Options& opts) { _options = opts; }
+void MeshViewerWidget::query_open_texture_file() {
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open texture file"),
+        tr(""),
+        tr("PNG Files (*.png);;"
+        "BMP Files (*.bmp);;"
+        "GIF Files (*.gif);;"
+        "JPEG Files (*.jpg);;"
+        "TIFF Files (*.tif);;"
+        "All Files (*)"));
+    if (!fileName.isEmpty())
+        open_texture_gui(fileName);
+}
 
-    void open_mesh_gui(QString fname);
-
-    void open_texture_gui(QString fname);
-
-public slots:
-    void query_open_mesh_file();
-
-    void query_open_texture_file();
-private:
-    OpenMesh::IO::Options _options;
-};
+//=============================================================================
 

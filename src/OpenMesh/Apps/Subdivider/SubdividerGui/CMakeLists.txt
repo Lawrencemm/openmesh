@@ -7,8 +7,6 @@ include_directories (
   ${QT_INCLUDE_DIR}
 )
 
-set (targetName SubdividerGui)
-
 # source code directories
 set (directories 
   ../../QtViewer
@@ -28,22 +26,15 @@ set (sources
 # remove template cc files from source file list
 acg_drop_templates (sources)
 
-# genereate uic and moc targets
-if(QT5_FOUND)
-  acg_qt5_automoc (moc_targets ${headers})
-else()
-  acg_qt4_automoc (moc_targets ${headers})
-endif()
-
 if (WIN32)
-  acg_add_executable (${targetName} WIN32 ${sources} ${headers} ${moc_targets})
+  acg_add_executable (SubdividerGui WIN32 ${sources} ${headers})
   # link to qtmain library to get WinMain function for a non terminal app
-  target_link_libraries (${targetName} ${QT_QTMAIN_LIBRARY})
+  target_link_libraries (SubdividerGui ${QT_QTMAIN_LIBRARY})
 else ()
-  acg_add_executable (${targetName} ${sources} ${headers} ${moc_targets})
+  acg_add_executable (SubdividerGui ${sources} ${headers})
 endif ()
 
-target_link_libraries (${targetName}
+target_link_libraries (SubdividerGui
   OpenMeshCore
   OpenMeshTools
   ${QT_LIBRARIES}
