@@ -87,15 +87,6 @@ else ()
   set (ACG_PROJECT_BINDIR "bin")
 endif ()
 
-if( NOT APPLE )
-  # check 64 bit
-  if( CMAKE_SIZEOF_VOID_P MATCHES 4 )
-    set( HAVE_64_BIT 0 )
-  else( CMAKE_SIZEOF_VOID_P MATCHES 4 )
-    set( HAVE_64_BIT 1 )
-  endif( CMAKE_SIZEOF_VOID_P MATCHES 4 )
-endif (  NOT APPLE )
-
 # allow a project to modify the directories
 if (COMMAND acg_modify_project_dirs)
   acg_modify_project_dirs ()
@@ -115,24 +106,14 @@ macro (acg_set_target_props target)
       SKIP_BUILD_RPATH 0
     )
   elseif (APPLE AND NOT ACG_PROJECT_MACOS_BUNDLE)
-  if (NOT (CMAKE_MAJOR_VERSION  LESS 3) )
-      # save rpath
-      set_target_properties (
-        ${target} PROPERTIES
-        INSTALL_RPATH "@executable_path/../${ACG_PROJECT_LIBDIR}"
-        MACOSX_RPATH 1
-        #BUILD_WITH_INSTALL_RPATH 1
-        SKIP_BUILD_RPATH 0
-      )  
-    else()
-      # save rpath via install name dir
-      set_target_properties (
-        ${target} PROPERTIES
-        INSTALL_NAME_DIR "@executable_path/../${ACG_PROJECT_LIBDIR}"
-        #BUILD_WITH_INSTALL_RPATH 1
-        SKIP_BUILD_RPATH 0
-      ) 
-    endif(NOT (CMAKE_MAJOR_VERSION  LESS 3) )
+    # save rpath
+    set_target_properties (
+      ${target} PROPERTIES
+      INSTALL_RPATH "@executable_path/../${ACG_PROJECT_LIBDIR}"
+      MACOSX_RPATH 1
+      #BUILD_WITH_INSTALL_RPATH 1
+      SKIP_BUILD_RPATH 0
+    )  
   elseif (NOT APPLE)
 
     set_target_properties (
@@ -162,35 +143,6 @@ macro (acg_set var value)
     set (${var} ${value} CACHE INTERNAL "")
 endmacro ()
 
-# test for OpenMP
-macro (acg_openmp)
-  if (NOT OPENMP_NOTFOUND)
-        find_package(OpenMP)
-      if (OPENMP_FOUND)
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        add_definitions(-DUSE_OPENMP)
-    else ()
-      set (OPENMP_NOTFOUND 1)
-    endif()
-  endif ()
-endmacro ()
-
-# test for FTGL
-macro (acg_ftgl)
-  find_package (Freetype)
-
-  if (FREETYPE_FOUND)
-    find_package (FTGL)
-
-    if (FTGL_FOUND)
-      add_definitions (-DUSE_FTGL)
-      include_directories (${FTGL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2})
-      set (FTGL_LIBS ${FREETYPE_LIBRARIES} ${FTGL_LIBRARIES})
-    endif ()
-  endif ()
-endmacro ()
-
 # append all files with extension "ext" in the "dirs" directories to "ret"
 # excludes all files starting with a '.' (dot)
 macro (acg_append_files ret ext)
@@ -205,22 +157,6 @@ macro (acg_append_files ret ext)
     list (APPEND ${ret} ${_files})
   endforeach ()
 endmacro ()
-
-# append all files with extension "ext" in the "dirs" directories and its subdirectories to "ret"
-# excludes all files starting with a '.' (dot)
-macro (acg_append_files_recursive ret ext)
-  foreach (_dir ${ARGN})
-    file (GLOB_RECURSE _files "${_dir}/${ext}")
-    foreach (_file ${_files})
-      get_filename_component (_filename ${_file} NAME)
-      if (_filename MATCHES "^[.]")
-	list (REMOVE_ITEM _files ${_file})
-      endif ()
-    endforeach ()
-    list (APPEND ${ret} ${_files})
-  endforeach ()
-endmacro ()
-
 
 # drop all "*T.cc" files from list
 macro (acg_drop_templates list)
@@ -248,18 +184,6 @@ function (acg_copy_after_build target src dst)
   foreach (_file ${_files})
     add_custom_command(TARGET ${target} POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different "${src}/${_file}" "${dst}/${_file}"
-    )
-  endforeach ()
-endfunction ()
-
-# install the whole directory without svn files
-function (acg_install_dir src dst)
-  acg_unset (_files)
-  acg_get_files_in_dir (_files ${src})
-  foreach (_file ${_files})
-    get_filename_component (_file_PATH ${_file} PATH)
-    install(FILES "${src}/${_file}"
-      DESTINATION "${dst}/${_file_PATH}"
     )
   endforeach ()
 endfunction ()
