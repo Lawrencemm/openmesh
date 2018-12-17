@@ -67,15 +67,6 @@ if (UNIX)
   list(APPEND ADDITIONAL_C_RELEASE_FLAGS          "-DINCLUDE_TEMPLATES" )
   list(APPEND ADDITIONAL_C_RELWITHDEBINFO_FLAGS   "-DINCLUDE_TEMPLATES" )
  
-#  Deprecated setting. Remove in future release, as the default template depth 
-#  should be enough with state of the art compilers 
-#  # Increase the template depth as this might be exceeded from time to time
-#  IF( NOT CMAKE_SYSTEM MATCHES "SunOS*")
-#    list(APPEND ADDITIONAL_CXX_DEBUG_FLAGS          "-ftemplate-depth-100" )
-#    list(APPEND ADDITIONAL_CXX_RELEASE_FLAGS        "-ftemplate-depth-100" )
-#    list(APPEND ADDITIONAL_CXX_RELWITHDEBINFO_FLAGS "-ftemplate-depth-100" )  
-#  ENDIF()
-  
   ################################################################################
   # OS Defines
   ################################################################################  
@@ -197,10 +188,4 @@ if (UNIX)
     endif()
   endforeach()
 
-  #TODO : Test and remove it?!
-  IF( CMAKE_SYSTEM MATCHES "SunOS*")
-    set (CMAKE_CFLAGS_RELEASE "-xO3")
-    set (CMAKE_CXX_FLAGS_RELEASE "-xO3")        
-  endif ( CMAKE_SYSTEM MATCHES "SunOS*" ) 
-  
 endif ()
