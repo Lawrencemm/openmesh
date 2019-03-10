@@ -10,8 +10,8 @@ class OpenmeshConan(ConanFile):
     description = "<Description of Openmesh here>"
     topics = ("<Put some tag here>", "<here>", "<and here>")
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = {"shared": False, "fPIC": False}
     generators = "cmake"
     scm = {
         "type": "git",
@@ -19,6 +19,10 @@ class OpenmeshConan(ConanFile):
         "revision": "OpenMesh-"+version,
         "subfolder": "OpenMesh",
     }
+
+    def configure(self):
+        if self.settings.compiler == "Visual Studio":
+            del self.options.fPIC
 
     def source(self):
         # disable documentation build
@@ -40,6 +44,10 @@ class OpenmeshConan(ConanFile):
         tools.replace_in_file("OpenMesh/src/OpenMesh/Tools/CMakeLists.txt", "SHAREDANDSTATIC", "SHARED" if self.options.shared else "STATIC")
 
         cmake = CMake(self)
+
+        if self.settings.compiler != "Visual Studio":
+            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
+
         cmake.configure(defs={"BUILD_APPS": "OFF"}, source_folder="OpenMesh")
         cmake.build()
         cmake.install()
